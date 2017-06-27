@@ -40,7 +40,7 @@ EncodePolyline <- function(geom) UseMethod("encodePolyline")
 
 # sets 'polyline' attribute on the polyline column
 .encode.polyline <- function(x){
-	attr(x, "spdt_polyline") <- "polyline"
+	attr(x, "polyline") <- "spdt_polyline"
 	return(.spatialdatatable(x))
 }
 
