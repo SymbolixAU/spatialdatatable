@@ -17,7 +17,3 @@ print.spatialdatatable <- function(x, ...){
 	NextMethod()
 }
 
-
-
-
-
