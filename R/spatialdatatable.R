@@ -4,6 +4,9 @@
 print.spatialdatatable <- function(x, ...){
 	# cat("spatialdatatable")
 
+	## TODO:
+	## handle printing a subset of columns
+	# spdt_melbourne[, .(polygonId, polyline)]
 
 	## replace the polyine with just 20 chars
 	pl <- spdt_polyline_col(x)
@@ -13,3 +16,8 @@ print.spatialdatatable <- function(x, ...){
 
 	NextMethod()
 }
+
+
+
+
+
