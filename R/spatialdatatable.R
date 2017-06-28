@@ -49,7 +49,8 @@ print.spatialdatatable <- function(x, ...){
 	## handle printing a subset of columns
 	# spdt_melbourne[, .(polygonId, polyline)]
 
-	#poly_column <- attr(x, "spdt_polyline")
+	## update-by-reference (:=) is just printing, not updating
+
 	poly_column <- spdt_polyline_col(x)
 
 	# print(paste0("print polyline column: ", poly_column) )
@@ -59,16 +60,21 @@ print.spatialdatatable <- function(x, ...){
 	if( length(poly_column) > 0 ){
 
 		# print("truncating characters")
-		x <- x[, lapply(.SD, function(y) {
+		x <- x[,  lapply(.SD, function(y) {
 			paste0(substr(y, 1, pmin(20, nchar(y))), "...")
 		} )
 		, by = setdiff(names(x), poly_column)
 		, .SDcols = poly_column]
-		# if(poly_column %in% names(x)){
-		# 	print("print found polyline column")
-		# 	print(str(x))
-		# 	x[[poly_column]] <- paste0(substr(x[[poly_column]], 1, pmin(20, nchar(x[[poly_column]] ) ) ), "...")
-		# }
+
+		# x[, (poly_column) := lapply(poly_column, function(y) {
+		# 	paste0(substr(get(y), 1, pmin(20, nchar(get(y)))), "...")
+		# } ) ]
+
+		# for(col in poly_column)
+		# 	set(x, j = col, value = paste0(substr(dt[[col]], 1, 5), "..."))
+			# x[, col := paste0(substr(dt[[col]], 1, pmin(20, nchar(dt[[col]]))), "...")]
+
+
 	}
 	NextMethod()
 }
@@ -119,25 +125,25 @@ print.spatialdatatable <- function(x, ...){
 # str(b[1:2, ])
 
 
-# dt <- data.table(id = c(1,2),
-# 								 polyline = c("fajlfadlksflkdasjfladsfjldsafjldsa", "adfjkladsjfldsajfkldsaflkajds"),
-# 								 polyline2 = c("jflkadsjflkdasjfladsjflkadjsfkl", "fadsfdas"))
-#
-#
-# poly_col <- c("polyline", "polyline2")
-#
-# pols <- sapply(poly_col, function(y){
-# 	paste0( substr(dt[[y]], 1, pmin(20, nchar(dt[[y]]) ) ), "...")
-# })
-#
-# pols
-#
-# dt[, lapply(.SD, function(y) {
-# 		paste0(substr(y, 1, pmin(20, nchar(y))), "...")
-# 	} ),
-# 	by = setdiff(names(dt), poly_col)
-# 	, .SDcols = poly_col
-# 	]
+dt <- data.table(id = c(1,2),
+								 polyline = c("fajlfadlksflkdasjfladsfjldsafjldsa", "adfjkladsjfldsajfkldsaflkajds"),
+								 polyline2 = c("jflkadsjflkdasjfladsjflkadjsfkl", "fadsfdas"))
+
+
+poly_col <- c("polyline", "polyline2")
+
+pols <- sapply(poly_col, function(y){
+	paste0( substr(dt[[y]], 1, pmin(20, nchar(dt[[y]]) ) ), "...")
+})
+
+pols
+
+dt[, lapply(.SD, function(y) {
+		paste0(substr(y, 1, pmin(20, nchar(y))), "...")
+	} ),
+	by = setdiff(names(dt), poly_col)
+	, .SDcols = poly_col
+	]
 
 
 
