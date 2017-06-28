@@ -1,13 +1,14 @@
 
 
 .spatialdatatable <- function(dt){
-	setattr(dt, "class", c("spatialdatatable", class(dt)))
+	data.table::setattr(dt, "class", c("spatialdatatable", class(dt)))
 	return(dt)
 }
 
 # sets 'polyline' attribute on the polyline column
 .encode.polyline <- function(x){
-	attributes(x[["polyline"]]) <- list(spdt_polyline = "polyline")
+	data.table::setattr(x[["polyline"]], "spdt_polyline","polyline")
+	#attributes(x[["polyline"]]) <- list(spdt_polyline = "polyline")
 	return(.spatialdatatable(x))
 }
 
@@ -80,21 +81,20 @@ print.spatialdatatable <- function(x, ...){
 }
 
 
-#' @export
-`[.spatialdatatable` <- function(x, ...){
+#' #' @export
+#' `[.spatialdatatable` <- function(x, ...){
+#'
+#' 	## need to keep the polyline attribute if it exists
+#' 	# print("subsetting")
+#' 	# poly_column <- attr(x, "spdt_polyline")
+#' 	# poly_column <- spdt_polyline_col(x)
+#' 	# print(paste0("subset polyline column: ", poly_column) )
+#' 	NextMethod()
+#' 	# print("finsished subestting")
+#' }
 
-	## need to keep the polyline attribute if it exists
-	# print("subsetting")
-	# poly_column <- attr(x, "spdt_polyline")
-	# poly_column <- spdt_polyline_col(x)
-	# print(paste0("subset polyline column: ", poly_column) )
-	NextMethod()
-	# print("finsished subestting")
-}
-#'
-#'
-#
-# as.test <- function(x) {
+
+# as_test <- function(x) {
 # 	class(x) <- c('test', class(x))
 # 	attr(x, "test_col") <- "y"
 # 	attr(x[["y"]], "test_col_") <- "the column"
@@ -102,7 +102,7 @@ print.spatialdatatable <- function(x, ...){
 # }
 #
 # print.test <- function(x) {
-# 	testCol <- names(x)[names(x) %in% attr(x, "test_col")]
+# 	testCol <- find_test_col(x)
 # 	print( paste0("testCol: ", testCol))
 # 	if(!is.null(testCol)){
 # 		x[['y']] <- "more tests"
@@ -110,40 +110,40 @@ print.spatialdatatable <- function(x, ...){
 # 	NextMethod()
 # }
 #
-# find.test.col <- function(x) UseMethod("find_test_col")
+# find_test_col <- function(x) UseMethod("find_test_col")
 #
-# find_test_col.test <- function(x){
-# 	names(x)[names(x) %in% attr(x, "test_col")]
-# }
+# find_test_col.test <- function(x){ names(x)[names(x) %in% attr(x, "test_col")] }
 #
 # a <- data.table(x = 1:5, y = 1:5)
-# b <- as.test(a)
+# b <- as_test(a)
 #
 # b
 # str(b)
 # b[1:2, ]
 # str(b[1:2, ])
+#
+# b[, z := x]
 
 
-dt <- data.table(id = c(1,2),
-								 polyline = c("fajlfadlksflkdasjfladsfjldsafjldsa", "adfjkladsjfldsajfkldsaflkajds"),
-								 polyline2 = c("jflkadsjflkdasjfladsjflkadjsfkl", "fadsfdas"))
-
-
-poly_col <- c("polyline", "polyline2")
-
-pols <- sapply(poly_col, function(y){
-	paste0( substr(dt[[y]], 1, pmin(20, nchar(dt[[y]]) ) ), "...")
-})
-
-pols
-
-dt[, lapply(.SD, function(y) {
-		paste0(substr(y, 1, pmin(20, nchar(y))), "...")
-	} ),
-	by = setdiff(names(dt), poly_col)
-	, .SDcols = poly_col
-	]
+# dt <- data.table(id = c(1,2),
+# 								 polyline = c("fajlfadlksflkdasjfladsfjldsafjldsa", "adfjkladsjfldsajfkldsaflkajds"),
+# 								 polyline2 = c("jflkadsjflkdasjfladsjflkadjsfkl", "fadsfdas"))
+#
+#
+# poly_col <- c("polyline", "polyline2")
+#
+# pols <- sapply(poly_col, function(y){
+# 	paste0( substr(dt[[y]], 1, pmin(20, nchar(dt[[y]]) ) ), "...")
+# })
+#
+# pols
+#
+# dt[, lapply(.SD, function(y) {
+# 		paste0(substr(y, 1, pmin(20, nchar(y))), "...")
+# 	} ),
+# 	by = setdiff(names(dt), poly_col)
+# 	, .SDcols = poly_col
+# 	]
 
 
 
