@@ -38,13 +38,6 @@ EncodeSF <- function(sf){
 
 EncodePolyline <- function(geom) UseMethod("encodePolyline")
 
-# sets 'polyline' attribute on the polyline column
-.encode.polyline <- function(x){
-	attributes(x[["polyline"]]) <- list(polyline = "spdt_polyline")
-	return(.spatialdatatable(x))
-}
-
-
 #' @export
 encodePolyline.sfc_LINESTRING <- function(geom){
 
@@ -58,37 +51,6 @@ encodePolyline.sfc_LINESTRING <- function(geom){
 
 		return(.encode.polyline(dt))
 }
-
-# gets the encoded polyline from the spdt
-#' @export
-spdt_polyline <- function(spdt) UseMethod("spdt_polyline")
-
-#' @export
-spdt_polyline.spatialdatatable <- function(spdt){
-	spdt[[attr(spdt, "spdt_polyline")]]
-}
-
-#' @export
-spdt_polyline.default <- function(obj){
-	return(NULL)
-}
-
-#' @export
-spdt_polyline_col <- function(spdt) UseMethod("spdt_polyline_col")
-
-#' @export
-spdt_polyline_col.spatialdatatable <- function(spdt){
-	names(spdt)[names(spdt) %in% attr(spdt, "spdt_polyline")]
-}
-
-#' @export
-spdt_polyline_col.default <- function(spdt){
-	return(NULL)
-}
-
-
-
-
 
 #' @export
 encodePolyline.sfc_POLYGON <- function(geom){

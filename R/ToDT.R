@@ -91,11 +91,6 @@ spToDT <- function(sp) {
 
 }
 
-.spatialdatatable <- function(dt){
-	setattr(dt, "class", c("spatialdatatable", class(dt)))
-	return(dt)
-}
-
 #' @export
 spToDT.Line <- function(sp){
 	dt = data.table::data.table(coords = slot(sp, "coords"))
