@@ -6,22 +6,22 @@ print.spatialdatatable <- function(x, ...){
 	## handle printing a subset of columns
 	# spdt_melbourne[, .(polygonId, polyline)]
 
-	## replace the polyine with just 20 chars
-	# print(str(x))
-	# print(x)
-	# pl <- spdt_polyline_col(x)
-	# print(pl)
-	# print(str(x))
-
-	# if(length(pl) > 0){
-	# 	print("polyline exists")
-	#  	x[[pl]] <- paste0(substr(x[[pl]], 1, pmin(20, nchar(x[[pl]]) ) ), "...")
-	# }else{
-	# 	print("no polyline")
-	# }
+	poly_column <- attr(x, "spdt_polyline")
+	if(!is.null(poly_column) ){
+		if(poly_column %in% names(x)){
+			x[[poly_column]] <- paste0(substr(x[[poly_column]], 1, pmin(20, nchar(x[[poly_column]] ) ) ), "...")
+		}
+	}
 	NextMethod()
 }
 
+# poly_column <- "polyline"
+# attr(spdt_melbourne, "spdt_polyline") <- poly_column
+#
+# attributes(spdt_melbourne$polyline) <- NULL
+# str(spdt_melbourne)
+#
+# poly_col <- attr(spdt_melbourne, "spdt_polyline")
 
 # as.test <- function(x) {
 # 	class(x) <- c('test', class(x))
