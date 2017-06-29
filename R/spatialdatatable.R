@@ -94,36 +94,33 @@ print.spatialdatatable <- function(x, ...){
 #' }
 
 
-# as_test <- function(x) {
-# 	class(x) <- c('test', class(x))
-# 	attr(x, "test_col") <- "y"
-# 	attr(x[["y"]], "test_col_") <- "the column"
-# 	x
-# }
-#
-# print.test <- function(x) {
-# 	testCol <- find_test_col(x)
-# 	print( paste0("testCol: ", testCol))
-# 	if(!is.null(testCol)){
-# 		x[['y']] <- "more tests"
-# 	}
-# 	NextMethod()
-# }
-#
-# find_test_col <- function(x) UseMethod("find_test_col")
-#
-# find_test_col.test <- function(x){ names(x)[names(x) %in% attr(x, "test_col")] }
-#
-# a <- data.table(x = 1:5, y = 1:5)
-# b <- as_test(a)
-#
-# b
-# str(b)
-# b[1:2, ]
-# str(b[1:2, ])
-#
-# b[, z := x]
+as_test <- function(x) {
+	data.table::setattr(x, 'class', c('test_class', class(x)))
+}
 
+set_test_column <- function(x, col){
+	data.table::setattr(x[[col]], 'test_col', 'y')
+}
+
+print.test_class <- function(x) {
+	attributes = sapply(x, function(y) names(attributes(y)))
+	testCol <- names(which(attributes == "test_col"))
+
+	print("printing test class: ")
+
+	if(!is.null(testCol)){
+		x[[testCol]] <- paste0("test value: ", x[[testCol]])
+	}
+	NextMethod()
+}
+
+a <- data.table(x = 1:5, y = 1:5)
+as_test(a)
+set_test_column(a, 'y')
+
+a[1:3,]
+
+a[, z := y]
 
 # dt <- data.table(id = c(1,2),
 # 								 polyline = c("fajlfadlksflkdasjfladsfjldsafjldsa", "adfjkladsjfldsajfkldsaflkajds"),
