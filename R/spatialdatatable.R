@@ -46,101 +46,76 @@ spdt_polyline_col.default <- function(spdt){
 
 #' @export
 print.spatialdatatable <- function(x, ...){
-	## TODO:
-	## handle printing a subset of columns
-	# spdt_melbourne[, .(polygonId, polyline)]
 
-	## update-by-reference (:=) is just printing, not updating
+
+	## The data.table print method will only print a subset of rows, or 100, unless
+	## you specify otherwise
+
+	## what I want is to go through the 'print.data.table' method to get its formatting
+	## then to format the final column...
+
+	## if the data.table print options
+	# print("asking for next method")
+	# options("datatable.print.nrows" = 100L)
+	# options("datatable.prettyprint.char" = 10L)
+
 
 	poly_column <- spdt_polyline_col(x)
-
-	# print(paste0("print polyline column: ", poly_column) )
-
+	# print(paste0("poly_column: ", poly_column))
+	# print("printing spdt")
 	poly_column <- poly_column[ poly_column %in% names(x) ]
+
 
 	if( length(poly_column) > 0 ){
 
-		# print("truncating characters")
+		## truncate just the 'polyline' columns.
+		## data.table has the option 'datatable.prettyprint.char' that may overwrite this
+
+		print("truncating characters")
+
 		x <- x[,  lapply(.SD, function(y) {
 			paste0(substr(y, 1, pmin(20, nchar(y))), "...")
 		} )
 		, by = setdiff(names(x), poly_column)
 		, .SDcols = poly_column]
 
-		# x[, (poly_column) := lapply(poly_column, function(y) {
-		# 	paste0(substr(get(y), 1, pmin(20, nchar(get(y)))), "...")
-		# } ) ]
-
 		# for(col in poly_column)
-		# 	set(x, j = col, value = paste0(substr(dt[[col]], 1, 5), "..."))
-			# x[, col := paste0(substr(dt[[col]], 1, pmin(20, nchar(dt[[col]]))), "...")]
+		#  	set(x, j = col, value = paste0(strtrim(x[[col]], 20), "..."))
+		#   x[, col := paste0(substr(dt[[col]], 1, pmin(20, nchar(dt[[col]]))), "...")]
 
 
 	}
 	NextMethod()
+	## reset data.table print options
+	options("datatable.print.nrows" = 100L)
 }
 
 
-#' #' @export
-#' `[.spatialdatatable` <- function(x, ...){
-#'
-#' 	## need to keep the polyline attribute if it exists
-#' 	# print("subsetting")
-#' 	# poly_column <- attr(x, "spdt_polyline")
-#' 	# poly_column <- spdt_polyline_col(x)
-#' 	# print(paste0("subset polyline column: ", poly_column) )
-#' 	NextMethod()
-#' 	# print("finsished subestting")
-#' }
+#' @export
+`[.spatialdatatable` <- function(x, ...){
 
+	## need to keep the polyline attribute if it exists
+	# print("subsetting")
+	# poly_column <- attr(x, "spdt_polyline")
+	# poly_column <- spdt_polyline_col(x)
+	# print(paste0("subset polyline column: ", poly_column) )
 
-as_test <- function(x) {
-	data.table::setattr(x, 'class', c('test_class', class(x)))
-}
+	## detect for ':=' in 'j', and if it exists, we don't want to print
 
-set_test_column <- function(x, col){
-	data.table::setattr(x[[col]], 'test_col', 'y')
-}
-
-print.test_class <- function(x) {
-	attributes = sapply(x, function(y) names(attributes(y)))
-	testCol <- names(which(attributes == "test_col"))
-
-	print("printing test class: ")
-
-	if(!is.null(testCol)){
-		x[[testCol]] <- paste0("test value: ", x[[testCol]])
+	args <- as.list(substitute(list(...)))
+	args <- lapply(args, function(y) { grepl(":=", y) })
+	args <- sapply(args, sum)
+	if(sum(args) > 0){
+		print("found :=")
+		print(getOption("datatable.print.nrows"))
+		options("datatable.print.nrows" = -1L)
+	}else{
+		# print("didn't find :=")
+		# options("datatable.print.nrows" = 100L)
 	}
+
 	NextMethod()
 }
-
-a <- data.table(x = 1:5, y = 1:5)
-as_test(a)
-set_test_column(a, 'y')
-
-a[1:3,]
-
-a[, z := y]
-
-# dt <- data.table(id = c(1,2),
-# 								 polyline = c("fajlfadlksflkdasjfladsfjldsafjldsa", "adfjkladsjfldsajfkldsaflkajds"),
-# 								 polyline2 = c("jflkadsjflkdasjfladsjflkadjsfkl", "fadsfdas"))
-#
-#
-# poly_col <- c("polyline", "polyline2")
-#
-# pols <- sapply(poly_col, function(y){
-# 	paste0( substr(dt[[y]], 1, pmin(20, nchar(dt[[y]]) ) ), "...")
-# })
-#
-# pols
-#
-# dt[, lapply(.SD, function(y) {
-# 		paste0(substr(y, 1, pmin(20, nchar(y))), "...")
-# 	} ),
-# 	by = setdiff(names(dt), poly_col)
-# 	, .SDcols = poly_col
-# 	]
 
 
 
