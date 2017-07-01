@@ -31,4 +31,8 @@
 #'   \item{AREASQKM}{area of the SA2 polygon}
 #'   \item{polyline}{encoded polyline that defines each \code{pathId}}
 #' }
+#'
+#' @examples
+#'
+#' spdt <- copy(spdt_melbourne)
 "spdt_melbourne"

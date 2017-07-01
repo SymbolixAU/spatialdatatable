@@ -28,4 +28,8 @@ Edition 2016 data released by the Australian Bureau of Statistics
 The data is realsed under a Creative Commons Attribution 2.5 Australia licence
 \url{https://creativecommons.org/licenses/by/2.5/au/}
 }
+\examples{
+
+spdt <- copy(spdt_melbourne)
+}
 \keyword{datasets}
