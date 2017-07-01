@@ -1,4 +1,4 @@
-contenxt("spatialdatatable")
+context("spatialdatatable")
 
 library(googleway)
 library(sp)
@@ -6,6 +6,21 @@ library(sf)
 
 ## TODO:
 ## data.table 'global' options are unmodified
+
+test_that("setSpDT() sets attributes", {
+
+	dt <- data.table(id = 1:5)
+	setSpDT(dt)
+	expect_true('spatialdatatable' %in% class(dt))
+
+	setSpDT(dt, polyline_column = "id")
+	expect_true('spatialdatatable' %in% class(dt))
+
+	attributes = sapply(dt, function(x) names(attributes(x)))
+	expect_true(names(which(attributes == "spdt_polyline")) == "id")
+
+})
+
 
 test_that("spatialdatatable created from sp & sf objects", {
 

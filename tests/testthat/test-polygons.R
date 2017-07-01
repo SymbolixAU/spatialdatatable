@@ -28,12 +28,7 @@ test_that("winding number works", {
 
 	pointX = 0
 	pointY = 0
-	expect_equal(WindingNumber(pointX, pointY, polyX, polyY, debugIsClosed = T), -1)
-
-	expect_equal(
-		WindingNumber(pointX, pointY, polyX, polyY, debugClosePoly = T),
-		length(polyX) + 1
-	)
+	expect_equal(WindingNumber(pointX, pointY, polyX, polyY), 1)
 
 
 	## using lat/lon coordinates
@@ -73,9 +68,6 @@ test_that("winding number works", {
 		WindingNumber(pointX, pointY, polyX, polyY),
 		-1
 	)
-
-
-
 
 
 })

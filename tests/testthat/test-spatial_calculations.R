@@ -24,11 +24,9 @@ test_that("anitpodes are correct",{
 	)
 
 	expect_equal(
-		dtAntipode(c(-37, 144)),
-		c(37, -36)
+		dtAntipode(-37, 144),
+		list(37, -36)
 	)
-
-
 
 })
 
