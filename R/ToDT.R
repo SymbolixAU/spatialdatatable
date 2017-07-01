@@ -54,11 +54,6 @@
 #'
 #' library(sf)
 #'
-#' ## sfc POLYGONS
-#' p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
-#' p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
-#' pol <-st_polygon(list(p1,p2))
-#' dt <- spToDT(pol)
 #'
 #' ## sfc MULTIPOINT
 #' p <- rbind(c(3.2,4), c(3,4.6), c(3.8,4.4), c(3.5,3.8), c(3.4,3.6), c(3.9,4.5))
@@ -76,6 +71,11 @@
 #' mls <- st_multilinestring(list(s1,s2,s3))
 #' dt <- spToDT(mls)
 #'
+#' ## sfc POLYGONS
+#' p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
+#' p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
+#' pol <-st_polygon(list(p1,p2))
+#' dt <- spToDT(pol)
 #'
 #' ## sfc MULTIPOLYGON
 #' p3 <- rbind(c(3,0), c(4,0), c(4,1), c(3,1), c(3,0))
@@ -264,8 +264,9 @@ spToDT.sf <- function(sf){
 
 #' @export
 spToDT.sfg <- function(sf){
+	## e.g. class: "XY"  "LINESTRING"  "sfg"
 	dt_geom <- GeomToDT(sf::st_geometry(sf))
-	return(dt_geom)
+	return(.spatialdatatable(dt_geom))
 }
 
 
@@ -279,7 +280,7 @@ GeomToDT.sfc_POINT <- function(geom){
 	lst <- sapply(geom, `[`)
 
 	data.table::data.table(.id = seq_along(lst),
-												 coords.V1 = lst[1,],
+												 coords.V1 = lst[1, ],
 												 coords.V2 = lst[2, ])
 
 }

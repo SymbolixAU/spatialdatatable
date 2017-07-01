@@ -1,4 +1,6 @@
 
+## TODO:
+## - reset datatable.print.nrows
 
 .spatialdatatable <- function(dt){
 	data.table::setattr(dt, "class", c("spatialdatatable", class(dt)))
@@ -8,32 +10,50 @@
 # sets 'polyline' attribute on the polyline column
 .encode.polyline <- function(x){
 	data.table::setattr(x[["polyline"]], "spdt_polyline","polyline")
-	#attributes(x[["polyline"]]) <- list(spdt_polyline = "polyline")
 	return(.spatialdatatable(x))
 }
 
-
-# gets the encoded polyline from the spdt
+#' Polylines
+#'
+#'
+#' gets the encoded polyline(s) from a spatialdatatable object
+#'
+#' @param spdt spatialdatatable
+#'
 #' @export
-spdt_polyline <- function(spdt) UseMethod("spdt_polyline")
+polylines <- function(spdt) UseMethod("spdt_polyline")
 
 #' @export
 spdt_polyline.spatialdatatable <- function(spdt){
-	spdt[[attr(spdt, "spdt_polyline")]]
+
+	## TODO:
+	## return ALL columns if there are more than one containing a polyline
+
+	poly_column <- polyline_column(spdt)
+
+	if(length(poly_column) == 0){
+		message("No encoded polyline available")
+		return()
+	}
+
+	return(spdt[[attr(spdt[[poly_column]], "spdt_polyline")]])
 }
 
 #' @export
-spdt_polyline.default <- function(obj){
+spdt_polyline.default <- function(spdt){
 	return(NULL)
 }
 
+#' Polyline Column
+#'
+#' Gets the column(s) names of a spatialdatatable object containing encoded polylines
+#'
+#' @param spdt spatialdatatable object
 #' @export
-spdt_polyline_col <- function(spdt) UseMethod("spdt_polyline_col")
+polyline_column <- function(spdt) UseMethod("spdt_polyline_col")
 
 #' @export
 spdt_polyline_col.spatialdatatable <- function(spdt){
-	# names(spdt)[names(spdt) %in% attr(spdt, "spdt_polyline")]
-	# names(spdt)[which(sapply(spdt, function(x) !is.null(attributes(x))))]
 	attributes = sapply(spdt, function(x) names(attributes(x)))
 	names(which(attributes == "spdt_polyline"))
 }
@@ -47,14 +67,15 @@ spdt_polyline_col.default <- function(spdt){
 #' @export
 print.spatialdatatable <- function(x, ...){
 
-
+	# options("spatialdatatable.datatable.print.nrows" = getOption("datatable.print.nrows"))
+	# print(paste0("datatable print option: ", getOption("datatable.print.nrows")))
 	## The data.table print method will only print a subset of rows, or 100, unless
 	## you specify otherwise
 
 	## what I want is to go through the 'print.data.table' method to get its formatting
 	## then to format the final column...
 
-	poly_column <- spdt_polyline_col(x)
+	poly_column <- polyline_column(x)
 	poly_column <- poly_column[ poly_column %in% names(x) ]
 
 
@@ -69,6 +90,7 @@ print.spatialdatatable <- function(x, ...){
 		, by = setdiff(names(x), poly_column)
 		, .SDcols = poly_column]
 
+		### using 'set' modifies the object
 		# for(col in poly_column)
 		#  	set(x, j = col, value = paste0(strtrim(x[[col]], 20), "..."))
 		#   x[, col := paste0(substr(dt[[col]], 1, pmin(20, nchar(dt[[col]]))), "...")]
@@ -77,7 +99,7 @@ print.spatialdatatable <- function(x, ...){
 	}
 	NextMethod()
 	## reset data.table print options
-	options("datatable.print.nrows" = 100L)
+	options("datatable.print.nrows" = getOption("spatialdatatable.datatable.print.nrows"))
 }
 
 
@@ -94,7 +116,6 @@ print.spatialdatatable <- function(x, ...){
 	if(sum(args) > 0){
 		options("datatable.print.nrows" = -1L)
 	}
-
 	NextMethod()
 }
 
