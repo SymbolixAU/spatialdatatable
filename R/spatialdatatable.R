@@ -19,13 +19,13 @@ setSpDT <- function(x, polyline_column = NULL, ...){
 	# 	assign(name, x, parent.frame(), inherits = TRUE)
 	#
 	}
-	# if(!is.null(polyline_column)){
-	# 	if(!polyline_column %in% names(x)){
-	# 		warning(paste0(polyline_column, " not found in ", name))
-	# 	}else{
-	# 		data.table::setattr(x[[polyline_column]], "spdt_polyline","polyline")
-	# 	}
-	# }
+	if(!is.null(polyline_column)){
+		if(!polyline_column %in% names(x)){
+			warning(paste0(polyline_column, " not found in ", name))
+		}else{
+			data.table::setattr(x[[polyline_column]], "spdt_polyline","polyline")
+		}
+	}
 }
 
 
