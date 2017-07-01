@@ -54,11 +54,6 @@
 #'
 #' library(sf)
 #'
-#' ## sfc POLYGONS
-#' p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
-#' p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
-#' pol <-st_polygon(list(p1,p2))
-#' dt <- spToDT(pol)
 #'
 #' ## sfc MULTIPOINT
 #' p <- rbind(c(3.2,4), c(3,4.6), c(3.8,4.4), c(3.5,3.8), c(3.4,3.6), c(3.9,4.5))
@@ -76,6 +71,11 @@
 #' mls <- st_multilinestring(list(s1,s2,s3))
 #' dt <- spToDT(mls)
 #'
+#' ## sfc POLYGONS
+#' p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
+#' p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
+#' pol <-st_polygon(list(p1,p2))
+#' dt <- spToDT(pol)
 #'
 #' ## sfc MULTIPOLYGON
 #' p3 <- rbind(c(3,0), c(4,0), c(4,1), c(3,1), c(3,0))
@@ -86,38 +86,43 @@
 #'
 #' }
 #' @export
-spToDT <- function(sp) UseMethod("spToDT")
+spToDT <- function(sp) {
+	UseMethod("spToDT")
+
+}
 
 #' @export
 spToDT.Line <- function(sp){
-	return(data.table::data.table(coords = slot(sp, "coords")))
+	dt = data.table::data.table(coords = slot(sp, "coords"))
+	return(.spatialdatatable(dt))
 }
 
 #' @export
 spToDT.Lines <- function(sp){
 
-	return(data.table::rbindlist(lapply(1:length(sp), function(x){
+	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
 		data.table::data.table(
 			id = slot(sp, "ID"),
 			coords = slot(sp@Lines[[x]], "coords")
 		)
 
-	})))
+	}))
+	return(.spatialdatatable(dt))
 }
 
 #' @export
 spToDT.SpatialLines <- function(sp){
 	spToDTMessage(sp)
 
-	return(data.table::rbindlist(lapply(1:length(sp), function(x){
+	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
 		data.table::data.table(
 			id = slot(sp@lines[[x]], "ID"),
 			coords = slot(slot(sp@lines[[x]], "Lines")[[1]], "coords")
 		)
-
-	})))
+	}))
+	return(.spatialdatatable(dt))
 }
 
 
@@ -127,13 +132,14 @@ spToDT.SpatialLinesDataFrame <- function(sp){
 
 	spToDTMessage(sp)
 
-	return(data.table::rbindlist(lapply(1:length(sp), function(x){
+	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
 		data.table::data.table(
 			id = slot(sp@lines[[x]], "ID"),
 			coords = slot(slot(sp@lines[[x]], "Lines")[[1]], "coords"),
 			data = slot(sp, "data")[x, ])
-	})))
+	}))
+	return(.spatialdatatable(dt))
 }
 
 
@@ -141,8 +147,8 @@ spToDT.SpatialLinesDataFrame <- function(sp){
 spToDT.SpatialPoints <- function(sp){
 
 	spToDTMessage(sp)
-
-	return(data.table::data.table(coords = slot(sp, "coords")))
+	dt <- data.table::data.table(coords = slot(sp, "coords"))
+	return(.spatialdatatable(dt))
 }
 
 #' @export
@@ -150,28 +156,28 @@ spToDT.SpatialPointsDataFrame <- function(sp){
 
 	spToDTMessage(sp)
 
-		return(data.table::data.table(
-			coords = slot(sp, "coords"),
-			data = slot(sp, "data")
-		))
-
+	dt <- data.table::data.table(
+		coords = slot(sp, "coords"),
+		data = slot(sp, "data")
+	)
+	return(.spatialdatatable(dt))
 }
 
 
 
 #' @export
 spToDT.Polygon <- function(sp){
-	return(
-		data.table::data.table(coords = slot(sp, "coords"),
-													 hole = slot(sp, "hole"),
-													 ringDir = slot(sp, "ringDir"))
-		)
+
+	dt <- data.table::data.table(coords = slot(sp, "coords"),
+															 hole = slot(sp, "hole"),
+															 ringDir = slot(sp, "ringDir"))
+	return(.spatialdatatable(dt))
 }
 
 #' @export
 spToDT.Polygons <- function(sp){
 
-	return(data.table::rbindlist(
+	dt <- data.table::rbindlist(
 
 		lapply(1:length(sp@Polygons), function(x){
 
@@ -181,16 +187,17 @@ spToDT.Polygons <- function(sp){
 				hole = slot(sp@Polygons[[x]], "hole"),
 				ringDir = slot(sp@Polygons[[x]], "ringDir"),
 				coords = slot(sp@Polygons[[x]], "coords")
-				)
-			})
-	))
+			)
+		})
+	)
+	return(.spatialdatatable(dt))
 }
 
 #' @export
 spToDT.SpatialPolygons <- function(sp){
 	spToDTMessage(sp)
 
-	return(data.table::rbindlist(lapply(1:length(sp), function(x){
+	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
 		data.table::rbindlist(lapply(1:length(sp@polygons[[x]]@Polygons), function(y){
 
@@ -202,7 +209,8 @@ spToDT.SpatialPolygons <- function(sp){
 				hole = slot(sp@polygons[[x]]@Polygons[[y]], "hole")
 			)
 		}))
-	})))
+	}))
+	return(.spatialdatatable(dt))
 }
 
 
@@ -212,7 +220,7 @@ spToDT.SpatialPolygonsDataFrame <- function(sp){
 
 	spToDTMessage(sp)
 
-	return(data.table::rbindlist(lapply(1:length(sp), function(x){
+	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
 		data.table::rbindlist(lapply(1:length(sp@polygons[[x]]@Polygons), function(y){
 
@@ -223,10 +231,11 @@ spToDT.SpatialPolygonsDataFrame <- function(sp){
 				ringDir = slot(sp@polygons[[x]]@Polygons[[y]], "ringDir"),
 				hole = slot(sp@polygons[[x]]@Polygons[[y]], "hole"),
 				data = slot(sp, "data")[x, ]
-				)
+			)
 
 		}))
-	})))
+	}))
+	return(.spatialdatatable(dt))
 
 }
 
@@ -248,14 +257,16 @@ spToDT.sf <- function(sf){
 
 	dt_geom <- GeomToDT(geom)
 
-	return(dt[ dt_geom, on = c(id = ".id"), nomatch = 0])
+	dt <- dt[ dt_geom, on = c(id = ".id"), nomatch = 0]
+	return(.spatialdatatable(dt))
 }
 
 
 #' @export
 spToDT.sfg <- function(sf){
+	## e.g. class: "XY"  "LINESTRING"  "sfg"
 	dt_geom <- GeomToDT(sf::st_geometry(sf))
-	return(dt_geom)
+	return(.spatialdatatable(dt_geom))
 }
 
 
@@ -269,7 +280,7 @@ GeomToDT.sfc_POINT <- function(geom){
 	lst <- sapply(geom, `[`)
 
 	data.table::data.table(.id = seq_along(lst),
-												 coords.V1 = lst[1,],
+												 coords.V1 = lst[1, ],
 												 coords.V2 = lst[2, ])
 
 }
@@ -331,7 +342,7 @@ GeomToDT.sfc_POLYGON <- function(geom){
 					data.table::data.table(
 						lineId = y,
 						coords.V1 = x[[y]][,1],
-					  coords.V2 = x[[y]][,2],
+						coords.V2 = x[[y]][,2],
 						hole = (y > 1)[c(T, F)]
 					)
 				})
@@ -364,9 +375,9 @@ GeomToDT.sfc_MULTIPOLYGON <- function(geom){
 						coords.V1 = x[[y]][[1]][,1],
 						coords.V2 = x[[y]][[1]][,2],
 						hole = (y > 1)[c(T, F)]
-						)
-					})
-				)
+					)
+				})
+			)
 		}), idcol = T
 	)
 }
@@ -385,4 +396,3 @@ spToDT.default <- function(sp){
 spToDTMessage <- function(sp){
 	message(paste0("dropping projection attribute: ", slot(slot(sp, "proj4string"), "projargs")))
 }
-

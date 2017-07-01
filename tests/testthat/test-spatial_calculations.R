@@ -4,12 +4,12 @@ context("calculations")
 test_that("anitpodes are correct",{
 
 	expect_equal(
-		spatial.data.table:::antipodeLat(-10),
+		spatialdatatable:::antipodeLat(-10),
 		10
 	)
 
 	expect_equal(
-		spatial.data.table:::antipodeLat(0),
+		spatialdatatable:::antipodeLat(0),
 		0
 	)
 
@@ -19,7 +19,7 @@ test_that("anitpodes are correct",{
 	)
 
 	expect_equal(
-		spatial.data.table:::antipodeLon(-0.40),
+		spatialdatatable:::antipodeLon(-0.40),
 		179.6
 	)
 

@@ -6,13 +6,12 @@
 #'
 #' @examples
 #' library(sf)
-#' library(magrittr)
 #'
 #' sf_poly <- st_as_sfc(c("POLYGON((-80.190 25.774, -66.118 18.466, -64.757 32.321))",
-#'                        "POLYGON((-70.579 28.745, -67.514 29.570, -66.668 27.339))")) %>%
-#'           st_sf()
+#'                        "POLYGON((-70.579 28.745, -67.514 29.570, -66.668 27.339))"))
+#' sf <- st_sf(id = paste0("poly", 1:2), sf_poly)
 #'
-#' EncodeSF(sf_poly)
+#' EncodeSF(sf)
 #'
 #' @export
 EncodeSF <- function(sf){
@@ -39,7 +38,6 @@ EncodeSF <- function(sf){
 
 EncodePolyline <- function(geom) UseMethod("encodePolyline")
 
-
 #' @export
 encodePolyline.sfc_LINESTRING <- function(geom){
 
@@ -48,14 +46,16 @@ encodePolyline.sfc_LINESTRING <- function(geom){
 			encode_pl(m[,2],m[,1])
 		})
 
-		return(data.table::data.table(.id = 1:length(geom),
-																	polyline = pl))
+		dt <- data.table::data.table(.id = 1:length(geom),
+																	polyline = pl)
+
+		return(.encode.polyline(dt))
 }
 
 #' @export
 encodePolyline.sfc_POLYGON <- function(geom){
 
-	data.table::rbindlist(
+	dt <- data.table::rbindlist(
 		lapply(geom, function(x){
 				data.table::data.table(
 					polyline = sapply(x, function(y){
@@ -64,12 +64,15 @@ encodePolyline.sfc_POLYGON <- function(geom){
 				)
 		}), idcol = T
 	)
+
+	return(.encode.polyline(dt))
+
 }
 
 #' @export
 encodePolyline.sfc_MULTIPOLYGON <- function(geom){
 
-	data.table::rbindlist(
+	dt <- data.table::rbindlist(
 
 		lapply(geom, function(x){
 
@@ -86,6 +89,9 @@ encodePolyline.sfc_MULTIPOLYGON <- function(geom){
 			)
 		}), idcol = T
 	)
+
+	return(.encode.polyline(dt))
+
 }
 
 #' @export

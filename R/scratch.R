@@ -803,7 +803,25 @@
 # 	add_polygons(polyline = "simplified2")
 
 
+## attributes
 
+
+# library(data.table)
+#
+# as.test <- function(x) { class(x) <- c('test', class(x)); x }
+# print.test <- function(x) {  x[['a']] <- "more tests"; NextMethod()  }
+#
+# a <- data.table(x = 1:5, y = 1:5)
+# b <- as.test(a)
+#
+# print(a)
+# print(b)
+#
+# a2 <- a[1:5, ]
+# b2 <- b[1:5, ]
+#
+# a2
+# b2
 
 
 

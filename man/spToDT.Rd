@@ -62,11 +62,6 @@ dt <- spToDT(spdf)
 
 library(sf)
 
-## sfc POLYGONS
-p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
-p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
-pol <-st_polygon(list(p1,p2))
-dt <- spToDT(pol)
 
 ## sfc MULTIPOINT
 p <- rbind(c(3.2,4), c(3,4.6), c(3.8,4.4), c(3.5,3.8), c(3.4,3.6), c(3.9,4.5))
@@ -84,6 +79,11 @@ s3 <- rbind(c(0,4.4), c(0.6,5))
 mls <- st_multilinestring(list(s1,s2,s3))
 dt <- spToDT(mls)
 
+## sfc POLYGONS
+p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
+p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
+pol <-st_polygon(list(p1,p2))
+dt <- spToDT(pol)
 
 ## sfc MULTIPOLYGON
 p3 <- rbind(c(3,0), c(4,0), c(4,1), c(3,1), c(3,0))
