@@ -54,15 +54,7 @@ print.spatialdatatable <- function(x, ...){
 	## what I want is to go through the 'print.data.table' method to get its formatting
 	## then to format the final column...
 
-	## if the data.table print options
-	# print("asking for next method")
-	# options("datatable.print.nrows" = 100L)
-	# options("datatable.prettyprint.char" = 10L)
-
-
 	poly_column <- spdt_polyline_col(x)
-	# print(paste0("poly_column: ", poly_column))
-	# print("printing spdt")
 	poly_column <- poly_column[ poly_column %in% names(x) ]
 
 
@@ -70,8 +62,6 @@ print.spatialdatatable <- function(x, ...){
 
 		## truncate just the 'polyline' columns.
 		## data.table has the option 'datatable.prettyprint.char' that may overwrite this
-
-		print("truncating characters")
 
 		x <- x[,  lapply(.SD, function(y) {
 			paste0(substr(y, 1, pmin(20, nchar(y))), "...")
@@ -95,10 +85,6 @@ print.spatialdatatable <- function(x, ...){
 `[.spatialdatatable` <- function(x, ...){
 
 	## need to keep the polyline attribute if it exists
-	# print("subsetting")
-	# poly_column <- attr(x, "spdt_polyline")
-	# poly_column <- spdt_polyline_col(x)
-	# print(paste0("subset polyline column: ", poly_column) )
 
 	## detect for ':=' in 'j', and if it exists, we don't want to print
 
@@ -106,12 +92,7 @@ print.spatialdatatable <- function(x, ...){
 	args <- lapply(args, function(y) { grepl(":=", y) })
 	args <- sapply(args, sum)
 	if(sum(args) > 0){
-		print("found :=")
-		print(getOption("datatable.print.nrows"))
 		options("datatable.print.nrows" = -1L)
-	}else{
-		# print("didn't find :=")
-		# options("datatable.print.nrows" = 100L)
 	}
 
 	NextMethod()
