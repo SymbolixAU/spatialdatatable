@@ -1,7 +1,5 @@
 
-## TODO:
-## - reset datatable.print.nrows
-
+# sets 'spatialdatatable' attribute on the spatialdatatable
 .spatialdatatable <- function(dt){
 	data.table::setattr(dt, "class", c("spatialdatatable", class(dt)))
 	return(dt)
