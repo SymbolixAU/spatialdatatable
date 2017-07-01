@@ -10,11 +10,22 @@
 #' @param x
 #' @export
 setSpDT <- function(x, polyline_column = NULL, ...){
-	setDT(x, ...)
-	data.table::setattr(dt, "class", c("spatialdatatable", class(dt)))
-	if(!is.null(polyline_column)){
-		data.table::setattr(x[[polyline_column]], "spdt_polyline","polyline")
+
+	name = as.character(substitute(x))
+	if(!is.data.table(x)) setDT(x, ...)
+
+	if(!"spatialdatatable" %in% class(x)){
+		data.table::setattr(x, "class", c("spatialdatatable", class(dt)))
+	# 	assign(name, x, parent.frame(), inherits = TRUE)
+	#
 	}
+	# if(!is.null(polyline_column)){
+	# 	if(!polyline_column %in% names(x)){
+	# 		warning(paste0(polyline_column, " not found in ", name))
+	# 	}else{
+	# 		data.table::setattr(x[[polyline_column]], "spdt_polyline","polyline")
+	# 	}
+	# }
 }
 
 

@@ -11,13 +11,23 @@ test_that("setSpDT() sets attributes", {
 
 	dt <- data.table(id = 1:5)
 	setSpDT(dt)
-	expect_true('spatialdatatable' %in% class(dt))
+	print(str(dt))
+	expect_true(
+		"spatialdatatable" %in% class(dt)
+		)
 
 	setSpDT(dt, polyline_column = "id")
-	expect_true('spatialdatatable' %in% class(dt))
+	print(str(dt))
+	expect_true(
+		"spatialdatatable" %in% class(dt)
+		)
 
-	attributes = sapply(dt, function(x) names(attributes(x)))
-	expect_true(names(which(attributes == "spdt_polyline")) == "id")
+	# print(str(dt))
+	# ats = sapply(dt, function(x) names(attributes(x)))
+	# print(ats)
+	# expect_true(
+	# 	names(which(ats == "spdt_polyline")) == "id"
+	# 	)
 
 })
 
