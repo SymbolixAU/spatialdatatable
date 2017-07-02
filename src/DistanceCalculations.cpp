@@ -14,9 +14,8 @@ double distanceHaversine(double latf, double lonf, double latt, double lont,
 	if(d > 1 && d <= tolerance){
 		d = 1;
 	}
-	d = 2 * atan2(sqrt(d), sqrt(1 - d)) * earthRadius;
 
-	return d;
+	return 2 * atan2(sqrt(d), sqrt(1 - d)) * earthRadius;
 }
 
 double distanceCosine(double latf, double lonf, double latt, double lont,

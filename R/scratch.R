@@ -803,25 +803,42 @@
 # 	add_polygons(polyline = "simplified2")
 
 
-## attributes
+# mapKey <- read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")
+# sdt <- copy(spdt_melbourne)
+# sdt[, polyline2 := SimplifyPolyline(polyline, type = "complex")]
+#
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = sdt[1, .(polyline)], polyline = "polyline")
+#
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = sdt[1, .(polyline2)], polyline = "polyline2")
+#
+# sdt <- copy(spdt_melbourne)
+# sdt[, polyline2 := SimplifyPolyline(polyline, type = "complex")]
+#
+# PolylineDistance(sdt[1, polyline])
+# PolylineDistance(sdt[1, polyline2])
+#
+#
+# dt1 <- decode_pl(sdt[1, polyline])
+# dt2 <- decode_pl(sdt[1, polyline2])
+#
+# setDT(dt1)
+# setDT(dt2)
+#
+# dt1[, `:=`(latt = shift(lat, type = "lead"),
+# 					 lont = shift(lon, type = "lead"))]
+#
+# dt1[, dist := dtHaversine(lat, lon, latt, lont)]
+#
+# dt2[, `:=`(latt = shift(lat, type = "lead"),
+# 					 lont = shift(lon, type = "lead"))]
+#
+# dt2[, dist := dtHaversine(lat, lon, latt, lont)]
+#
+# dt1[, sum(dist, na.rm = T)]
+# dt2[, sum(dist, na.rm = T)]
 
-
-# library(data.table)
-#
-# as.test <- function(x) { class(x) <- c('test', class(x)); x }
-# print.test <- function(x) {  x[['a']] <- "more tests"; NextMethod()  }
-#
-# a <- data.table(x = 1:5, y = 1:5)
-# b <- as.test(a)
-#
-# print(a)
-# print(b)
-#
-# a2 <- a[1:5, ]
-# b2 <- b[1:5, ]
-#
-# a2
-# b2
 
 
 

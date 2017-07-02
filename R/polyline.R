@@ -120,3 +120,28 @@ encode_pl <- function(lat, lon){
 		message("The coordinates could not be encoded")
 	})
 }
+
+#' Polyline Distance
+#'
+#' Calculates the distance of an encoded polyline
+#'
+#' @param polyline
+#'
+#' @examples
+#' \dontrun{
+#'
+#' sdt <- copy(spdt_melbourne)
+#'
+#' sdt[, polyline_distance := PolylineDistance(polyline)]
+#'
+#'
+#' }
+#'
+#' @export
+PolylineDistance <- function(polyline){
+	rcpp_polyline_distance(polyline)
+}
+
+
+
+
