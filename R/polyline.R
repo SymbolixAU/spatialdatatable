@@ -72,8 +72,8 @@ SimplifyPolyline <- function(polyline, distanceTolerance = 100, type = c("simple
 #' @export
 decode_pl <- function(encoded){
 
-	if(class(encoded) != "character" | length(encoded) != 1)
-		stop("encoded must be a string of length 1")
+	# if(class(encoded) != "character" | length(encoded) != 1)
+	# 	stop("encoded must be a string of length 1")
 
 	tryCatch({
 		rcpp_decode_pl(encoded)

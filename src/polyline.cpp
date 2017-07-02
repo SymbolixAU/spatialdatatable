@@ -14,42 +14,69 @@ using namespace Rcpp;
 // ------------------------------------------------------
 
 // [[Rcpp::export]]
-DataFrame rcpp_decode_pl(std::string encoded){
-	int len = encoded.size();
-	int index = 0;
-	float lat = 0;
-	float lng = 0;
+Rcpp::List rcpp_decode_pl(std::string encoded){
+//Rcpp::List rcpp_decode_pl(Rcpp::StringVector encodedStrings){
+//DataFrame rcpp_decode_pl(std::string encoded){
 
-	NumericVector pointsLat;
-	NumericVector pointsLon;
+  //int encodedSize = encodedStrings.size();
+	//Rcpp::List result(encodedSize);
+	//DataFrame df_coords;
+	//Rcpp::List resultLats(encodedSize);
+	//Rcpp::List resultLons(encodedSize);
 
-	while (index < len){
-		char b;
-		int shift = 0;
-		int result = 0;
-		do {
-			b = encoded.at(index++) - 63;
-			result |= (b & 0x1f) << shift;
-			shift += 5;
-		} while (b >= 0x20);
-		float dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
-		lat += dlat;
+  //for(int i = 0; i < encodedSize; i++){
 
-		shift = 0;
-		result = 0;
-		do {
-			b = encoded.at(index++) - 63;
-			result |= (b & 0x1f) << shift;
-			shift += 5;
-		} while (b >= 0x20);
-		float dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
-		lng += dlng;
+  	//std::string thisEncoded = Rcpp::as< std::string >(encodedStrings[i]);
 
-		pointsLat.push_back(lat * (float)1e-5);
-		pointsLon.push_back(lng * (float)1e-5);
-	}
+		int len = encoded.size();
+		int index = 0;
+		float lat = 0;
+		float lng = 0;
 
-	return DataFrame::create(Named("lat") = pointsLat, Named("lon") = pointsLon);
+		NumericVector pointsLat;
+		NumericVector pointsLon;
+
+		while (index < len){
+			char b;
+			int shift = 0;
+			int result = 0;
+			do {
+				b = encoded.at(index++) - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			float dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
+			lat += dlat;
+
+			shift = 0;
+			result = 0;
+			do {
+				b = encoded.at(index++) - 63;
+				result |= (b & 0x1f) << shift;
+				shift += 5;
+			} while (b >= 0x20);
+			float dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
+			lng += dlng;
+
+			pointsLat.push_back(lat * (float)1e-5);
+			pointsLon.push_back(lng * (float)1e-5);
+		//}
+
+		//df_coords = DataFrame::create(Named("lat") = pointsLat, Named("lon") = pointsLon);
+		//result[i] = df_coords;
+
+		//result[i] = Rcpp::List::create(
+		//	_["lat"] = pointsLat,
+		//	_["lon"] = pointsLon
+		//);
+
+		//resultLats[i] = pointsLat;
+		//resultLons[i] = pointsLon;
+
+  }
+
+		return Rcpp::List::create(_["lat"] = pointsLat, _["lon"] = pointsLon);
+  //return result;
 }
 
 Rcpp::String EncodeNumber(int num){

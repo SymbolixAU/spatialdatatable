@@ -160,7 +160,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_decode_pl
-DataFrame rcpp_decode_pl(std::string encoded);
+Rcpp::List rcpp_decode_pl(std::string encoded);
 RcppExport SEXP spatialdatatable_rcpp_decode_pl(SEXP encodedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
