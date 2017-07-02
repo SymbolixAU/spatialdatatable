@@ -7,16 +7,16 @@ library(sf)
 ## TODO:
 ## data.table 'global' options are unmodified
 
-test_that("setSpDT() sets attributes", {
+test_that("setSDT() sets attributes", {
 
 	dt <- data.table(id = 1:5)
-	setSpDT(dt)
+	setSDT(dt)
 	print(str(dt))
 	expect_true(
 		"spatialdatatable" %in% class(dt)
 		)
 
-	setSpDT(dt, polyline_column = "id")
+	setSDT(dt, polyline_column = "id")
 	print(str(dt))
 	expect_true(
 		"spatialdatatable" %in% class(dt)
@@ -29,6 +29,31 @@ test_that("setSpDT() sets attributes", {
 	# 	names(which(ats == "spdt_polyline")) == "id"
 	# 	)
 
+})
+
+
+test_that("setSDT works in a function", {
+
+	dt <- data.table(id = 1:5)
+	foo <- function(x){
+		setSDT(x)
+	}
+
+	foo(dt)
+	expect_true("spatialdatatable" %in% class(dt))
+
+	dt <- data.table(id = 1:5)
+	foo <- function(x){
+		setSDT(x)
+		x[, val := letters[1:5]]
+	}
+
+	foo(dt)
+	expect_true("val" %in% names(dt))
+
+	dt <- data.table(id = 1:5)
+	dt2 <- foo(dt)
+	expect_true(identical(dt, dt2))
 })
 
 

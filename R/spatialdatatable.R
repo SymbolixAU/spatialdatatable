@@ -1,15 +1,17 @@
 
 ## TODO:
-## setSpDT()  (like setDT())
-## - also, setSpDT(x, polyline = "polyline_column") to define the polyline attribute
+## setSDT()  (like setDT())
+## - also, setSDT(x, polyline = "polyline_column") to define the polyline attribute
+##
+## test that setSDT works inside functions, and HOW it works!?
 
-#' set spdt
+#' Set SDT
 #'
 #' creates a spatialdatatable object
 #'
 #' @param x
 #' @export
-setSpDT <- function(x, polyline_column = NULL, ...){
+setSDT <- function(x, polyline_column = NULL, ...){
 
 	name = as.character(substitute(x))
 	if(!is.data.table(x)) setDT(x, ...)
