@@ -59,8 +59,8 @@ PointsInPolygon <- function(vectorX, vectorY, pointsX, pointsY, pointsIds){
 #' is outside the polygon.
 #'
 #'
-#' @param pointX x-coordinate of a point
-#' @param pointY y-coordinate of a point
+#' @param pointX x-coordinate of a point (typically 'latitude')
+#' @param pointY y-coordinate of a point (typically 'longitude')
 #' @param polyX x-coordinates of the polygon
 #' @param polyY y-coordinates of thepolygon
 #'
