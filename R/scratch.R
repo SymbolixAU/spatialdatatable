@@ -838,12 +838,29 @@
 #
 # dt1[, sum(dist, na.rm = T)]
 # dt2[, sum(dist, na.rm = T)]
-
-
-
-
-
-
+#
+# library(Rcpp)
+#
+# cppFunction('double dHaversine(double latf, double lonf, double latt, double lont,
+#                          double tolerance, double earthRadius){
+# 						double d;
+# 						double dlat = latt - latf;
+# 						double dlon =  lont - lonf;
+#
+# 						d = (sin(dlat * 0.5) * sin(dlat * 0.5)) + (cos(latf) * cos(latt)) * (sin(dlon * 0.5) * sin(dlon * 0.5));
+# 						if(d > 1 && d <= tolerance){
+# 						d = 1;
+# 						}
+#
+# 						return 2 * atan2(sqrt(d), sqrt(1 - d)) * earthRadius;
+# 						}')
+#
+# dHaversine(-37.5549, 144.1877, -37.55483, 144.1877, 1000000000, 6378137.0)
+#
+# dtHaversine(-37.5549, 144.1877, -37.55483, 144.1877, 1000000000, 6378137.0)
+# dtHaversine(dt1[1, lat], dt1[1, lon], dt1[1, latt], dt1[1, lont], 1000000000, 6378137.0)
+# geosphere::distHaversine(p1 = rev(c(-37.5549, 144.1877)), p2 = rev(c(-37.55483, 144.1877)))
+#
 
 
 

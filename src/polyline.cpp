@@ -111,6 +111,10 @@ Rcpp::NumericVector rcpp_polyline_distance(Rcpp::StringVector encodedStrings){
 	Rcpp::DoubleVector lats;
 	Rcpp::DoubleVector lons;
 	Rcpp::DoubleVector result(len);
+	double latf;
+	double lonf;
+	double latt;
+	double lont;
 
 	for(int i = 0; i < len; i++){
 
@@ -123,17 +127,16 @@ Rcpp::NumericVector rcpp_polyline_distance(Rcpp::StringVector encodedStrings){
 		nCoords = lats.size() - 1;
 		thisDistance = 0;
 		for(int j = 0; j < nCoords; j++){
-			if(j < 1){
-				Rcpp::Rcout << lats[j] << ", " << lons[j] << std::endl;
-				Rcpp::Rcout << lats[j + 1] << ", " << lons[j + 1] << std::endl;
-				// Rcpp::Rcout << distanceHaversine(-37.5549, 144.188, -37.554901, 144.188, 1000000000, spdt::EARTH_RADIUS) << std::endl;
-				Rcpp::Rcout << distanceHaversine(lats[j], lons[j], lats[j + 1], lons[j + 1], 1000000000, spdt::EARTH_RADIUS) << std::endl;
-				// Rcpp::Rcout << distanceCosine(lats[j], lons[j], lats[j + 1], lons[j + 1], spdt::EARTH_RADIUS) << std::endl;
-			}
-			thisDistance += distanceHaversine(lats[j], lons[j], lats[j + 1], lons[j + 1], 1000000000, spdt::EARTH_RADIUS);
+
+			latf = toRadians(lats[j]);
+			lonf = toRadians(lons[j]);
+			latt = toRadians(lats[j + 1]);
+			lont = toRadians(lons[j + 1]);
+
+			thisDistance += distanceHaversine(lats[j], lons[j],
+                                     lats[j + 1], lons[j + 1],
+                                     1000000000, spdt::EARTH_RADIUS);
 		}
-		Rcpp::Rcout << thisDistance << std::endl;
-		Rcpp::Rcout << "rows: " << nCoords << std::endl;
 		result[i] = thisDistance;
 	}
 
