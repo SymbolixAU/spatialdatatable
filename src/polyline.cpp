@@ -106,7 +106,7 @@ Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
 // Length of an encoded polyline
 // - calculate the haversine distance between successive coordinates
 // [[Rcpp::export]]
-Rcpp::NumericVector rcpp_polyline_distance(Rcpp::StringVector encodedStrings){
+Rcpp::NumericVector rcppPolylineDistance(Rcpp::StringVector encodedStrings){
 
 	int len = encodedStrings.size();
 	int nCoords;

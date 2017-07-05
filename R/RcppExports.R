@@ -49,8 +49,8 @@ rcpp_encode_pl <- function(latitude, longitude, num_coords) {
     .Call('spatialdatatable_rcpp_encode_pl', PACKAGE = 'spatialdatatable', latitude, longitude, num_coords)
 }
 
-rcpp_polyline_distance <- function(encodedStrings) {
-    .Call('spatialdatatable_rcpp_polyline_distance', PACKAGE = 'spatialdatatable', encodedStrings)
+rcppPolylineDistance <- function(encodedStrings) {
+    .Call('spatialdatatable_rcppPolylineDistance', PACKAGE = 'spatialdatatable', encodedStrings)
 }
 
 rcppDouglasPeucker <- function(polyline, distanceTolerance) {

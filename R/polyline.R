@@ -139,7 +139,7 @@ encode_pl <- function(lat, lon){
 #'
 #' @export
 PolylineDistance <- function(polyline){
-	rcpp_polyline_distance(polyline)
+	rcppPolylineDistance(polyline)
 }
 
 
