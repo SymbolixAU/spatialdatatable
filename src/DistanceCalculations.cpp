@@ -13,12 +13,19 @@ double distanceHaversine(double latf, double lonf, double latt, double lont,
 	double dlat = latt - latf;
 	double dlon =  lont - lonf;
 
+	//Rcpp::Rcout << "dlat: " << dlat << std::endl;
+	//Rcpp::Rcout << "dlon: " << dlon << std::endl;
+
 	d = (sin(dlat * 0.5) * sin(dlat * 0.5)) + (cos(latf) * cos(latt)) * (sin(dlon * 0.5) * sin(dlon * 0.5));
 	if(d > 1 && d <= tolerance){
 		d = 1;
 	}
 
-	return inverseHaversine(d);
+	//Rcpp::Rcout << "haversine: " << d << std::endl;
+	//Rcpp::Rcout << "distance: " << inverseHaversine(d) << std::endl;
+
+	return 2 * atan2(sqrt(d), sqrt(1 - d)) * spdt::EARTH_RADIUS;
+	//return inverseHaversine(d);
 }
 
 
@@ -325,16 +332,31 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 	double latt;
 	double lonf;
 	double lont;
+	double dist = 0;
 
 	for(int i = 0; i < n; i++){
+
+		Rcpp::Rcout.precision(10);
+		Rcpp::Rcout << std::fixed << latFrom[i] << "," << lonFrom[i] << std::endl;
+		Rcpp::Rcout << std::fixed << latTo[i] << "," << lonTo[i] << std::endl;
 
 		latf = toRadians(latFrom[i]);
 		lonf = toRadians(lonFrom[i]);
 		latt = toRadians(latTo[i]);
 		lont = toRadians(lonTo[i]);
 
-		distance[i] = distanceHaversine(latf, lonf, latt, lont, tolerance);
+		Rcpp::Rcout << latf << std::fixed << "," << lonf << std::endl;
+		Rcpp::Rcout << latt << std::fixed << "," << lont << std::endl;
+
+		Rcpp::Rcout << "rcppDistanceHaversine distance: " << dist << std::endl;
+		dist = distanceHaversine(latf, lonf, latt, lont, tolerance);
+		Rcpp::Rcout << "rcppDistanceHaversine distance: " << dist << std::endl;
+
+		distance[i] = dist;
 	}
+
+	//double dx = distanceHaversine(-38.39360, 144.7876, -38.39354, 144.7875, 1.00000001);
+	//Rcpp::Rcout << "haversine3: "<<	distance[0] << std::endl;
 	return distance;
 }
 
