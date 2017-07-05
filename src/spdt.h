@@ -11,7 +11,8 @@ namespace spdt {
   	double lon;
   };
 
-  const double EARTH_RADIUS = 6378137.0;
+  //const double EARTH_RADIUS = 6378137.0
+  const double EARTH_RADIUS = 6371009;
   const double RADIAN = 57.2957795131;  // 180 / PI
   const double DEGREE = 0.01745329251;  // PI / 180
 
@@ -45,11 +46,12 @@ namespace spdt {
 
   double normaliseLonDeg(double deg);
 
-  double distanceHaversine(double latf, double lonf, double latt, double lont,
-                           double tolerance, double earthRadius);
+  double inverseHaversine(double d);
 
-  double distanceCosine(double latf, double lonf, double latt, double lont,
-                        double earthRadius);
+  double distanceHaversine(double latf, double lonf, double latt, double lont,
+                           double tolerance);
+
+  double distanceCosine(double latf, double lonf, double latt, double lont);
 
 
   double distanceEuclidean(double latf, double lonf, double latt, double lont);
@@ -57,10 +59,10 @@ namespace spdt {
   double bearingCalc(double latf, double lonf, double latt, double lont,
                      bool compassBearing);
 
-  double crossTrack(double distance, double bearing1, double bearing2, double earthRadius);
+  double crossTrack(double distance, double bearing1, double bearing2);
 
 
-  double alongTrack(double distance, double xtrack, double earthRadius);
+  double alongTrack(double distance, double xtrack);
 
   /**
    * Is Left
@@ -104,7 +106,7 @@ namespace spdt {
   Rcpp::NumericVector ClosePolygon(Rcpp::NumericVector polyVector);
 
   double rcppDist2gc(double latFrom, double lonFrom, double latTo, double lonTo,
-                     double pointLat, double pointLon, double tolerance, double earthRadius);
+                     double pointLat, double pointLon, double tolerance);
 
   DataFrame decode_polyline(std::string encoded);
 

@@ -7,9 +7,9 @@
 WindingNumber(pointX, pointY, polyX, polyY)
 }
 \arguments{
-\item{pointX}{x-coordinate of a point}
+\item{pointX}{x-coordinate of a point (typically 'latitude')}
 
-\item{pointY}{y-coordinate of a point}
+\item{pointY}{y-coordinate of a point (typically 'longitude')}
 
 \item{polyX}{x-coordinates of the polygon}
 

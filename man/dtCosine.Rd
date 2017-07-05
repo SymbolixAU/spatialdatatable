@@ -4,7 +4,7 @@
 \alias{dtCosine}
 \title{dt cosine}
 \usage{
-dtCosine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius())
+dtCosine(latFrom, lonFrom, latTo, lonTo)
 }
 \arguments{
 \item{latFrom}{latitude}
@@ -14,8 +14,6 @@ dtCosine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius())
 \item{latTo}{latitude}
 
 \item{lonTo}{latitude}
-
-\item{r}{radius of earth}
 }
 \value{
 distance in metres

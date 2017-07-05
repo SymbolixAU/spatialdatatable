@@ -3,6 +3,11 @@
 
 using namespace Rcpp;
 
+// Reference:
+// https://github.com/googlemaps/android-maps-utils/blob/7368f6157560c6d132de55f27e1147cd6a43c961/library/src/com/google/maps/android/SphericalUtil.java
+
+
+
 // ------------------------------------------------------
 // C++ implementation of the google api polyline decoder
 // https://developers.google.com/maps/documentation/utilities/polylineutility
@@ -20,8 +25,8 @@ DataFrame rcpp_decode_pl(std::string encoded){
 	float lat = 0;
 	float lng = 0;
 
-	NumericVector pointsLat;
-	NumericVector pointsLon;
+	Rcpp::NumericVector  pointsLat;
+	Rcpp::NumericVector pointsLon;
 
 	while (index < len){
 		char b;
@@ -98,6 +103,66 @@ Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
 }
 
 
+// Length of an encoded polyline
+// - calculate the haversine distance between successive coordinates
+// [[Rcpp::export]]
+Rcpp::NumericVector rcppPolylineDistance(Rcpp::StringVector encodedStrings){
+
+	int len = encodedStrings.size();
+	int nCoords;
+	Rcpp::DataFrame df_coords;
+	float thisDistance;
+	Rcpp::DoubleVector lats;
+	Rcpp::DoubleVector lons;
+	Rcpp::DoubleVector result(len);
+	double latf;
+	double lonf;
+	double latt;
+	double lont;
+
+	for(int i = 0; i < len; i++){
+
+		std::string thisEncoded = Rcpp::as< std::string >(encodedStrings[i]);
+		df_coords = rcpp_decode_pl(thisEncoded);
+		lats = df_coords["lat"];
+		lons = df_coords["lon"];
+
+		// calculate the total distance between each successive pair of coordinates
+		nCoords = lats.size() - 1;
+		thisDistance = 0;
+		for(int j = 0; j < nCoords; j++){
+
+			//Rcpp::Rcout.precision(10);
+
+			//Rcpp::Rcout << lats[j] << std::fixed << "," << lons[j] << std::endl;
+			//Rcpp::Rcout << lats[j + 1] << std::fixed << "," << lons[j + 1] << std::endl;
+
+			latf = toRadians(lats[j]);
+			lonf = toRadians(lons[j]);
+			latt = toRadians(lats[j + 1]);
+			lont = toRadians(lons[j + 1]);
+
+		  //Rcpp::Rcout << latf << std::fixed << "," << lonf << std::endl;
+			//Rcpp::Rcout << latt << std::fixed <<  "," << lont << std::endl;
+
+			//Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
+			thisDistance += distanceHaversine(latf, lonf, latt, lont, 1000000000);
+			//Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
+		}
+		result[i] = thisDistance;
+
+
+		//double dx = distanceHaversine(-38.39360, 144.7876, -38.39354, 144.7875, 1.00000001);
+	  //Rcpp::Rcout << "haversine2: "<<	dx << std::endl;
+
+	}
+
+	return result;
+
+}
+
+
+
 //DataFrame rcpp_decode_pl( std::string encoded );
 //Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
 //                            Rcpp::NumericVector longitude,
@@ -140,7 +205,7 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 
 			// abs() called as the sign of the distance matters
 			thisDistance = fabs(rcppDist2gc(startLat, startLon, endLat, endLon, lats[i], lons[i],
-	                             distanceTolerance, spdt::EARTH_RADIUS));
+	                             distanceTolerance));
 
 			if(thisDistance > maxDistance){
 				maxDistance = thisDistance;
@@ -191,7 +256,7 @@ Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distan
 
 // [[Rcpp::export]]
 Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double distanceTolerance,
-                               double tolerance, double earthRadius){
+                               double tolerance){
 
 	// vertex cluster reduction
 	int nPolylines = polyline.size();
@@ -216,7 +281,7 @@ Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double dist
 		// only 'keep' those that are outside the tolerance range
 		for (int i = 0; i < n; i++){
 
-			if(distanceHaversine(lats[i], lons[i], lats[i + 1], lons[i + 1], tolerance, earthRadius) > distanceTolerance){
+			if(distanceHaversine(lats[i], lons[i], lats[i + 1], lons[i + 1], tolerance) > distanceTolerance){
 				keepLat[keepCounter] = lats[i];
 				keepLon[keepCounter] = lons[i];
 				keepCounter++;

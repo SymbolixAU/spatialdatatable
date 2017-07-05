@@ -803,30 +803,64 @@
 # 	add_polygons(polyline = "simplified2")
 
 
-## attributes
-
-
-# library(data.table)
+# mapKey <- read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")
+# sdt <- copy(spdt_melbourne)
+# sdt[, polyline2 := SimplifyPolyline(polyline, type = "complex")]
 #
-# as.test <- function(x) { class(x) <- c('test', class(x)); x }
-# print.test <- function(x) {  x[['a']] <- "more tests"; NextMethod()  }
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = sdt[1, .(polyline)], polyline = "polyline")
 #
-# a <- data.table(x = 1:5, y = 1:5)
-# b <- as.test(a)
+# google_map(key = mapKey) %>%
+# 	add_polylines(data = sdt[1, .(polyline2)], polyline = "polyline2")
 #
-# print(a)
-# print(b)
+# sdt <- copy(spdt_melbourne)
+# sdt[, polyline2 := SimplifyPolyline(polyline, type = "complex")]
 #
-# a2 <- a[1:5, ]
-# b2 <- b[1:5, ]
+# PolylineDistance(sdt[1, polyline])
+# PolylineDistance(sdt[1, polyline2])
 #
-# a2
-# b2
-
-
-
-
-
+#
+# dt1 <- decode_pl(sdt[1, polyline])
+# dt2 <- decode_pl(sdt[1, polyline2])
+#
+# setDT(dt1)
+# setDT(dt2)
+#
+# dt1[, `:=`(latt = shift(lat, type = "lead"),
+# 					 lont = shift(lon, type = "lead"))]
+#
+# dt1[, dist := dtHaversine(lat, lon, latt, lont)]
+#
+# dt2[, `:=`(latt = shift(lat, type = "lead"),
+# 					 lont = shift(lon, type = "lead"))]
+#
+# dt2[, dist := dtHaversine(lat, lon, latt, lont)]
+#
+# dt1[, sum(dist, na.rm = T)]
+# dt2[, sum(dist, na.rm = T)]
+#
+# library(Rcpp)
+#
+# cppFunction('double dHaversine(double latf, double lonf, double latt, double lont,
+#                          double tolerance, double earthRadius){
+# 						double d;
+# 						double dlat = latt - latf;
+# 						double dlon =  lont - lonf;
+#
+# 						d = (sin(dlat * 0.5) * sin(dlat * 0.5)) + (cos(latf) * cos(latt)) * (sin(dlon * 0.5) * sin(dlon * 0.5));
+# 						if(d > 1 && d <= tolerance){
+# 						d = 1;
+# 						}
+#
+# 						return 2 * atan2(sqrt(d), sqrt(1 - d)) * earthRadius;
+# 						}')
+#
+# dHaversine(-37.5549, 144.1877, -37.55483, 144.1877, 1000000000, 6378137.0)
+#
+# dtHaversine(-37.5549, 144.1877, -37.55483, 144.1877, 1000000000, 6378137.0)
+# dtHaversine(dt1[1, lat], dt1[1, lon], dt1[1, latt], dt1[1, lont], 1000000000, 6378137.0)
+# geosphere::distHaversine(p1 = rev(c(-37.5549, 144.1877)), p2 = rev(c(-37.55483, 144.1877)))
+#
 
 
 

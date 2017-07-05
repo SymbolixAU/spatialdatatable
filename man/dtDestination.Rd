@@ -4,7 +4,7 @@
 \alias{dtDestination}
 \title{dt destination}
 \usage{
-dtDestination(latFrom, lonFrom, distance, bearing, r = earthsRadius())
+dtDestination(latFrom, lonFrom, distance, bearing)
 }
 \arguments{
 \item{latFrom}{latitude from (in degrees)}
@@ -14,8 +14,6 @@ dtDestination(latFrom, lonFrom, distance, bearing, r = earthsRadius())
 \item{distance}{distance in metres}
 
 \item{bearing}{from north (in degrees)}
-
-\item{r}{radius of earth in metres}
 }
 \value{
 list of latitude and longitude coordinates at the destination
@@ -35,6 +33,6 @@ b <- 0:360
 dt <- data.table::data.table(lat = sample(lats, size = n, replace = T),
                              lon = sample(lons, size = n, replace = T),
                              bearing = sample(b, size = n, replace = T))
-dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, earthsRadius(), 90)]
+dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, 90)]
 
 }

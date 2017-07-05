@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // rcppAlongTrack
-NumericVector rcppAlongTrack(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, NumericVector pointLat, NumericVector pointLon, double tolerance, double earthRadius);
-RcppExport SEXP spatialdatatable_rcppAlongTrack(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP pointLatSEXP, SEXP pointLonSEXP, SEXP toleranceSEXP, SEXP earthRadiusSEXP) {
+NumericVector rcppAlongTrack(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, NumericVector pointLat, NumericVector pointLon, double tolerance);
+RcppExport SEXP spatialdatatable_rcppAlongTrack(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP pointLatSEXP, SEXP pointLonSEXP, SEXP toleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,14 +18,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type pointLat(pointLatSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type pointLon(pointLonSEXP);
     Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
-    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppAlongTrack(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, earthRadius));
+    rcpp_result_gen = Rcpp::wrap(rcppAlongTrack(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance));
     return rcpp_result_gen;
 END_RCPP
 }
 // rcppDist2gc
-NumericVector rcppDist2gc(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, NumericVector pointLat, NumericVector pointLon, double tolerance, double earthRadius);
-RcppExport SEXP spatialdatatable_rcppDist2gc(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP pointLatSEXP, SEXP pointLonSEXP, SEXP toleranceSEXP, SEXP earthRadiusSEXP) {
+NumericVector rcppDist2gc(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, NumericVector pointLat, NumericVector pointLon, double tolerance);
+RcppExport SEXP spatialdatatable_rcppDist2gc(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP pointLatSEXP, SEXP pointLonSEXP, SEXP toleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,14 +35,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type pointLat(pointLatSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type pointLon(pointLonSEXP);
     Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
-    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppDist2gc(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, earthRadius));
+    rcpp_result_gen = Rcpp::wrap(rcppDist2gc(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance));
     return rcpp_result_gen;
 END_RCPP
 }
 // rcppDestination
-Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom, NumericVector distance, NumericVector bearing, double earthRadius);
-RcppExport SEXP spatialdatatable_rcppDestination(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP distanceSEXP, SEXP bearingSEXP, SEXP earthRadiusSEXP) {
+Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom, NumericVector distance, NumericVector bearing);
+RcppExport SEXP spatialdatatable_rcppDestination(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP distanceSEXP, SEXP bearingSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -51,8 +49,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type lonFrom(lonFromSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type distance(distanceSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type bearing(bearingSEXP);
-    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppDestination(latFrom, lonFrom, distance, bearing, earthRadius));
+    rcpp_result_gen = Rcpp::wrap(rcppDestination(latFrom, lonFrom, distance, bearing));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -86,8 +83,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcppDistanceHaversine
-NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, double earthRadius, double tolerance);
-RcppExport SEXP spatialdatatable_rcppDistanceHaversine(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP earthRadiusSEXP, SEXP toleranceSEXP) {
+NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, double tolerance);
+RcppExport SEXP spatialdatatable_rcppDistanceHaversine(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP toleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -95,15 +92,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type lonFrom(lonFromSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type latTo(latToSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type lonTo(lonToSEXP);
-    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
     Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, earthRadius, tolerance));
+    rcpp_result_gen = Rcpp::wrap(rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, tolerance));
     return rcpp_result_gen;
 END_RCPP
 }
 // rcppDistanceCosine
-NumericVector rcppDistanceCosine(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo, double earthRadius);
-RcppExport SEXP spatialdatatable_rcppDistanceCosine(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP, SEXP earthRadiusSEXP) {
+NumericVector rcppDistanceCosine(NumericVector latFrom, NumericVector lonFrom, NumericVector latTo, NumericVector lonTo);
+RcppExport SEXP spatialdatatable_rcppDistanceCosine(SEXP latFromSEXP, SEXP lonFromSEXP, SEXP latToSEXP, SEXP lonToSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -111,8 +107,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type lonFrom(lonFromSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type latTo(latToSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type lonTo(lonToSEXP);
-    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppDistanceCosine(latFrom, lonFrom, latTo, lonTo, earthRadius));
+    rcpp_result_gen = Rcpp::wrap(rcppDistanceCosine(latFrom, lonFrom, latTo, lonTo));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -183,6 +178,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppPolylineDistance
+Rcpp::NumericVector rcppPolylineDistance(Rcpp::StringVector encodedStrings);
+RcppExport SEXP spatialdatatable_rcppPolylineDistance(SEXP encodedStringsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type encodedStrings(encodedStringsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppPolylineDistance(encodedStrings));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppDouglasPeucker
 Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distanceTolerance);
 RcppExport SEXP spatialdatatable_rcppDouglasPeucker(SEXP polylineSEXP, SEXP distanceToleranceSEXP) {
@@ -196,35 +202,46 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcppSimplifyPolyline
-Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double distanceTolerance, double tolerance, double earthRadius);
-RcppExport SEXP spatialdatatable_rcppSimplifyPolyline(SEXP polylineSEXP, SEXP distanceToleranceSEXP, SEXP toleranceSEXP, SEXP earthRadiusSEXP) {
+Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double distanceTolerance, double tolerance);
+RcppExport SEXP spatialdatatable_rcppSimplifyPolyline(SEXP polylineSEXP, SEXP distanceToleranceSEXP, SEXP toleranceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::StringVector >::type polyline(polylineSEXP);
     Rcpp::traits::input_parameter< double >::type distanceTolerance(distanceToleranceSEXP);
     Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
-    Rcpp::traits::input_parameter< double >::type earthRadius(earthRadiusSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppSimplifyPolyline(polyline, distanceTolerance, tolerance, earthRadius));
+    rcpp_result_gen = Rcpp::wrap(rcppSimplifyPolyline(polyline, distanceTolerance, tolerance));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcppEarthRadius
+double rcppEarthRadius();
+RcppExport SEXP spatialdatatable_rcppEarthRadius() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(rcppEarthRadius());
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"spatialdatatable_rcppAlongTrack", (DL_FUNC) &spatialdatatable_rcppAlongTrack, 8},
-    {"spatialdatatable_rcppDist2gc", (DL_FUNC) &spatialdatatable_rcppDist2gc, 8},
-    {"spatialdatatable_rcppDestination", (DL_FUNC) &spatialdatatable_rcppDestination, 5},
+    {"spatialdatatable_rcppAlongTrack", (DL_FUNC) &spatialdatatable_rcppAlongTrack, 7},
+    {"spatialdatatable_rcppDist2gc", (DL_FUNC) &spatialdatatable_rcppDist2gc, 7},
+    {"spatialdatatable_rcppDestination", (DL_FUNC) &spatialdatatable_rcppDestination, 4},
     {"spatialdatatable_rcppMidpoint", (DL_FUNC) &spatialdatatable_rcppMidpoint, 4},
     {"spatialdatatable_rcppBearing", (DL_FUNC) &spatialdatatable_rcppBearing, 5},
-    {"spatialdatatable_rcppDistanceHaversine", (DL_FUNC) &spatialdatatable_rcppDistanceHaversine, 6},
-    {"spatialdatatable_rcppDistanceCosine", (DL_FUNC) &spatialdatatable_rcppDistanceCosine, 5},
+    {"spatialdatatable_rcppDistanceHaversine", (DL_FUNC) &spatialdatatable_rcppDistanceHaversine, 5},
+    {"spatialdatatable_rcppDistanceCosine", (DL_FUNC) &spatialdatatable_rcppDistanceCosine, 4},
     {"spatialdatatable_rcppDistanceEuclidean", (DL_FUNC) &spatialdatatable_rcppDistanceEuclidean, 4},
     {"spatialdatatable_rcppPointsInPolygon", (DL_FUNC) &spatialdatatable_rcppPointsInPolygon, 5},
     {"spatialdatatable_rcppWindingNumber", (DL_FUNC) &spatialdatatable_rcppWindingNumber, 4},
     {"spatialdatatable_rcpp_decode_pl", (DL_FUNC) &spatialdatatable_rcpp_decode_pl, 1},
     {"spatialdatatable_rcpp_encode_pl", (DL_FUNC) &spatialdatatable_rcpp_encode_pl, 3},
+    {"spatialdatatable_rcppPolylineDistance", (DL_FUNC) &spatialdatatable_rcppPolylineDistance, 1},
     {"spatialdatatable_rcppDouglasPeucker", (DL_FUNC) &spatialdatatable_rcppDouglasPeucker, 2},
-    {"spatialdatatable_rcppSimplifyPolyline", (DL_FUNC) &spatialdatatable_rcppSimplifyPolyline, 4},
+    {"spatialdatatable_rcppSimplifyPolyline", (DL_FUNC) &spatialdatatable_rcppSimplifyPolyline, 3},
+    {"spatialdatatable_rcppEarthRadius", (DL_FUNC) &spatialdatatable_rcppEarthRadius, 0},
     {NULL, NULL, 0}
 };
 

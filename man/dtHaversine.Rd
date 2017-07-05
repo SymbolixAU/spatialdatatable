@@ -4,8 +4,7 @@
 \alias{dtHaversine}
 \title{dt haversine}
 \usage{
-dtHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius(),
-  tolerance = 1e+09)
+dtHaversine(latFrom, lonFrom, latTo, lonTo, tolerance = 1e+09)
 }
 \arguments{
 \item{latFrom}{latitude}
@@ -15,8 +14,6 @@ dtHaversine(latFrom, lonFrom, latTo, lonTo, r = earthsRadius(),
 \item{latTo}{latitude}
 
 \item{lonTo}{latitude}
-
-\item{r}{radius of earth}
 
 \item{tolerance}{numeric. See details}
 }

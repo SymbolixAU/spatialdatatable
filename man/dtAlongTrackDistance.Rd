@@ -5,7 +5,7 @@
 \title{Along Track Distance}
 \usage{
 dtAlongTrackDistance(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
-  tolerance = 1e+09, r = earthsRadius())
+  tolerance = 1e+09)
 }
 \arguments{
 \item{latFrom}{latitude value for the start of the path}
@@ -20,7 +20,7 @@ dtAlongTrackDistance(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
 
 \item{pointLon}{longitude value for the point}
 
-\item{r}{}
+\item{tolerance}{}
 }
 \description{
 Calculates the distance along a great-circle to the cross-track point
