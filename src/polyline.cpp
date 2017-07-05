@@ -134,22 +134,22 @@ Rcpp::NumericVector rcpp_polyline_distance(Rcpp::StringVector encodedStrings){
 		dist = 0;
 		for(int j = 0; j < nCoords; j++){
 
-			Rcpp::Rcout.precision(10);
+			//Rcpp::Rcout.precision(10);
 
-			Rcpp::Rcout << lats[j] << std::fixed << "," << lons[j] << std::endl;
-			Rcpp::Rcout << lats[j + 1] << std::fixed << "," << lons[j + 1] << std::endl;
+			//Rcpp::Rcout << lats[j] << std::fixed << "," << lons[j] << std::endl;
+			//Rcpp::Rcout << lats[j + 1] << std::fixed << "," << lons[j + 1] << std::endl;
 
 			latf = toRadians(lats[j]);
 			lonf = toRadians(lons[j]);
 			latt = toRadians(lats[j + 1]);
 			lont = toRadians(lons[j + 1]);
 
-			Rcpp::Rcout << latf << std::fixed << "," << lonf << std::endl;
-			Rcpp::Rcout << latt << std::fixed <<  "," << lont << std::endl;
+		  //Rcpp::Rcout << latf << std::fixed << "," << lonf << std::endl;
+			//Rcpp::Rcout << latt << std::fixed <<  "," << lont << std::endl;
 
-			Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
-			dist = distanceHaversine(lats[j], lons[j], lats[j + 1], lons[j + 1], 1000000000);
-			Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
+			//Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
+			dist = distanceHaversine(latf, lonf, latt, lont, 1000000000);
+			//Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
 			thisDistance = thisDistance + dist;
 		}
 		result[i] = thisDistance;

@@ -336,21 +336,21 @@ NumericVector rcppDistanceHaversine(NumericVector latFrom, NumericVector lonFrom
 
 	for(int i = 0; i < n; i++){
 
-		Rcpp::Rcout.precision(10);
-		Rcpp::Rcout << std::fixed << latFrom[i] << "," << lonFrom[i] << std::endl;
-		Rcpp::Rcout << std::fixed << latTo[i] << "," << lonTo[i] << std::endl;
+		//Rcpp::Rcout.precision(10);
+		//Rcpp::Rcout << std::fixed << latFrom[i] << "," << lonFrom[i] << std::endl;
+		//Rcpp::Rcout << std::fixed << latTo[i] << "," << lonTo[i] << std::endl;
 
 		latf = toRadians(latFrom[i]);
 		lonf = toRadians(lonFrom[i]);
 		latt = toRadians(latTo[i]);
 		lont = toRadians(lonTo[i]);
 
-		Rcpp::Rcout << latf << std::fixed << "," << lonf << std::endl;
-		Rcpp::Rcout << latt << std::fixed << "," << lont << std::endl;
+		//Rcpp::Rcout << latf << std::fixed << "," << lonf << std::endl;
+		//Rcpp::Rcout << latt << std::fixed << "," << lont << std::endl;
 
-		Rcpp::Rcout << "rcppDistanceHaversine distance: " << dist << std::endl;
+		//Rcpp::Rcout << "rcppDistanceHaversine distance: " << dist << std::endl;
 		dist = distanceHaversine(latf, lonf, latt, lont, tolerance);
-		Rcpp::Rcout << "rcppDistanceHaversine distance: " << dist << std::endl;
+		//Rcpp::Rcout << "rcppDistanceHaversine distance: " << dist << std::endl;
 
 		distance[i] = dist;
 	}
