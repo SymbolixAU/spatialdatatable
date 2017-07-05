@@ -135,7 +135,7 @@ Rcpp::NumericVector rcpp_polyline_distance(Rcpp::StringVector encodedStrings){
 
 			thisDistance += distanceHaversine(lats[j], lons[j],
                                      lats[j + 1], lons[j + 1],
-                                     1000000000, spdt::EARTH_RADIUS);
+                                     1000000000);
 		}
 		result[i] = thisDistance;
 	}
@@ -188,7 +188,7 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 
 			// abs() called as the sign of the distance matters
 			thisDistance = fabs(rcppDist2gc(startLat, startLon, endLat, endLon, lats[i], lons[i],
-	                             distanceTolerance, spdt::EARTH_RADIUS));
+	                             distanceTolerance));
 
 			if(thisDistance > maxDistance){
 				maxDistance = thisDistance;
@@ -239,7 +239,7 @@ Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distan
 
 // [[Rcpp::export]]
 Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double distanceTolerance,
-                               double tolerance, double earthRadius){
+                               double tolerance){
 
 	// vertex cluster reduction
 	int nPolylines = polyline.size();
@@ -264,7 +264,7 @@ Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double dist
 		// only 'keep' those that are outside the tolerance range
 		for (int i = 0; i < n; i++){
 
-			if(distanceHaversine(lats[i], lons[i], lats[i + 1], lons[i + 1], tolerance, earthRadius) > distanceTolerance){
+			if(distanceHaversine(lats[i], lons[i], lats[i + 1], lons[i + 1], tolerance) > distanceTolerance){
 				keepLat[keepCounter] = lats[i];
 				keepLon[keepCounter] = lons[i];
 				keepCounter++;

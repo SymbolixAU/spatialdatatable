@@ -6,7 +6,6 @@
 #' @param lonFrom longitude
 #' @param latTo latitude
 #' @param lonTo latitude
-#' @param r radius of earth
 #' @param tolerance numeric. See details
 #'
 #' @details
@@ -27,10 +26,9 @@
 #' @export
 dtHaversine <- function(latFrom, lonFrom,
 												latTo, lonTo,
-												r = earthsRadius(),
 												tolerance = 1e+9){
 
-	rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, r, tolerance)
+	rcppDistanceHaversine(latFrom, lonFrom, latTo, lonTo, tolerance)
 }
 
 #' dt cosine
@@ -41,7 +39,6 @@ dtHaversine <- function(latFrom, lonFrom,
 #' @param lonFrom longitude
 #' @param latTo latitude
 #' @param lonTo latitude
-#' @param r radius of earth
 #'
 #'
 #' @return distance in metres
@@ -55,10 +52,9 @@ dtHaversine <- function(latFrom, lonFrom,
 #'
 #' @export
 dtCosine <- function(latFrom, lonFrom,
-												latTo, lonTo,
-												r = earthsRadius()){
+												latTo, lonTo){
 
-	rcppDistanceCosine(latFrom, lonFrom, latTo, lonTo, r)
+	rcppDistanceCosine(latFrom, lonFrom, latTo, lonTo)
 }
 
 
@@ -171,7 +167,6 @@ dtMidpoint <- function(latFrom, lonFrom, latTo, lonTo){
 #' @param lonFrom longitude from (in degrees)
 #' @param distance distance in metres
 #' @param bearing from north (in degrees)
-#' @param r radius of earth in metres
 #' @return list of latitude and longitude coordinates at the destination
 #' @examples
 #'
@@ -185,11 +180,11 @@ dtMidpoint <- function(latFrom, lonFrom, latTo, lonTo){
 #' dt <- data.table::data.table(lat = sample(lats, size = n, replace = T),
 #'                              lon = sample(lons, size = n, replace = T),
 #'                              bearing = sample(b, size = n, replace = T))
-#' dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, earthsRadius(), 90)]
+#' dt[, c("destinationLat", "destinationLon") := dtDestination(lat, lon, 90)]
 #'
 #' @export
-dtDestination <- function(latFrom, lonFrom, distance, bearing, r = earthsRadius()){
-	rcppDestination(latFrom, lonFrom, distance, bearing, r);
+dtDestination <- function(latFrom, lonFrom, distance, bearing){
+	rcppDestination(latFrom, lonFrom, distance, bearing);
 }
 
 
@@ -236,7 +231,6 @@ dtAntipode <- function(lat, lon) {
 #' @param pointLat latitude value for the point
 #' @param pointLon longitude value for the point
 #' @param tolerance
-#' @param r
 #'
 #' @examples
 #' dt <- data.table(lat1 = c(0, 0),
@@ -254,14 +248,14 @@ dtAntipode <- function(lat, lon) {
 #'
 #' @export
 dtDist2gc <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
-											tolerance = 1e+9, r = earthsRadius()){
+											tolerance = 1e+9){
 
 	## TODO:
 	## - specify the distance function to use in the calculationg
 	## - (currently uses haversine)
 
 	rcppDist2gc(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
-							tolerance, r)
+							tolerance)
 }
 
 #' Along Track Distance
@@ -275,15 +269,14 @@ dtDist2gc <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
 #' @param pointLat latitude value for the point
 #' @param pointLon longitude value for the point
 #' @param tolerance
-#' @param r
 #'
 #' @seealso dtDist2gc
 #'
 #' @export
 dtAlongTrackDistance <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon,
-																 tolerance = 1e+9, r = earthsRadius()){
+																 tolerance = 1e+9){
 
-	rcppAlongTrack(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, r)
+	rcppAlongTrack(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance)
 }
 
 

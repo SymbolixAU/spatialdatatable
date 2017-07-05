@@ -42,7 +42,7 @@ SimplifyPolyline <- function(polyline, distanceTolerance = 100, type = c("simple
 
   if(type == "simple"){
   	## the 'simple' method uses dtDist2gc, which requires another tolerance an earth radius
-  	return(rcppSimplifyPolyline(polyline, distanceTolerance, 1e+9, earthsRadius()))
+  	return(rcppSimplifyPolyline(polyline, distanceTolerance, 1e+9))
   }else if(type == "complex"){
 		return(rcppDouglasPeucker(polyline, distanceTolerance))
   }else{
