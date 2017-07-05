@@ -22,3 +22,8 @@ double normaliseLonDeg(double deg){
 	return fmod(deg - 180.0, 360.0) + 180.0;
 }
 
+// [[Rcpp::export]]
+double rcppEarthRadius(){
+	return spdt::EARTH_RADIUS;
+}
+

@@ -220,6 +220,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppEarthRadius
+double rcppEarthRadius();
+RcppExport SEXP spatialdatatable_rcppEarthRadius() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(rcppEarthRadius());
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"spatialdatatable_rcppAlongTrack", (DL_FUNC) &spatialdatatable_rcppAlongTrack, 8},
@@ -237,6 +247,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"spatialdatatable_rcpp_polyline_distance", (DL_FUNC) &spatialdatatable_rcpp_polyline_distance, 1},
     {"spatialdatatable_rcppDouglasPeucker", (DL_FUNC) &spatialdatatable_rcppDouglasPeucker, 2},
     {"spatialdatatable_rcppSimplifyPolyline", (DL_FUNC) &spatialdatatable_rcppSimplifyPolyline, 4},
+    {"spatialdatatable_rcppEarthRadius", (DL_FUNC) &spatialdatatable_rcppEarthRadius, 0},
     {NULL, NULL, 0}
 };
 

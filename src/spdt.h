@@ -11,7 +11,8 @@ namespace spdt {
   	double lon;
   };
 
-  const double EARTH_RADIUS = 6378137.0;
+  //const double EARTH_RADIUS = 6378137.0
+  const double EARTH_RADIUS = 6371009;
   const double RADIAN = 57.2957795131;  // 180 / PI
   const double DEGREE = 0.01745329251;  // PI / 180
 

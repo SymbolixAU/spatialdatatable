@@ -298,7 +298,7 @@ antipodeLon <- function(lon) return((lon %% 360) - 180)
 #' @examples
 #' earthsRadius()
 #' @export
-earthsRadius <- function() return(6378137)
+earthsRadius <- function() rcppEarthRadius()
 
 
 toRadians <- function(x) return(x * (pi / 180))

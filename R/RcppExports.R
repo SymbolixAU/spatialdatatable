@@ -61,3 +61,7 @@ rcppSimplifyPolyline <- function(polyline, distanceTolerance, tolerance, earthRa
     .Call('spatialdatatable_rcppSimplifyPolyline', PACKAGE = 'spatialdatatable', polyline, distanceTolerance, tolerance, earthRadius)
 }
 
+rcppEarthRadius <- function() {
+    .Call('spatialdatatable_rcppEarthRadius', PACKAGE = 'spatialdatatable')
+}
+

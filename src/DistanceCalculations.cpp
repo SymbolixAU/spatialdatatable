@@ -18,6 +18,10 @@ double distanceHaversine(double latf, double lonf, double latt, double lont,
 	return 2 * atan2(sqrt(d), sqrt(1 - d)) * earthRadius;
 }
 
+double inverseHaversine(double d){
+
+}
+
 double distanceCosine(double latf, double lonf, double latt, double lont,
                       double earthRadius){
 
