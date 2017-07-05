@@ -26,7 +26,7 @@ test_that("setSDT() sets attributes", {
 	# ats = sapply(dt, function(x) names(attributes(x)))
 	# print(ats)
 	# expect_true(
-	# 	names(which(ats == "spdt_polyline")) == "id"
+	# 	names(which(ats == "sdt_polyline")) == "id"
 	# 	)
 
 })
@@ -111,32 +111,32 @@ test_that("spatialdatatable created from sp & sf objects", {
 
 test_that("data.table update-by-reference creates new column", {
 
-	spdt <- copy(spdt_melbourne)
-	spdt[, p := polyline]
+	sdt <- copy(sdt_melbourne)
+	sdt[, p := polyline]
 	expect_true(
-		"p" %in% names(spdt)
+		"p" %in% names(sdt)
 	)
 
-	## new column contains the 'spdt_polyline' attribute
+	## new column contains the 'sdt_polyline' attribute
 	expect_true(
-		names(attributes(spdt$p)) == "spdt_polyline"
+		names(attributes(sdt$p)) == "sdt_polyline"
 	)
 
 	expect_true(
-		attributes(spdt$p) == "polyline"
+		attributes(sdt$p) == "polyline"
 	)
 
 })
 
 test_that("data.table update-by-references doesn't print", {
-	spdt <- copy(spdt_melbourne)
-	expect_silent(spdt[, p := polyline])
+	sdt <- copy(sdt_melbourne)
+	expect_silent(sdt[, p := polyline])
 })
 
 # test_that("spatialdatatable print truncates polyline column", {
 #
-# 	spdt <- copy(spdt_melbourne)
-# 	expect_output(print(spdt))
+# 	sdt <- copy(sdt_melbourne)
+# 	expect_output(print(sdt))
 #
 # })
 

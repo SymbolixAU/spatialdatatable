@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include "spdt.h"
+#include "sdt.h"
 
 using namespace Rcpp;
 

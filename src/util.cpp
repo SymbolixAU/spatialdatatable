@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include "spdt.h"
+#include "sdt.h"
 
 using namespace Rcpp;
 
@@ -11,11 +11,11 @@ void vectorCheck(NumericVector v1, NumericVector v2){
 }
 
 double toRadians(double deg){
-	return deg * spdt::DEGREE;
+	return deg * sdt::DEGREE;
 }
 
 double toDegrees(double rad){
-	return rad * spdt::RADIAN;
+	return rad * sdt::RADIAN;
 }
 
 double normaliseLonDeg(double deg){
@@ -24,6 +24,6 @@ double normaliseLonDeg(double deg){
 
 // [[Rcpp::export]]
 double rcppEarthRadius(){
-	return spdt::EARTH_RADIUS;
+	return sdt::EARTH_RADIUS;
 }
 

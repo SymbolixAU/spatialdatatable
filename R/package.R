@@ -14,4 +14,4 @@ NULL
 ## - methods for polylines
 ## -- length
 ##
-## - if 'SimplifyPolyline' is called on a 'spdt_polyline' column, return a 'spdt_polyline column
+## - if 'SimplifyPolyline' is called on a 'sdt_polyline' column, return a 'spdt_polyline column

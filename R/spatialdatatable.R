@@ -25,7 +25,7 @@ setSDT <- function(x, polyline_column = NULL, ...){
 		if(!polyline_column %in% names(x)){
 			warning(paste0(polyline_column, " not found in ", name))
 		}else{
-			data.table::setattr(x[[polyline_column]], "spdt_polyline","polyline")
+			data.table::setattr(x[[polyline_column]], "sdt_polyline","polyline")
 		}
 	}
 }
@@ -40,7 +40,7 @@ setSDT <- function(x, polyline_column = NULL, ...){
 
 # sets 'polyline' attribute on the polyline column
 .encode.polyline <- function(x){
-	data.table::setattr(x[["polyline"]], "spdt_polyline","polyline")
+	data.table::setattr(x[["polyline"]], "sdt_polyline","polyline")
 	return(.spatialdatatable(x))
 }
 
@@ -49,29 +49,29 @@ setSDT <- function(x, polyline_column = NULL, ...){
 #'
 #' gets the encoded polyline(s) from a spatialdatatable object
 #'
-#' @param spdt spatialdatatable
+#' @param sdt spatialdatatable
 #'
 #' @export
-polylines <- function(spdt) UseMethod("spdt_polyline")
+polylines <- function(sdt) UseMethod("sdt_polyline")
 
 #' @export
-spdt_polyline.spatialdatatable <- function(spdt){
+sdt_polyline.spatialdatatable <- function(sdt){
 
 	## TODO:
 	## return ALL columns if there are more than one containing a polyline
 
-	poly_column <- polyline_column(spdt)
+	poly_column <- polyline_column(sdt)
 
 	if(length(poly_column) == 0){
 		message("No encoded polyline available")
 		return()
 	}
 
-	return(spdt[[attr(spdt[[poly_column]], "spdt_polyline")]])
+	return(sdt[[attr(sdt[[poly_column]], "sdt_polyline")]])
 }
 
 #' @export
-spdt_polyline.default <- function(spdt){
+sdt_polyline.default <- function(sdt){
 	return(NULL)
 }
 
@@ -79,18 +79,18 @@ spdt_polyline.default <- function(spdt){
 #'
 #' Gets the column(s) names of a spatialdatatable object containing encoded polylines
 #'
-#' @param spdt spatialdatatable object
+#' @param sdt spatialdatatable object
 #' @export
-polyline_column <- function(spdt) UseMethod("spdt_polyline_col")
+polyline_column <- function(sdt) UseMethod("sdt_polyline_col")
 
 #' @export
-spdt_polyline_col.spatialdatatable <- function(spdt){
-	attributes = sapply(spdt, function(x) names(attributes(x)))
-	names(which(attributes == "spdt_polyline"))
+sdt_polyline_col.spatialdatatable <- function(sdt){
+	attributes = sapply(sdt, function(x) names(attributes(x)))
+	names(which(attributes == "sdt_polyline"))
 }
 
 #' @export
-spdt_polyline_col.default <- function(spdt){
+sdt_polyline_col.default <- function(sdt){
 	return(NULL)
 }
 
