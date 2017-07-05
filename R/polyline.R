@@ -130,7 +130,7 @@ encode_pl <- function(lat, lon){
 #' @examples
 #' \dontrun{
 #'
-#' sdt <- copy(spdt_melbourne)
+#' sdt <- copy(sdt_melbourne)
 #'
 #' sdt[, polyline_distance := PolylineDistance(polyline)]
 #'

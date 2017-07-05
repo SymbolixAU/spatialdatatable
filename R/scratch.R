@@ -804,7 +804,7 @@
 
 
 # mapKey <- read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")
-# sdt <- copy(spdt_melbourne)
+# sdt <- copy(sdt_melbourne)
 # sdt[, polyline2 := SimplifyPolyline(polyline, type = "complex")]
 #
 # google_map(key = mapKey) %>%
@@ -813,7 +813,7 @@
 # google_map(key = mapKey) %>%
 # 	add_polylines(data = sdt[1, .(polyline2)], polyline = "polyline2")
 #
-# sdt <- copy(spdt_melbourne)
+# sdt <- copy(sdt_melbourne)
 # sdt[, polyline2 := SimplifyPolyline(polyline, type = "complex")]
 #
 # PolylineDistance(sdt[1, polyline])

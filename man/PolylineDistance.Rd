@@ -15,7 +15,7 @@ Calculates the distance of an encoded polyline
 \examples{
 \dontrun{
 
-sdt <- copy(spdt_melbourne)
+sdt <- copy(sdt_melbourne)
 
 sdt[, polyline_distance := PolylineDistance(polyline)]
 

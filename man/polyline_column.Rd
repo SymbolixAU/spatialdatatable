@@ -4,10 +4,10 @@
 \alias{polyline_column}
 \title{Polyline Column}
 \usage{
-polyline_column(spdt)
+polyline_column(sdt)
 }
 \arguments{
-\item{spdt}{spatialdatatable object}
+\item{sdt}{spatialdatatable object}
 }
 \description{
 Gets the column(s) names of a spatialdatatable object containing encoded polylines

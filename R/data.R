@@ -9,7 +9,7 @@
 "sf_tramRoute"
 
 
-#' Spdt Melbourne
+#' Sdt Melbourne
 #'
 #' Polygons for Melbourne and the surrounding area
 #'
@@ -34,5 +34,5 @@
 #'
 #' @examples
 #'
-#' spdt <- copy(spdt_melbourne)
-"spdt_melbourne"
+#' sdt <- copy(sdt_melbourne)
+"sdt_melbourne"

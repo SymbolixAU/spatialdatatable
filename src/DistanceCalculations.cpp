@@ -1,10 +1,10 @@
 #include <Rcpp.h>
-#include "spdt.h"
+#include "sdt.h"
 
 using namespace Rcpp;
 
 double inverseHaversine(double d){
-	return 2 * atan2(sqrt(d), sqrt(1 - d)) * spdt::EARTH_RADIUS;
+	return 2 * atan2(sqrt(d), sqrt(1 - d)) * sdt::EARTH_RADIUS;
 }
 
 double distanceHaversine(double latf, double lonf, double latt, double lont,
@@ -24,7 +24,7 @@ double distanceHaversine(double latf, double lonf, double latt, double lont,
 	//Rcpp::Rcout << "haversine: " << d << std::endl;
 	//Rcpp::Rcout << "distance: " << inverseHaversine(d) << std::endl;
 
-	return 2 * atan2(sqrt(d), sqrt(1 - d)) * spdt::EARTH_RADIUS;
+	return 2 * atan2(sqrt(d), sqrt(1 - d)) * sdt::EARTH_RADIUS;
 	//return inverseHaversine(d);
 }
 
@@ -32,7 +32,7 @@ double distanceHaversine(double latf, double lonf, double latt, double lont,
 double distanceCosine(double latf, double lonf, double latt, double lont){
 
 	double dlon = lont - lonf;
-	return (acos( sin(latf) * sin(latt) + cos(latf) * cos(latt) * cos(dlon) ) * spdt::EARTH_RADIUS);
+	return (acos( sin(latf) * sin(latt) + cos(latf) * cos(latt) * cos(dlon) ) * sdt::EARTH_RADIUS);
 
 }
 
@@ -41,11 +41,11 @@ double distanceEuclidean(double latf, double lonf, double latt, double lont){
 }
 
 double crossTrack(double distance, double bearing1, double bearing2){
-	return (asin( sin(distance) * sin(bearing1 - bearing2)) * spdt::EARTH_RADIUS);
+	return (asin( sin(distance) * sin(bearing1 - bearing2)) * sdt::EARTH_RADIUS);
 }
 
 double alongTrack(double distance, double xtrack){
-	return (acos( cos(distance) / cos(xtrack / spdt::EARTH_RADIUS) ) * spdt::EARTH_RADIUS);
+	return (acos( cos(distance) / cos(xtrack / sdt::EARTH_RADIUS) ) * sdt::EARTH_RADIUS);
 }
 
 double bearingCalc(double latf, double lonf, double latt, double lont,
@@ -90,7 +90,7 @@ double rcppDist2gc(double latFrom, double lonFrom, double latTo, double lonTo,
 
 	// (angular) distance from start-point (on path) to the point
 	d = distanceHaversine(latf, lonf, plat, plon, tolerance);
-	d = d / spdt::EARTH_RADIUS;
+	d = d / sdt::EARTH_RADIUS;
 
 	// initial bearing from start-point (on path) to point
 	b1 = bearingCalc(latf, lonf, plat, plon, true);
@@ -138,7 +138,7 @@ NumericVector rcppAlongTrack(NumericVector latFrom, NumericVector lonFrom,
 
 		// (angular) distance from start-point (on path) to the point
 		d = distanceHaversine(latf, lonf, plat, plon, tolerance);
-		d = d / spdt::EARTH_RADIUS;
+		d = d / sdt::EARTH_RADIUS;
 
 		// initial bearing from start-point (on path) to point
 		b1 = bearingCalc(latf, lonf, plat, plon, true);
@@ -190,7 +190,7 @@ NumericVector rcppDist2gc(NumericVector latFrom, NumericVector lonFrom,
 
 		// (angular) distance from start-point (on path) to the point
 		d = distanceHaversine(latf, lonf, plat, plon, tolerance);
-		d = d / spdt::EARTH_RADIUS;
+		d = d / sdt::EARTH_RADIUS;
 
 		// initial bearing from start-point (on path) to point
 		b1 = bearingCalc(latf, lonf, plat, plon, true);
@@ -232,7 +232,7 @@ Rcpp::List rcppDestination(NumericVector latFrom, NumericVector lonFrom,
 		lonf = toRadians(lonFrom[i]);
 
 		bear = toRadians(bearing[i]);
-		phi = ( distance[i] / spdt::EARTH_RADIUS );
+		phi = ( distance[i] / sdt::EARTH_RADIUS );
 
 		latt = asin( ( sin(latf) * cos(phi) ) + ( cos(latf) * sin(phi) * cos(bear) ) );
 		lont = lonf + ( atan2( sin(bear) * sin(phi) * cos(latf), cos(phi) - ( sin(latf) * sin(latt) ) ) );

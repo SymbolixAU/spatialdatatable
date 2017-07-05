@@ -1,10 +1,10 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-#ifndef SPDT_H
-#define SPDT_H
+#ifndef SDT_H
+#define SDT_H
 
-namespace spdt {
+namespace sdt {
 
   struct GPS{
   	double lat;

@@ -4,10 +4,10 @@
 \alias{polylines}
 \title{Polylines}
 \usage{
-polylines(spdt)
+polylines(sdt)
 }
 \arguments{
-\item{spdt}{spatialdatatable}
+\item{sdt}{spatialdatatable}
 }
 \description{
 gets the encoded polyline(s) from a spatialdatatable object
