@@ -3,6 +3,10 @@
 
 using namespace Rcpp;
 
+// Reference:
+// https://github.com/googlemaps/android-maps-utils/blob/7368f6157560c6d132de55f27e1147cd6a43c961/library/src/com/google/maps/android/SphericalUtil.java
+
+
 
 // ------------------------------------------------------
 // C++ implementation of the google api polyline decoder
