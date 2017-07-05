@@ -119,7 +119,6 @@ Rcpp::NumericVector rcpp_polyline_distance(Rcpp::StringVector encodedStrings){
 	double lonf;
 	double latt;
 	double lont;
-	double dist;
 
 	for(int i = 0; i < len; i++){
 
@@ -131,7 +130,6 @@ Rcpp::NumericVector rcpp_polyline_distance(Rcpp::StringVector encodedStrings){
 		// calculate the total distance between each successive pair of coordinates
 		nCoords = lats.size() - 1;
 		thisDistance = 0;
-		dist = 0;
 		for(int j = 0; j < nCoords; j++){
 
 			//Rcpp::Rcout.precision(10);
@@ -148,9 +146,8 @@ Rcpp::NumericVector rcpp_polyline_distance(Rcpp::StringVector encodedStrings){
 			//Rcpp::Rcout << latt << std::fixed <<  "," << lont << std::endl;
 
 			//Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
-			dist = distanceHaversine(latf, lonf, latt, lont, 1000000000);
+			thisDistance += distanceHaversine(latf, lonf, latt, lont, 1000000000);
 			//Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
-			thisDistance = thisDistance + dist;
 		}
 		result[i] = thisDistance;
 
