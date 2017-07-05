@@ -4,6 +4,8 @@
 ## - also, setSDT(x, polyline = "polyline_column") to define the polyline attribute
 ##
 ## test that setSDT works inside functions, and HOW it works!?
+## print sdt_melbourne with more than one attribute on the polyline column
+
 
 #' Set SDT
 #'
@@ -85,8 +87,10 @@ polyline_column <- function(sdt) UseMethod("sdt_polyline_col")
 
 #' @export
 sdt_polyline_col.spatialdatatable <- function(sdt){
-	attributes = sapply(sdt, function(x) names(attributes(x)))
-	names(which(attributes == "sdt_polyline"))
+	# ats = sapply(sdt, function(x) names(attributes(x)))
+	# names(which(ats == "sdt_polyline"))
+	names(which(sapply(sdt, function(x) sum(names(attributes(x)) %in% 'sdt_polyline') ) > 0))
+
 }
 
 #' @export
