@@ -12,6 +12,12 @@ PolylineArea(polyline)
 \description{
 Calculates the area of an enclosed polyline.
 }
+\details{
+the area 'inside' the polyline is the surface that does not contain the south pole.
+
+Units are the same as the radius squared. So the radius is in metres, so the
+units are metres squared.
+}
 \examples{
 \dontrun{
 

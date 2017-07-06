@@ -169,6 +169,7 @@ double polarTriangleArea(double tant, double lont, double tanf, double lonf){
 	return 2 * atan2(t * sin(dlon), 1 + (t * cos(dlon)));
 }
 
+// the signed area can be used to determine the orientation of the path
 double computeSignedArea(NumericVector lats, NumericVector lons){
 
 	int nCoords = lats.size();
