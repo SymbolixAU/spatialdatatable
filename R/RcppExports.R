@@ -53,6 +53,10 @@ rcppPolylineDistance <- function(encodedStrings) {
     .Call('spatialdatatable_rcppPolylineDistance', PACKAGE = 'spatialdatatable', encodedStrings)
 }
 
+rcppPolylineArea <- function(encodedStrings) {
+    .Call('spatialdatatable_rcppPolylineArea', PACKAGE = 'spatialdatatable', encodedStrings)
+}
+
 rcppDouglasPeucker <- function(polyline, distanceTolerance) {
     .Call('spatialdatatable_rcppDouglasPeucker', PACKAGE = 'spatialdatatable', polyline, distanceTolerance)
 }

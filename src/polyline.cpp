@@ -109,6 +109,7 @@ Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
 Rcpp::NumericVector rcppPolylineDistance(Rcpp::StringVector encodedStrings){
 
 	int len = encodedStrings.size();
+
 	int nCoords;
 	Rcpp::DataFrame df_coords;
 	float thisDistance;
@@ -161,6 +162,80 @@ Rcpp::NumericVector rcppPolylineDistance(Rcpp::StringVector encodedStrings){
 
 }
 
+// Returns the signed area of a traingle which has the north pole as vertex.
+double polarTriangleArea(double tant, double lont, double tanf, double lonf){
+	double dlon = lont - lonf;
+	double t = tant * tanf;
+	return 2 * atan2(t * sin(dlon), 1 + (t * cos(dlon)));
+}
+
+double computeSignedArea(NumericVector lats, NumericVector lons){
+
+	int nCoords = lats.size();
+	double totalArea = 0;
+
+	double latf;
+	double lonf;
+	//double latt;
+	double lont;
+	double tanf;
+	double tant;
+
+	if(nCoords == 1) return 0;
+	// polyline of 1 coordinate can't be closed
+	// polyline of > 2 coordinates, may need closing
+
+	if(!isPolygonClosed(lats[0], lats[nCoords], lons[0], lons[nCoords])){
+		lats = ClosePolygon(lats);
+		lons = ClosePolygon(lons);
+		nCoords++;   // because we've added a point
+	}
+
+	latf = lats[(nCoords - 1 )];
+	lonf = lons[(nCoords - 1 )];
+
+	tanf = tan( (sdt::PI_OVER_2 - toRadians(latf) ) * 0.5 );
+	lonf = toRadians(lonf);
+
+	for(int j = 0; j < nCoords; j++){
+
+		tant = tan( (sdt::PI_OVER_2 - toRadians(lats[j]) ) * 0.5 );
+		lont = toRadians(lons[j]);
+		totalArea += polarTriangleArea(tant, lont, tanf, lonf);
+
+		tanf = tant;
+		lonf = lont;
+	}
+
+	return totalArea * (sdt::EARTH_RADIUS * sdt::EARTH_RADIUS);
+}
+
+// [[Rcpp::export]]
+NumericVector rcppPolylineArea(Rcpp::StringVector encodedStrings){
+
+	int len = encodedStrings.size();
+
+	Rcpp::DataFrame df_coords;
+	Rcpp::DoubleVector lats;
+	Rcpp::DoubleVector lons;
+	Rcpp::DoubleVector result(len);
+
+	for(int i = 0; i < len; i++){
+
+		std::string thisEncoded = Rcpp::as< std::string >(encodedStrings[i]);
+		df_coords = rcpp_decode_pl(thisEncoded);
+		lats = df_coords["lat"];
+		lons = df_coords["lon"];
+
+		// calculate the total distance between each successive pair of coordinates
+		result[i] = fabs(computeSignedArea(lats, lons));
+	}
+
+	return result;
+
+}
+
+
 
 
 //DataFrame rcpp_decode_pl( std::string encoded );
@@ -180,8 +255,8 @@ void cppDouglasPeucker(NumericVector lats, NumericVector lons, int firstIndex, i
 
 	int pathLength = lats.size();
 	int thisIndex = firstIndex;
-	float maxDistance = 0.0;
-	float thisDistance;
+	double maxDistance = 0.0;
+	double thisDistance;
 	double startLat = lats[firstIndex];
 	double startLon = lons[firstIndex];
 	double endLat = lats[lastIndex];

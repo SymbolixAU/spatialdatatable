@@ -189,6 +189,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppPolylineArea
+NumericVector rcppPolylineArea(Rcpp::StringVector encodedStrings);
+RcppExport SEXP spatialdatatable_rcppPolylineArea(SEXP encodedStringsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type encodedStrings(encodedStringsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppPolylineArea(encodedStrings));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppDouglasPeucker
 Rcpp::StringVector rcppDouglasPeucker(Rcpp::StringVector polyline, double distanceTolerance);
 RcppExport SEXP spatialdatatable_rcppDouglasPeucker(SEXP polylineSEXP, SEXP distanceToleranceSEXP) {
@@ -239,6 +250,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"spatialdatatable_rcpp_decode_pl", (DL_FUNC) &spatialdatatable_rcpp_decode_pl, 1},
     {"spatialdatatable_rcpp_encode_pl", (DL_FUNC) &spatialdatatable_rcpp_encode_pl, 3},
     {"spatialdatatable_rcppPolylineDistance", (DL_FUNC) &spatialdatatable_rcppPolylineDistance, 1},
+    {"spatialdatatable_rcppPolylineArea", (DL_FUNC) &spatialdatatable_rcppPolylineArea, 1},
     {"spatialdatatable_rcppDouglasPeucker", (DL_FUNC) &spatialdatatable_rcppDouglasPeucker, 2},
     {"spatialdatatable_rcppSimplifyPolyline", (DL_FUNC) &spatialdatatable_rcppSimplifyPolyline, 3},
     {"spatialdatatable_rcppEarthRadius", (DL_FUNC) &spatialdatatable_rcppEarthRadius, 0},

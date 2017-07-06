@@ -142,6 +142,19 @@ PolylineDistance <- function(polyline){
 	rcppPolylineDistance(polyline)
 }
 
-
-
+#' Polyline Area
+#'
+#' Calculates the area of an enclosed polyline.
+#'
+#' @param polyline
+#'
+#' @examples
+#' \dontrun{
+#'
+#' }
+#'
+#' @export
+PolylineArea <- function(polyline){
+	rcppPolylineArea(polyline)
+}
 

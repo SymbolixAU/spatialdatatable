@@ -24,8 +24,8 @@ double distanceHaversine(double latf, double lonf, double latt, double lont,
 	//Rcpp::Rcout << "haversine: " << d << std::endl;
 	//Rcpp::Rcout << "distance: " << inverseHaversine(d) << std::endl;
 
-	return 2 * atan2(sqrt(d), sqrt(1 - d)) * sdt::EARTH_RADIUS;
-	//return inverseHaversine(d);
+	//return 2 * atan2(sqrt(d), sqrt(1 - d)) * sdt::EARTH_RADIUS;
+	return inverseHaversine(d);
 }
 
 

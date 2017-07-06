@@ -15,6 +15,7 @@ namespace sdt {
   const double EARTH_RADIUS = 6371009;
   const double RADIAN = 57.2957795131;  // 180 / PI
   const double DEGREE = 0.01745329251;  // PI / 180
+  const double PI_OVER_2 = 1.57079632679; // PI / 2
 
 }
 
