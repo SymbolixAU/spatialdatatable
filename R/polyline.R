@@ -149,7 +149,7 @@ PolylineDistance <- function(polyline){
 #' @details
 #' the area 'inside' the polyline is the surface that does not contain the south pole.
 #'
-#' Units are the same as the radius squared. So the radius is in metres, so the
+#' Units are the same as the radius squared. The radius is in metres, so the
 #' units are metres squared.
 #'
 #' @param polyline

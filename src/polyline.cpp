@@ -134,28 +134,14 @@ Rcpp::NumericVector rcppPolylineDistance(Rcpp::StringVector encodedStrings){
 		for(int j = 0; j < nCoords; j++){
 
 			//Rcpp::Rcout.precision(10);
-
-			//Rcpp::Rcout << lats[j] << std::fixed << "," << lons[j] << std::endl;
-			//Rcpp::Rcout << lats[j + 1] << std::fixed << "," << lons[j + 1] << std::endl;
-
 			latf = toRadians(lats[j]);
 			lonf = toRadians(lons[j]);
 			latt = toRadians(lats[j + 1]);
 			lont = toRadians(lons[j + 1]);
 
-		  //Rcpp::Rcout << latf << std::fixed << "," << lonf << std::endl;
-			//Rcpp::Rcout << latt << std::fixed <<  "," << lont << std::endl;
-
-			//Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
 			thisDistance += distanceHaversine(latf, lonf, latt, lont, 1000000000);
-			//Rcpp::Rcout << "rcpp_polyline_distance distance: " << dist << std::endl;
 		}
 		result[i] = thisDistance;
-
-
-		//double dx = distanceHaversine(-38.39360, 144.7876, -38.39354, 144.7875, 1.00000001);
-	  //Rcpp::Rcout << "haversine2: "<<	dx << std::endl;
-
 	}
 
 	return result;

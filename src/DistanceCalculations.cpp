@@ -13,18 +13,10 @@ double distanceHaversine(double latf, double lonf, double latt, double lont,
 	double dlat = latt - latf;
 	double dlon =  lont - lonf;
 
-	//Rcpp::Rcout << "dlat: " << dlat << std::endl;
-	//Rcpp::Rcout << "dlon: " << dlon << std::endl;
-
 	d = (sin(dlat * 0.5) * sin(dlat * 0.5)) + (cos(latf) * cos(latt)) * (sin(dlon * 0.5) * sin(dlon * 0.5));
 	if(d > 1 && d <= tolerance){
 		d = 1;
 	}
-
-	//Rcpp::Rcout << "haversine: " << d << std::endl;
-	//Rcpp::Rcout << "distance: " << inverseHaversine(d) << std::endl;
-
-	//return 2 * atan2(sqrt(d), sqrt(1 - d)) * sdt::EARTH_RADIUS;
 	return inverseHaversine(d);
 }
 
