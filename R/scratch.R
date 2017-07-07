@@ -863,4 +863,22 @@
 #
 
 
+## Area calculations
+# library(sf)
+# library(spatialdatatable)
+# nc <- st_read(system.file("shape/nc.shp", package="sf"))
+# nc <- rbind(nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc, nc)
+# sdt <- EncodeSF(nc)
+#
+# library(microbenchmark)
+#
+# microbenchmark(
+# 	sf = {
+# 		st_area(nc)
+# 	},
+# 	sdt = {
+# 		sdt[, polyArea := PolylineArea(polyline)]
+# 	}
+# )
+
 
