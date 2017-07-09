@@ -5,7 +5,8 @@
 ##
 ## test that setSDT works inside functions, and HOW it works!?
 ## print sdt_melbourne with more than one attribute on the polyline column
-
+##
+## - merging a spatialdatatable with a datatable - which attributes does it keep?
 
 #' Set SDT
 #'

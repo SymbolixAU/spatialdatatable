@@ -4,21 +4,50 @@
 \alias{EncodeSF}
 \title{Encode Simple Feature}
 \usage{
-EncodeSF(sf)
+EncodeSF(sf, id = NULL)
 }
 \arguments{
 \item{sf}{simple-feature object (from \code{library(sf)})}
+
+\item{id}{column of \code{sf} to be used as the id. If NULL, a value from
+1 to .N will be assigned to a column called \code{.id}}
 }
 \description{
 Converts coordinates from simple-feature objects (\code{sf}) into encoded polylines
 }
 \examples{
+\dontrun{
 library(sf)
 
+## sf_LINESTRING
+sf_line <- st_as_sfc(c("LINESTRING(-80.190 25.774, -66.118 18.466, -64.757 32.321)",
+                       "LINESTRING(-70.579 28.745, -67.514 29.570, -66.668 27.339)"))
+
+sf <- st_sf(id = paste0("line", 1:2), sf_line)
+
+sdt <- EncodeSF(sf)
+sdt <- EncodeSF(sf, id = "id")
+
+
+## sf_POLYGON
 sf_poly <- st_as_sfc(c("POLYGON((-80.190 25.774, -66.118 18.466, -64.757 32.321))",
                        "POLYGON((-70.579 28.745, -67.514 29.570, -66.668 27.339))"))
 sf <- st_sf(id = paste0("poly", 1:2), sf_poly)
 
 EncodeSF(sf)
 
+EncodeSF(sf, id = "id")
+
+
+## sf_MULTIPOLYGON
+filename <- system.file("shape/nc.shp", package="sf")
+nc <- st_read(filename)
+
+sdt <- EncodeSF(nc)
+
+nc$id <- 1:nrow(nc)
+sdt <- EncodeSF(nc, id = "id")
+
+
+}
 }

@@ -881,4 +881,20 @@
 # 	}
 # )
 
+## :=
+
+# sdt <- copy(sdt_melbourne)
+# sdt[, polyline2 := polyline]
+# sdt[, polygonId2 := polygonId]
+# sdt[, `:=`(pathId2 = pathId, SA2_NAME2 = SA2_NAME)]
+# sdt$SA3_NAME2 <- sdt$SA3_NAME
+# PolylineArea(sdt[1:2,])
+
+
+
+
+
+
+
+
 

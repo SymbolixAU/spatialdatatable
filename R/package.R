@@ -15,3 +15,5 @@ NULL
 ## -- length
 ##
 ## - if 'SimplifyPolyline' is called on a 'sdt_polyline' column, return a 'spdt_polyline column
+##
+## - re-building the package prevents := from working

@@ -147,15 +147,21 @@ PolylineDistance <- function(polyline){
 #' Calculates the area of an enclosed polyline.
 #'
 #' @details
-#' the area 'inside' the polyline is the surface that does not contain the south pole.
+#' The area 'inside' the polyline is the surface that does not contain the south pole.
 #'
 #' Units are the same as the radius squared. The radius is in metres, so the
 #' units are metres squared.
 #'
-#' @param polyline
+#' @param polyline an encoded polyline
+#'
+#' @seealso
+#' \link{encode_pl}, \link{decode_pl}
 #'
 #' @examples
 #' \dontrun{
+#'
+#' sdt <- copy(sdt_melbourne)
+#' sdt[, area := PolylineArea(polyline)]
 #'
 #' }
 #'
@@ -163,4 +169,8 @@ PolylineDistance <- function(polyline){
 PolylineArea <- function(polyline){
 	rcppPolylineArea(polyline)
 }
+
+
+
+
 

@@ -7,13 +7,13 @@
 PolylineArea(polyline)
 }
 \arguments{
-\item{polyline}{}
+\item{polyline}{an encoded polyline}
 }
 \description{
 Calculates the area of an enclosed polyline.
 }
 \details{
-the area 'inside' the polyline is the surface that does not contain the south pole.
+The area 'inside' the polyline is the surface that does not contain the south pole.
 
 Units are the same as the radius squared. The radius is in metres, so the
 units are metres squared.
@@ -21,6 +21,12 @@ units are metres squared.
 \examples{
 \dontrun{
 
+sdt <- copy(sdt_melbourne)
+sdt[, area := PolylineArea(polyline)]
+
 }
 
+}
+\seealso{
+\link{encode_pl}, \link{decode_pl}
 }
