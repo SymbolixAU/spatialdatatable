@@ -21,7 +21,7 @@ Install the developent version using `devtools`
 devtools::install_github("SymbolixAU/spatialdatatable")
 ```
 
-## 
+## Why I made this package
 
 The driving factor behind developing `spatialdatatable` was to simplify the process of doing distance calculations within a `data.table`, which was driven by writing an [efficient haversine calculation](https://www.symbolix.com.au/blog-main/j26ynx6awfl32brcaxdjxnwalwmmbc) that falls naturally within the `j` argument of `data.table`.
 
