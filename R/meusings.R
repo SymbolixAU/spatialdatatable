@@ -14,8 +14,8 @@
 # # # data(meuse.riv)
 # # # meuse.sr = SpatialPolygons(list(Polygons(list(Polygon(meuse.riv)),"meuse.riv")))
 # # #
-# # # dt_meuse <- spToDT(meuse)
-# # # dt_meuse.sr <- spToDT(meuse.sr)
+# # # dt_meuse <- toSDT(meuse)
+# # # dt_meuse.sr <- toSDT(meuse.sr)
 # #
 # #
 # # data(meuse)
@@ -48,7 +48,7 @@
 #
 # plot(scot_LL, axes=TRUE)
 #
-# dt_scot <- spToDT(scot_LL)
+# dt_scot <- toSDT(scot_LL)
 #
 # dt_sutherland <- dt_scot[data.NAME == "Sutherland"]
 #

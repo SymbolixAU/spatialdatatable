@@ -17,9 +17,9 @@
 # spdf <- readOGR(dsn = "../../SVNStuff/Clients/HT0_HydroTasmania/MRBU_MRWF_BUS_surveys/Data/Received_BUSData/GIS",
 # 								layer = "Mainlands_poly")
 #
-# spToDT(sp)
+# toSDT(sp)
 #
-# spToDT(spdf)
+# toSDT(spdf)
 
 # library(data.table)
 # library(sp)
@@ -29,11 +29,11 @@
 #
 # sp <- SpatialPointsDataFrame(coords = tram_stops[, c("stop_lon", "stop_lat")], data = tram_stops)
 #
-# spToDT(sp)
+# toSDT(sp)
 #
 # sp <- SpatialPoints(coords = tram_stops[, c("stop_lon", "stop_lat")])
 #
-# spToDT(sp)
+# toSDT(sp)
 #
 # library(data.table)
 # dt_stops <- as.data.table(tram_stops)
@@ -80,7 +80,7 @@
 
 
 # sf <- sf::read_sf("~/Documents/SVNStuff/Clients/HT0_HydroTasmania/MRBU_MRWF_BUS_surveys/Data/Received_BUSData/GIS/Roads_line.shp")
-# spToDT(sf)
+# toSDT(sf)
 #
 # map_key <- symbolix.utils::mapKey()
 #
@@ -95,7 +95,7 @@
 # geom <- sf::st_geometry(nc)
 # class(geom)
 #
-# dt.nc <- spToDT(nc)
+# dt.nc <- toSDT(nc)
 #
 #
 #
@@ -115,7 +115,7 @@
 # sf <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
 # sf <- st_linestring(sf)
 #
-# spToDT(sf)
+# toSDT(sf)
 #
 # geom <- st_geometry(sf)
 #
@@ -178,7 +178,7 @@
 #
 # sf <- st_as_sf(shp_postcode)
 #
-# dt <- spToDT(sf)
+# dt <- toSDT(sf)
 #
 # dt_poly <- EncodeSF(sf)
 #
@@ -292,7 +292,7 @@
 # sf_point <- readRDS("~/Downloads/melb_centroid.rds")
 #
 #
-# spToDT(sf_point)
+# toSDT(sf_point)
 #
 # library(data.table)
 #
@@ -314,8 +314,8 @@
 # 									 "POINT(3 3)")) %>%
 # 	st_sf()
 #
-# dt_polys <- spToDT(polys)
-# dt_pts <- spToDT(pts)
+# dt_polys <- toSDT(polys)
+# dt_pts <- toSDT(pts)
 #
 # PointInPolygon(dt_polygons = dt_polys,
 # 							 polyColumns = c("id", "lineId", "coords.V1", "coords.V2", "hole"),
@@ -406,8 +406,8 @@
 # table(res$NAME_1)
 #
 #
-# dt_x <- spToDT(x)
-# dt_p <- spToDT(p)
+# dt_x <- toSDT(x)
+# dt_p <- toSDT(p)
 #
 # dt_res <- PointInPolygon(dt_polygons = dt_x,
 # 												 polyColumns = c("id","lineId","coords.V2","coords.V1","hole"),
@@ -457,8 +457,8 @@
 # over(sr, meuse)
 #
 #
-# dt_sr <- spToDT(sr)
-# dt_meuse <- spToDT(meuse)
+# dt_sr <- toSDT(sr)
+# dt_meuse <- toSDT(meuse)
 # dt_meuse[, id := .I]
 #
 # PointInPolygon(dt_polygons = dt_sr,

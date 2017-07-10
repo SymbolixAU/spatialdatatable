@@ -21,7 +21,7 @@
 #
 # sf_vic <- st_as_sf(shp_vic)
 #
-# spToDT(sf_vic)
+# toSDT(sf_vic)
 #
 # shp_fis <- subset(shp, shp@data$SLA_CODE11 == 255208529)
 # plot(shp_fis)
@@ -29,7 +29,7 @@
 # ## polygons with many lines
 # mapKey <- read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")
 #
-# dt_polygons <- spToDT(shp_vic)
+# dt_polygons <- toSDT(shp_vic)
 # dt_points <- data.table(id = 1:3,
 # 												lat = c(-38.402, -38.3, -38.4),
 # 												lon = c(145.23, 145.3, 145.275))

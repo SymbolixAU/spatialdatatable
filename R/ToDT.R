@@ -1,8 +1,8 @@
-#' spToDT
+#' toSDT
 #'
 #' Converts Spatial objects (from packages \code{sp} and \code{sf}) into a \code{data.table}
 #'
-#' @param sp Spatial Object
+#' @param sobj Spatial or sf object
 #'
 #' @examples
 #' \dontrun{
@@ -11,44 +11,45 @@
 #' library(sp)
 #'
 #' ## SpatialPointsDataFrame
-#' sp <- SpatialPointsDataFrame(coords = tram_stops[, c("stop_lon", "stop_lat")], data = tram_stops)
-#' dt <- spToDT(sp)
+#' sp <- SpatialPointsDataFrame(coords = tram_stops[, c("stop_lon", "stop_lat")],
+#'     data = tram_stops[, setdiff(names(tram_stops), c("stop_lon", "stop_lat"))])
+#' dt <- toSDT(sp)
 #'
 #' ## spLine
 #' spLine <- Line(tram_route[, c("shape_pt_lat", "shape_pt_lon")])
-#' dt <- spToDT(spLine)
+#' dt <- toSDT(spLine)
 #'
 #' ## spLines
 #' spLines <- Lines(Line(tram_route[, c("shape_pt_lat", "shape_pt_lon")]), ID = 1)
-#' dt <- spToDT(spLines)
+#' dt <- toSDT(spLines)
 #'
 #' ## SpatialLines
 #' spLines <- SpatialLines(list(Lines(Line(tram_route[, c("shape_pt_lat", "shape_pt_lon")]), ID = 1)))
-#' dt <- spToDT(spLines)
+#' dt <- toSDT(spLines)
 #'
 #' ## SpatialLinesDataFrame
 #' spdf <- SpatialLinesDataFrame(spLines, data = data.frame(route = 35, operator = "Yarra Trams"))
-#' dt <- spToDT(spdf)
+#' dt <- toSDT(spdf)
 #'
 #' ## Polygon
 #' df <- data.frame(lat = c(25.774, 18.466, 32.321, 28.745, 29.570, 27.339),
 #'                  lon = c(-80.190, -66.118, -64.757, -70.579, -67.514, -66.668),
 #'                  id = c(rep('outer', 3), rep('inner', 3)))
 #' pl_outer <- Polygon(df[df$id == "outer", c("lat", "lon")])
-#' dt <- spToDT(pl_outer)
+#' dt <- toSDT(pl_outer)
 #'
 #' ## Polygons
 #' pl_inner <- Polygon(df[df$id == "inner", c("lat", "lon")])
 #' pl <- Polygons(list(pl_outer, pl_inner), ID = "bermuda")
-#' dt <- spToDT(pl)
+#' dt <- toSDT(pl)
 #'
 #' ## SpatialPolygons
 #' sppl <- SpatialPolygons(list(pl))
-#' dt <- spToDT(sppl)
+#' dt <- toSDT(sppl)
 #'
 #' ## SpatialPolygonsDataFrame
 #' spdf <- SpatialPolygonsDataFrame(sppl, data = data.frame(ID = c("bermuda")), match.ID = FALSE)
-#' dt <- spToDT(spdf)
+#' dt <- toSDT(spdf)
 #'
 #'
 #'
@@ -58,47 +59,60 @@
 #' ## sfc MULTIPOINT
 #' p <- rbind(c(3.2,4), c(3,4.6), c(3.8,4.4), c(3.5,3.8), c(3.4,3.6), c(3.9,4.5))
 #' mp <- st_multipoint(p)
-#' dt <- spToDT(mp)
+#' dt <- toSDT(mp)
 #'
 #' ## sfc LINESTRING
 #' s1 <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
 #' ls <- st_linestring(s1)
-#' spToDT(ls)
+#' toSDT(ls)
 #'
 #' ## sfc MULTILINESTRING
 #' s2 <- rbind(c(0.2,3), c(0.2,4), c(1,4.8), c(2,4.8))
 #' s3 <- rbind(c(0,4.4), c(0.6,5))
 #' mls <- st_multilinestring(list(s1,s2,s3))
-#' dt <- spToDT(mls)
+#' dt <- toSDT(mls)
 #'
 #' ## sfc POLYGONS
 #' p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
 #' p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
 #' pol <-st_polygon(list(p1,p2))
-#' dt <- spToDT(pol)
+#' dt <- toSDT(pol)
 #'
 #' ## sfc MULTIPOLYGON
 #' p3 <- rbind(c(3,0), c(4,0), c(4,1), c(3,1), c(3,0))
 #' p4 <- rbind(c(3.3,0.3), c(3.8,0.3), c(3.8,0.8), c(3.3,0.8), c(3.3,0.3))[5:1,]
 #' p5 <- rbind(c(3,3), c(4,2), c(4,3), c(3,3))
 #' mpol <- st_multipolygon(list(list(p1,p2), list(p3,p4), list(p5)))
-#' dt <- spToDT(mpol)
+#' dt <- toSDT(mpol)
 #'
 #' }
 #' @export
-spToDT <- function(sp) {
-	UseMethod("spToDT")
-
+toSDT <- function(sobj) {
+	UseMethod("toSDT")
 }
 
+#' spToDT
+#'
+#' deprecated. Now use \link{toSDT}
+#'
+#' @param sobj spatial or sf object
 #' @export
-spToDT.Line <- function(sp){
+spToDT <- function(sobj){
+	warning("I've deprecated this function. In the future please use toSDT()")
+	toSDT(sp)
+}
+
+
+#' @export
+toSDT.Line <- function(sp){
+
+	## No ID slot
 	dt = data.table::data.table(coords = slot(sp, "coords"))
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 #' @export
-spToDT.Lines <- function(sp){
+toSDT.Lines <- function(sp){
 
 	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
@@ -108,12 +122,12 @@ spToDT.Lines <- function(sp){
 		)
 
 	}))
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 #' @export
-spToDT.SpatialLines <- function(sp){
-	spToDTMessage(sp)
+toSDT.SpatialLines <- function(sp){
+	toSDTMessage(sp)
 
 	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
@@ -122,15 +136,15 @@ spToDT.SpatialLines <- function(sp){
 			coords = slot(slot(sp@lines[[x]], "Lines")[[1]], "coords")
 		)
 	}))
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 
 
 #' @export
-spToDT.SpatialLinesDataFrame <- function(sp){
+toSDT.SpatialLinesDataFrame <- function(sp){
 
-	spToDTMessage(sp)
+	toSDTMessage(sp)
 
 	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
@@ -139,43 +153,43 @@ spToDT.SpatialLinesDataFrame <- function(sp){
 			coords = slot(slot(sp@lines[[x]], "Lines")[[1]], "coords"),
 			data = slot(sp, "data")[x, ])
 	}))
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 
 #' @export
-spToDT.SpatialPoints <- function(sp){
-
-	spToDTMessage(sp)
+toSDT.SpatialPoints <- function(sp){
+  ## No ID slot
+	toSDTMessage(sp)
 	dt <- data.table::data.table(coords = slot(sp, "coords"))
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 #' @export
-spToDT.SpatialPointsDataFrame <- function(sp){
-
-	spToDTMessage(sp)
+toSDT.SpatialPointsDataFrame <- function(sp){
+  ## No ID slot
+	toSDTMessage(sp)
 
 	dt <- data.table::data.table(
 		coords = slot(sp, "coords"),
 		data = slot(sp, "data")
 	)
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 
 
 #' @export
-spToDT.Polygon <- function(sp){
-
+toSDT.Polygon <- function(sp){
+  ## No ID Slot
 	dt <- data.table::data.table(coords = slot(sp, "coords"),
 															 hole = slot(sp, "hole"),
 															 ringDir = slot(sp, "ringDir"))
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 #' @export
-spToDT.Polygons <- function(sp){
+toSDT.Polygons <- function(sp){
 
 	dt <- data.table::rbindlist(
 
@@ -190,12 +204,12 @@ spToDT.Polygons <- function(sp){
 			)
 		})
 	)
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 #' @export
-spToDT.SpatialPolygons <- function(sp){
-	spToDTMessage(sp)
+toSDT.SpatialPolygons <- function(sp){
+	toSDTMessage(sp)
 
 	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
@@ -210,15 +224,15 @@ spToDT.SpatialPolygons <- function(sp){
 			)
 		}))
 	}))
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 
 
 #' @export
-spToDT.SpatialPolygonsDataFrame <- function(sp){
+toSDT.SpatialPolygonsDataFrame <- function(sp){
 
-	spToDTMessage(sp)
+	toSDTMessage(sp)
 
 	dt <- data.table::rbindlist(lapply(1:length(sp), function(x){
 
@@ -235,12 +249,12 @@ spToDT.SpatialPolygonsDataFrame <- function(sp){
 
 		}))
 	}))
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 
 }
 
 #' @export
-spToDT.sf <- function(sf){
+toSDT.sf <- function(sf){
 
 	dataCols <- setdiff(names(sf), attr(sf, 'sf_column'))
 
@@ -258,15 +272,15 @@ spToDT.sf <- function(sf){
 	dt_geom <- GeomToDT(geom)
 
 	dt <- dt[ dt_geom, on = c(id = ".id"), nomatch = 0]
-	return(.spatialdatatable(dt))
+	return(.spatial.data.table(dt))
 }
 
 
 #' @export
-spToDT.sfg <- function(sf){
+toSDT.sfg <- function(sf){
 	## e.g. class: "XY"  "LINESTRING"  "sfg"
 	dt_geom <- GeomToDT(sf::st_geometry(sf))
-	return(.spatialdatatable(dt_geom))
+	return(.spatial.data.table(dt_geom))
 }
 
 
@@ -389,10 +403,10 @@ GeomToDT.default <- function(geom){
 
 
 #' @export
-spToDT.default <- function(sp){
+toSDT.default <- function(sp){
 	stop(paste0("I don't know how to convert objects of class ", paste0(class(sp), collapse = " ,")))
 }
 
-spToDTMessage <- function(sp){
+toSDTMessage <- function(sp){
 	message(paste0("dropping projection attribute: ", slot(slot(sp, "proj4string"), "projargs")))
 }

@@ -7,8 +7,8 @@
 polyline_column(sdt)
 }
 \arguments{
-\item{sdt}{spatialdatatable object}
+\item{sdt}{spatial.data.table object}
 }
 \description{
-Gets the column(s) names of a spatialdatatable object containing encoded polylines
+Gets the column(s) names of a spatial.data.table object containing encoded polylines
 }

@@ -7,5 +7,5 @@
 setSDT(x, polyline_column = NULL, ...)
 }
 \description{
-creates a spatialdatatable object
+creates a spatial.data.table object
 }

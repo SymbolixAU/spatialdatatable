@@ -7,8 +7,8 @@
 polylines(sdt)
 }
 \arguments{
-\item{sdt}{spatialdatatable}
+\item{sdt}{spatial.data.table object}
 }
 \description{
-gets the encoded polyline(s) from a spatialdatatable object
+gets the encoded polyline(s) from a spatial.data.table object
 }

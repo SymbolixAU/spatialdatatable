@@ -7,10 +7,13 @@
 ## print sdt_melbourne with more than one attribute on the polyline column
 ##
 ## - merging a spatialdatatable with a datatable - which attributes does it keep?
+##
+## - encode argument (logical) to specify if a line/polygon should be encoded
+## - need to ensure latlon projection?
 
 #' Set SDT
 #'
-#' creates a spatialdatatable object
+#' creates a spatial.data.table object
 #'
 #' @param x
 #' @export
@@ -19,8 +22,8 @@ setSDT <- function(x, polyline_column = NULL, ...){
 	name = as.character(substitute(x))
 	if(!is.data.table(x)) setDT(x, ...)
 
-	if(!"spatialdatatable" %in% class(x)){
-		data.table::setattr(x, "class", c("spatialdatatable", class(dt)))
+	if(!"spatial.data.table" %in% class(x)){
+		data.table::setattr(x, "class", c("spatial.data.table", class(dt)))
 	# 	assign(name, x, parent.frame(), inherits = TRUE)
 	#
 	}
@@ -35,30 +38,35 @@ setSDT <- function(x, polyline_column = NULL, ...){
 
 
 
-# sets 'spatialdatatable' attribute on the spatialdatatable
-.spatialdatatable <- function(dt){
-	data.table::setattr(dt, "class", c("spatialdatatable", class(dt)))
+# sets 'spatial.data.table' attribute on the spatial.data.table
+.spatial.data.table <- function(dt){
+	data.table::setattr(dt, "class", c("spatial.data.table", class(dt)))
 	return(dt)
 }
 
 # sets 'polyline' attribute on the polyline column
 .encode.polyline <- function(x){
 	data.table::setattr(x[["polyline"]], "sdt_polyline","polyline")
-	return(.spatialdatatable(x))
+	return(.spatial.data.table(x))
 }
+
+# .reset.class <- function(sdt){
+# 	if(!"spatial.data.table" %in% attr(sdt, 'class'))
+# 		return(.spatial.data.table(sdt))
+# }
 
 #' Polylines
 #'
 #'
-#' gets the encoded polyline(s) from a spatialdatatable object
+#' gets the encoded polyline(s) from a spatial.data.table object
 #'
-#' @param sdt spatialdatatable
+#' @param sdt spatial.data.table object
 #'
 #' @export
 polylines <- function(sdt) UseMethod("sdt_polyline")
 
 #' @export
-sdt_polyline.spatialdatatable <- function(sdt){
+sdt_polyline.spatial.data.table <- function(sdt){
 
 	## TODO:
 	## return ALL columns if there are more than one containing a polyline
@@ -80,14 +88,14 @@ sdt_polyline.default <- function(sdt){
 
 #' Polyline Column
 #'
-#' Gets the column(s) names of a spatialdatatable object containing encoded polylines
+#' Gets the column(s) names of a spatial.data.table object containing encoded polylines
 #'
-#' @param sdt spatialdatatable object
+#' @param sdt spatial.data.table object
 #' @export
 polyline_column <- function(sdt) UseMethod("sdt_polyline_col")
 
 #' @export
-sdt_polyline_col.spatialdatatable <- function(sdt){
+sdt_polyline_col.spatial.data.table <- function(sdt){
 	# ats = sapply(sdt, function(x) names(attributes(x)))
 	# names(which(ats == "sdt_polyline"))
 	names(which(sapply(sdt, function(x) sum(names(attributes(x)) %in% 'sdt_polyline') ) > 0))
@@ -101,7 +109,7 @@ sdt_polyline_col.default <- function(sdt){
 
 
 #' @export
-print.spatialdatatable <- function(x, ...){
+print.spatial.data.table <- function(x, ...){
 
 	# options("spatialdatatable.datatable.print.nrows" = getOption("datatable.print.nrows"))
 	# print(paste0("datatable print option: ", getOption("datatable.print.nrows")))
@@ -140,7 +148,7 @@ print.spatialdatatable <- function(x, ...){
 
 
 #' @export
-`[.spatialdatatable` <- function(x, ...){
+`[.spatial.data.table` <- function(x, ...){
 
 	## need to keep the polyline attribute if it exists
 
@@ -152,6 +160,7 @@ print.spatialdatatable <- function(x, ...){
 	if(sum(args) > 0){
 		options("datatable.print.nrows" = -1L)
 	}
+
 	NextMethod()
 }
 
