@@ -10,6 +10,8 @@
 ##
 ## - encode argument (logical) to specify if a line/polygon should be encoded
 ## - need to ensure latlon projection?
+##
+## - keep BBOX and other info
 
 #' Set SDT
 #'
