@@ -44,7 +44,7 @@ object.size(sdt)
 
 ```
 
-The `EncodeSF()` function takes the geometry information from the `sf` object and encodes it using Google's encoding algorithm (without losing any of the other data). 
+The `EncodeSF()` function takes the geometry information from the `sf` object and encodes it using Google's encoding algorithm (without losing any of the other data), and then stores it in a `spatial.data.table` object. 
 
 ```
 sf
