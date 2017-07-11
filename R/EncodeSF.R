@@ -29,6 +29,9 @@
 #'
 #' EncodeSF(sf, id = "id")
 #'
+#' p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
+#' p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
+#' pol <-st_polygon(list(p1,p2))
 #'
 #'
 #' ## sf_MULTIPOLYGON
