@@ -6,6 +6,15 @@ NULL
 #' @import sf
 NULL
 
+#' spatial.data.table
+#'
+#' A \code{spatial.data.table} is an extension of \code{data.table}. All the usual
+#' operations on a \code{data.table} should still work on a \code{spatial.data.table}.
+#'
+#'
+#'
+"_PACKAGE"
+
 
 ## TODO:
 ## - include a 'sequence' column to show the points in sequence

@@ -3,6 +3,8 @@
 #' Converts Spatial objects (from packages \code{sp} and \code{sf}) into a \code{data.table}
 #'
 #' @param sobj Spatial or sf object
+#' @param id an id
+#' @param encode logical
 #'
 #' @examples
 #' \dontrun{
@@ -87,7 +89,7 @@
 #'
 #' }
 #' @export
-toSDT <- function(sobj) {
+toSDT <- function(sobj, encode = FALSE, id = NULL) {
 	UseMethod("toSDT")
 }
 
@@ -277,7 +279,7 @@ toSDT.sf <- function(sf){
 
 
 #' @export
-toSDT.sfg <- function(sf){
+toSDT.sfg <- function(sf, encode, id){
 	## e.g. class: "XY"  "LINESTRING"  "sfg"
 	dt_geom <- GeomToDT(sf::st_geometry(sf))
 	return(.spatial.data.table(dt_geom))
@@ -346,6 +348,7 @@ GeomToDT.sfc_MULTILINESTRING <- function(geom){
 #' @export
 GeomToDT.sfc_POLYGON <- function(geom){
 
+	## a polygon consists of (Ext_ring, hole, hole, hole, ...)
 	data.table::rbindlist(
 
 		lapply(geom, function(x){

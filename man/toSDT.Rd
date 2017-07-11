@@ -4,10 +4,14 @@
 \alias{toSDT}
 \title{toSDT}
 \usage{
-toSDT(sobj)
+toSDT(sobj, encode = FALSE, id = NULL)
 }
 \arguments{
 \item{sobj}{Spatial or sf object}
+
+\item{encode}{logical}
+
+\item{id}{an id}
 }
 \description{
 Converts Spatial objects (from packages \code{sp} and \code{sf}) into a \code{data.table}
