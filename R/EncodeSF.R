@@ -43,6 +43,13 @@
 #'
 #'
 #' ## sf_MULTIPOLYGON
+#' sf_poly <- st_as_sfc(c("MULTIPOLYGON(((-80.190 25.774, -66.118 18.466, -64.757 32.321)))",
+#'                        "MULTIPOLYGON(((-70.579 28.745, -67.514 29.570, -66.668 27.339), (1 1, 2 2, 1.5 1.5)), ((0 0, 1 0, 3 2)))"))
+#' sf <- st_sf(id = paste0("poly", 1:2), sf_poly)
+#' EncodeSF(sf)
+#'
+#'
+#'
 #' filename <- system.file("shape/nc.shp", package="sf")
 #' nc <- st_read(filename)
 #'
@@ -143,7 +150,7 @@ encodePolyline.sfc_POLYGON <- function(geom, id, ids){
 		})
 	)
 
-	setnames(dt, "id", id)
+	data.table::setnames(dt, "id", id)
 	return(dt)
 }
 
@@ -153,9 +160,15 @@ encodePolyline.sfc_MULTIPOLYGON <- function(geom, id, ids){
 	## TODO
 	## - check this works for lots of nested polygons with holes
 	## - can I infact use `encodePolyoine.sfc_POLYGON` ?
+	##
+	## - I think I will need to account for multiple polygons stored in the same
+	## - row, with another nested lapply of some sort, that goes through each row
+	## - and encodes each polygon (and holes)
+
+	## IS this now just the same as sfc_POLYGON?
 	dt <- data.table::rbindlist(
 
-		lapply(1:length(ids), function(x){
+		lapply(seq_along(ids), function(x){
 
 			data.table::rbindlist(
 
@@ -163,8 +176,10 @@ encodePolyline.sfc_MULTIPOLYGON <- function(geom, id, ids){
 					pl <- sapply(y, function(z){
 						encode_pl(z[,2], z[,1])
 					})
+
 					lineId <- seq_along(pl)
 					hole = lineId > 1
+
 					data.table::data.table(
 						id = ids[x],
 						lineId = lineId,

@@ -52,6 +52,13 @@ EncodeSF(sf)
 
 
 ## sf_MULTIPOLYGON
+sf_poly <- st_as_sfc(c("MULTIPOLYGON(((-80.190 25.774, -66.118 18.466, -64.757 32.321)))",
+                       "MULTIPOLYGON(((-70.579 28.745, -67.514 29.570, -66.668 27.339), (1 1, 2 2, 1.5 1.5)), ((0 0, 1 0, 3 2)))"))
+sf <- st_sf(id = paste0("poly", 1:2), sf_poly)
+EncodeSF(sf)
+
+
+
 filename <- system.file("shape/nc.shp", package="sf")
 nc <- st_read(filename)
 
