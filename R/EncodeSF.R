@@ -16,22 +16,40 @@
 #'
 #' sf <- st_sf(id = paste0("line", 1:2), sf_line)
 #'
-#' sdt <- EncodeSF(sf)
-#' sdt <- EncodeSF(sf, id = "id")
+#' EncodeSF(sf)
+#' EncodeSF(sf, id = "id")
 #'
 #'
 #' ## sf_POLYGON
 #' sf_poly <- st_as_sfc(c("POLYGON((-80.190 25.774, -66.118 18.466, -64.757 32.321))",
-#'                        "POLYGON((-70.579 28.745, -67.514 29.570, -66.668 27.339))"))
+#'                        "POLYGON((-70.579 28.745, -67.514 29.570, -66.668 27.339), (0 0, 1 0, 3 2))"))
 #' sf <- st_sf(id = paste0("poly", 1:2), sf_poly)
 #'
 #' EncodeSF(sf)
 #'
 #' EncodeSF(sf, id = "id")
 #'
+#' p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
+#' p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
+#' pol <- st_polygon(list(p1,p2))
+#'
+#' EncodeSF(pol)
+#'
+#' sf_poly <- st_as_sfc("POLYGON((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1))")
+#' EncodeSF(sf_poly)
+#'
+#' sf <- st_sf(id = "poly", sf_poly)
+#' EncodeSF(sf)
 #'
 #'
 #' ## sf_MULTIPOLYGON
+#' sf_poly <- st_as_sfc(c("MULTIPOLYGON(((-80.190 25.774, -66.118 18.466, -64.757 32.321)))",
+#'                        "MULTIPOLYGON(((-70.579 28.745, -67.514 29.570, -66.668 27.339), (1 1, 2 2, 1.5 1.5)), ((0 0, 1 0, 3 2)))"))
+#' sf <- st_sf(id = paste0("poly", 1:2), sf_poly)
+#' EncodeSF(sf)
+#'
+#'
+#'
 #' filename <- system.file("shape/nc.shp", package="sf")
 #' nc <- st_read(filename)
 #'
@@ -43,7 +61,11 @@
 #'
 #' }
 #' @export
-EncodeSF <- function(sf, id = NULL){
+EncodeSF <- function(sf, id = NULL) UseMethod("encodeSf")
+
+
+#' @export
+encodeSf.sf <- function(sf, id = NULL){
 
 	if(!is.null(id)){
 		if(!id %in% names(sf)){
@@ -71,7 +93,18 @@ EncodeSF <- function(sf, id = NULL){
 	dt <- merge(dt, dt_geom, by = id, sort = F, all = T)
 
 	return(.encode.polyline(dt))
+}
 
+## TODO
+#' @export
+encodeSf.POLYGON <- function(sf){
+	message("still working on this, hold tight!")
+}
+
+## TODO
+#' @export
+encodesf.sfc_POLYGON <- function(sf){
+	message("still working on this, hold tight!")
 }
 
 
@@ -93,14 +126,30 @@ encodePolyline.sfc_LINESTRING <- function(geom, id, ids){
 #' @export
 encodePolyline.sfc_POLYGON <- function(geom, id, ids){
 
-	pl <- sapply(geom, function(x){
-		sapply(x, function(y){
-			encode_pl(y[,2],y[,1])
+	## A POLYGON is of the form POLYGON((poly1), (hole), (hole))
+	dt <- data.table::rbindlist(
+
+		lapply(seq_along(ids), function(x){
+
+			data.table::rbindlist(
+
+				lapply(seq_along(geom[[x]]), function(y){
+					g <- geom[[x]][[y]]
+					pl <- encode_pl(g[,2],g[,1])
+
+					lineId <- y
+					hole = lineId > 1
+
+					data.table::data.table(
+						id = x,
+						lineId = lineId,
+						polyline = pl,
+						hole = hole)
+				})
+			)
 		})
-	})
-	dt <- data.table::data.table(id = ids,
-															 polyline = pl,
-															 stringsAsFactors = F)
+	)
+
 	data.table::setnames(dt, "id", id)
 	return(dt)
 }
@@ -108,9 +157,18 @@ encodePolyline.sfc_POLYGON <- function(geom, id, ids){
 #' @export
 encodePolyline.sfc_MULTIPOLYGON <- function(geom, id, ids){
 
+	## TODO
+	## - check this works for lots of nested polygons with holes
+	## - can I infact use `encodePolyoine.sfc_POLYGON` ?
+	##
+	## - I think I will need to account for multiple polygons stored in the same
+	## - row, with another nested lapply of some sort, that goes through each row
+	## - and encodes each polygon (and holes)
+
+	## IS this now just the same as sfc_POLYGON?
 	dt <- data.table::rbindlist(
 
-		lapply(1:length(ids), function(x){
+		lapply(seq_along(ids), function(x){
 
 			data.table::rbindlist(
 
@@ -118,8 +176,10 @@ encodePolyline.sfc_MULTIPOLYGON <- function(geom, id, ids){
 					pl <- sapply(y, function(z){
 						encode_pl(z[,2], z[,1])
 					})
+
 					lineId <- seq_along(pl)
 					hole = lineId > 1
+
 					data.table::data.table(
 						id = ids[x],
 						lineId = lineId,
