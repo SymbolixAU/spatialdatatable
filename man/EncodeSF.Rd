@@ -25,8 +25,8 @@ sf_line <- st_as_sfc(c("LINESTRING(-80.190 25.774, -66.118 18.466, -64.757 32.32
 
 sf <- st_sf(id = paste0("line", 1:2), sf_line)
 
-sdt <- EncodeSF(sf)
-sdt <- EncodeSF(sf, id = "id")
+EncodeSF(sf)
+EncodeSF(sf, id = "id")
 
 
 ## sf_POLYGON
@@ -42,8 +42,10 @@ p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
 p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
 pol <- st_polygon(list(p1,p2))
 
-sf_poly <- st_as_sfc("POLYGON((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1))")
 EncodeSF(pol)
+
+sf_poly <- st_as_sfc("POLYGON((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1))")
+EncodeSF(sf_poly)
 
 sf <- st_sf(id = "poly", sf_poly)
 EncodeSF(sf)
