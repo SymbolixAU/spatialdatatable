@@ -53,6 +53,7 @@ EncodeSF(sf_poly)
 sf <- st_sf(id = "poly", sf_poly)
 EncodeSF(sf)
 
+EncodeSF(sf, id = "id")
 
 ## sf_MULTIPOLYGON
 sf_poly <- st_as_sfc(c("MULTIPOLYGON(((-80.190 25.774, -66.118 18.466, -64.757 32.321)))",
