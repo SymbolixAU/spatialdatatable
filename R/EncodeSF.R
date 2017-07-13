@@ -23,6 +23,9 @@
 #' ## sf_POLYGON
 #' sf_poly <- st_as_sfc(c("POLYGON((-80.190 25.774, -66.118 18.466, -64.757 32.321))",
 #'                        "POLYGON((-70.579 28.745, -67.514 29.570, -66.668 27.339), (0 0, 1 0, 3 2))"))
+#'
+#' EncodeSF(sf_poly)
+#'
 #' sf <- st_sf(id = paste0("poly", 1:2), sf_poly)
 #'
 #' EncodeSF(sf)
@@ -95,16 +98,40 @@ encodeSf.sf <- function(sf, id = NULL){
 	return(.encode.polyline(dt))
 }
 
-## TODO
 #' @export
 encodeSf.POLYGON <- function(sf){
-	message("still working on this, hold tight!")
+
+	id <- ".id"
+	ids <- 1
+
+	dt <- data.table::data.table(".id" = ids)
+
+	geom <- sf::st_geometry(sf)
+	dt_geom <- EncodePolyline(geom, id, ids)
+
+	dt <- merge(dt, dt_geom, by = id, sort = F, all = T)
+	return(.encode.polyline(dt))
+
 }
 
-## TODO
 #' @export
-encodesf.sfc_POLYGON <- function(sf){
-	message("still working on this, hold tight!")
+encodeSf.sfc_POLYGON <- function(sf){
+
+	## TODO:
+	## - do I convert this to an 'sf' first, so I can attach an ID?
+
+
+	id <- ".id"
+	ids <- 1:length(sf)
+	sf <- sf::st_sf(".id" = ids, sf)
+	dt <- data.table::data.table(".id" = ids)
+
+
+	geom <- sf::st_geometry(sf)
+	dt_geom <- EncodePolyline(geom, id, ids)
+
+	dt <- merge(dt, dt_geom, by = id, sort = F, all = T)
+	return(.encode.polyline(dt))
 }
 
 
