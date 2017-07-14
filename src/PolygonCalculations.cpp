@@ -95,3 +95,5 @@ double rcppWindingNumber(double pointX, double pointY,
 	return windingNumber(pointX, pointY, vectorX, vectorY);
 }
 
+
+

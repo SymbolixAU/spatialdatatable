@@ -102,6 +102,40 @@ Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
 	return output_str;
 }
 
+// [[Rcpp::export]]
+Rcpp::StringVector rcppBoundingBoxPolyline(Rcpp::StringVector polylines){
+	// calculates the bounding box of an encoded polyline
+	//
+	// given a polyline,
+	// decode it, find the bounding box
+	// return polyline
+
+	int n = polylines.size();
+	Rcpp::StringVector boundingBoxes(n);
+
+	NumericVector df_lats;
+	NumericVector df_lons;
+	NumericVector lats(2);
+	NumericVector lons(2);
+
+	Rcpp::DataFrame df;
+
+	for(int i = 0; i < n; i ++){
+		df = rcpp_decode_pl(Rcpp::as< std::string >(polylines[i]));
+		df_lats = df["lat"];
+		df_lons = df["lon"];
+
+		lats[0] = Rcpp::min(df_lats);
+		lats[1] = Rcpp::max(df_lats);
+		lons[0] = Rcpp::min(df_lons);
+		lons[1] = Rcpp::max(df_lons);
+
+		boundingBoxes[i] = rcpp_encode_pl(lats, lons, 2);
+	}
+
+	return boundingBoxes;
+
+}
 
 // Length of an encoded polyline
 // - calculate the haversine distance between successive coordinates

@@ -178,6 +178,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppBoundingBoxPolyline
+Rcpp::StringVector rcppBoundingBoxPolyline(Rcpp::StringVector polylines);
+RcppExport SEXP spatialdatatable_rcppBoundingBoxPolyline(SEXP polylinesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type polylines(polylinesSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppBoundingBoxPolyline(polylines));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppPolylineDistance
 Rcpp::NumericVector rcppPolylineDistance(Rcpp::StringVector encodedStrings);
 RcppExport SEXP spatialdatatable_rcppPolylineDistance(SEXP encodedStringsSEXP) {
@@ -249,6 +260,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"spatialdatatable_rcppWindingNumber", (DL_FUNC) &spatialdatatable_rcppWindingNumber, 4},
     {"spatialdatatable_rcpp_decode_pl", (DL_FUNC) &spatialdatatable_rcpp_decode_pl, 1},
     {"spatialdatatable_rcpp_encode_pl", (DL_FUNC) &spatialdatatable_rcpp_encode_pl, 3},
+    {"spatialdatatable_rcppBoundingBoxPolyline", (DL_FUNC) &spatialdatatable_rcppBoundingBoxPolyline, 1},
     {"spatialdatatable_rcppPolylineDistance", (DL_FUNC) &spatialdatatable_rcppPolylineDistance, 1},
     {"spatialdatatable_rcppPolylineArea", (DL_FUNC) &spatialdatatable_rcppPolylineArea, 1},
     {"spatialdatatable_rcppDouglasPeucker", (DL_FUNC) &spatialdatatable_rcppDouglasPeucker, 2},

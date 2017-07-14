@@ -171,6 +171,12 @@ PolylineArea <- function(polyline){
 }
 
 
-
-
+#' Polyline Bounds
+#'
+#' Bounding box for a polyline
+#'
+#' @export
+PolylineBounds <- function(polyline){
+	rcppBoundingBoxPolyline(polyline)
+}
 

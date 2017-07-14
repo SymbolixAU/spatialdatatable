@@ -49,6 +49,10 @@ rcpp_encode_pl <- function(latitude, longitude, num_coords) {
     .Call('spatialdatatable_rcpp_encode_pl', PACKAGE = 'spatialdatatable', latitude, longitude, num_coords)
 }
 
+rcppBoundingBoxPolyline <- function(polylines) {
+    .Call('spatialdatatable_rcppBoundingBoxPolyline', PACKAGE = 'spatialdatatable', polylines)
+}
+
 rcppPolylineDistance <- function(encodedStrings) {
     .Call('spatialdatatable_rcppPolylineDistance', PACKAGE = 'spatialdatatable', encodedStrings)
 }
