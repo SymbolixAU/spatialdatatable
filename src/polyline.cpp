@@ -379,5 +379,55 @@ Rcpp::StringVector rcppSimplifyPolyline(Rcpp::StringVector polyline, double dist
 }
 
 
+// [[Rcpp::export]]
+Rcpp::List rcppPolylineCenter(Rcpp::StringVector polylines){
+	// takes a polyline, and finds the center lat/lon
 
+	int nPolylines = polylines.size();
+
+	NumericVector resLats(nPolylines);
+	NumericVector resLons(nPolylines);
+	Rcpp::DataFrame df;
+	NumericVector lats;
+	NumericVector lons;
+	double lat;
+	double lon;
+	int nCoords;
+
+	double x;
+	double y;
+	double z;
+	double h;
+
+	for(int i = 0; i < nPolylines; i++){
+		df = rcpp_decode_pl(Rcpp::as< std::string >(polylines[i]));
+		lats = df["lat"];
+		lons = df["lon"];
+
+		nCoords = lats.size();
+
+		x = 0;
+		y = 0;
+		z = 0;
+		for(int j = 0; j < nCoords; j++){
+			lat = toRadians(lats[j]);
+			lon = toRadians(lons[j]);
+
+			x += cos(lat) * cos(lon);
+			y += cos(lat) * sin(lon);
+			z += sin(lat);
+		}
+
+		x = x / nCoords;
+		y = y / nCoords;
+		z = z / nCoords;
+
+		resLons[i] = toDegrees(atan2(y, x));
+		h = sqrt((x * x) + (y * y));
+		resLats[i] = toDegrees(atan2(z, h));
+	}
+
+	return Rcpp::List::create(resLats, resLons);
+
+}
 

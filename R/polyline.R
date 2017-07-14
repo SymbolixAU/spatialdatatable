@@ -171,6 +171,15 @@ PolylineArea <- function(polyline){
 }
 
 
-
+#' Polyline Center
+#'
+#' Finds the center coordinates of a polyline
+#'
+#' @param polyline an encoded polyline
+#'
+#' @export
+PolylineCenter <- function(polyline){
+	rcppPolylineCenter(polyline)
+}
 
 

@@ -225,6 +225,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcppPolylineCenter
+Rcpp::List rcppPolylineCenter(Rcpp::StringVector polylines);
+RcppExport SEXP spatialdatatable_rcppPolylineCenter(SEXP polylinesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type polylines(polylinesSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcppPolylineCenter(polylines));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcppEarthRadius
 double rcppEarthRadius();
 RcppExport SEXP spatialdatatable_rcppEarthRadius() {
@@ -253,6 +264,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"spatialdatatable_rcppPolylineArea", (DL_FUNC) &spatialdatatable_rcppPolylineArea, 1},
     {"spatialdatatable_rcppDouglasPeucker", (DL_FUNC) &spatialdatatable_rcppDouglasPeucker, 2},
     {"spatialdatatable_rcppSimplifyPolyline", (DL_FUNC) &spatialdatatable_rcppSimplifyPolyline, 3},
+    {"spatialdatatable_rcppPolylineCenter", (DL_FUNC) &spatialdatatable_rcppPolylineCenter, 1},
     {"spatialdatatable_rcppEarthRadius", (DL_FUNC) &spatialdatatable_rcppEarthRadius, 0},
     {NULL, NULL, 0}
 };
