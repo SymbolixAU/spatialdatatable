@@ -177,6 +177,31 @@ PolylineArea <- function(polyline){
 #'
 #' @param polyline an encoded polyline
 #'
+#' @examples
+#' \dontrun{
+#'
+#' sdt <- data.table(polygon_id = c(rep(1, 10)),
+#'       line_id = c(rep(1, 5), rep(2, 5)),
+#'       lat = c(1, 1, -1, -1, 1, 0.9, -0.9, -0.9, 0.9, 0.9),
+#'       lon = c(-1, 1, 1, -1, -1, -0.9, -0.9, 0.9, 0.9, -0.9))
+#'
+#' sdt <- sdt[, .(polyline = encode_pl(lat, lon)), by = .(polygon_id, line_id)]
+#'
+#' library(googleway)
+#'
+#' mapKey <- read.dcf("~/Documents/.googleAPI", fields = "GOOGLE_MAP_KEY")
+#'
+#' google_map(key = mapKey) %>%
+#'   add_polygons(data = sdt, polyline = "polyline", id = "polygon_id", pathId = "line_id")
+#'
+#' sdt[, c("centerLat", "centerLon") := PolylineCenter(polyline)]
+#'
+#' google_map(key = mapKey) %>%
+#'   add_polygons(data = sdt, polyline = "polyline", id = "polygon_id", pathId = "line_id") %>%
+#'   add_markers(data = sdt, lat = "centerLat", lon = "centerLon")
+#'
+#' }
+#'
 #' @export
 PolylineCenter <- function(polyline){
 	rcppPolylineCenter(polyline)
