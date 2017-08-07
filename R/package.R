@@ -26,3 +26,11 @@ NULL
 ## - if 'SimplifyPolyline' is called on a 'sdt_polyline' column, return a 'spdt_polyline column
 ##
 ## - re-building the package prevents := from working
+##
+## - specify all arguments should be columns of the data.table?
+## --- exemplified by dtDestination, the 'distance' value must be
+## --- a column / vector of values, otherwise if only one value is
+## --- supplied, it's only treated as one value and only used
+## --- on the first row, thre rest of the rows will assume
+## --- distance == 0
+## -- or, if a single value is supplied, assign it to ALL ROWS
