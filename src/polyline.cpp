@@ -13,37 +13,43 @@ using namespace Rcpp;
 //
 // ------------------------------------------------------
 
-// [[Rcpp::export]]
-Rcpp::String rcpp_wkt(Rcpp::NumericVector lats, Rcpp::NumericVector lons){
-
-	// given an encoded polyline,
-	// return the WKT representation of it
-
-	// input will be two vectors of lats & lons
-
-	// step 1:
-	// what enters this function when grouped by .id?
-	//Rcpp::Rcout << "string size: "  << lats.size() << std::endl;
-
-	// step 2:
-	// it's a multipolygon if there is more than one polygon ID
-	// AND not all of the other polygons are holes
-//	Rcpp::Rcout << "lat 0: " << lats[0] << std::endl;
-
-  Rcpp::String out = "hi";
-	//Rcpp::String out = single_wkt(lats, lons);
-
-	return out;
-}
 
 // [[Rcpp::export]]
-Rcpp::String rcpp_decode_wkt(std::string encoded){
+Rcpp::String rcpp_polyline_wkt(Rcpp::StringVector encodedStrings){
 
-	Rcpp::List decoded = decode_polyline(encoded);
+	// TODO:
+	// if no 'by' clause, assume each row is a single WKT polygon, rather than
+	// concatenate them all
 
-	Rcpp::String out = single_wkt(decoded);
+	int encodedSize = encodedStrings.size();
 
-	return out;
+	std::string out;
+	std::string firstOut = "";
+	std::string encoded;
+	Rcpp::List decoded;
+
+	std::ostringstream ossOutFirst;
+	std::ostringstream ossOut;
+
+	Rcpp::Rcout << "encoded size: " << encodedSize << std::endl;
+
+	if(encodedSize > 1){
+		for(int i = 0; i < (encodedSize - 1); i ++ ){
+			encoded = Rcpp::as< std::string >(encodedStrings[i]);
+			decoded = decode_polyline(encoded);
+			out = single_wkt(decoded);
+			ossOutFirst << out << ", ";
+		}
+		firstOut = ossOutFirst.str();
+	}
+
+	encoded = Rcpp::as< std::string >(encodedStrings[(encodedSize - 1)]);
+	decoded = decode_polyline(encoded);
+	out = single_wkt(decoded);
+
+	ossOut << "POLYGON (" << firstOut << out << ")";
+
+	return ossOut.str();
 }
 
 
@@ -62,9 +68,6 @@ Rcpp::List rcpp_decode_pl(Rcpp::StringVector encodedStrings){
 
   	resultLats[i] = decoded["lat"];
   	resultLons[i] = decoded["lon"];
-
-//		resultLats[i] = pointsLat;
-//		resultLons[i] = pointsLon;
   }
 
   return Rcpp::List::create(_["lat"] = resultLats, _["lon"] = resultLons);

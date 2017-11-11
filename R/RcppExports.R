@@ -41,12 +41,8 @@ rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY) {
     .Call('_spatialdatatable_rcppWindingNumber', PACKAGE = 'spatialdatatable', pointX, pointY, vectorX, vectorY)
 }
 
-rcpp_wkt <- function(lats, lons) {
-    .Call('_spatialdatatable_rcpp_wkt', PACKAGE = 'spatialdatatable', lats, lons)
-}
-
-rcpp_decode_wkt <- function(encoded) {
-    .Call('_spatialdatatable_rcpp_decode_wkt', PACKAGE = 'spatialdatatable', encoded)
+rcpp_polyline_wkt <- function(encodedStrings) {
+    .Call('_spatialdatatable_rcpp_polyline_wkt', PACKAGE = 'spatialdatatable', encodedStrings)
 }
 
 rcpp_decode_pl <- function(encodedStrings) {

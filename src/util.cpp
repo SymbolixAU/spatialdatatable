@@ -23,15 +23,13 @@ double normaliseLonDeg(double deg){
 }
 
 
-Rcpp::String single_wkt(Rcpp::List latLonList){
+std::string single_wkt(Rcpp::List latLonList){
 
 	NumericVector lats = latLonList["lat"];
 	NumericVector lons = latLonList["lon"];
 
 	int n = lats.size();
 	std::ostringstream ossOut;
-
-	Rcpp::Rcout << "single_wkt size: "  << n << std::endl;
 
 	ossOut << "(";
 	for(int i = 0; i < (n - 1); i ++) {

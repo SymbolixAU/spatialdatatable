@@ -116,7 +116,7 @@ namespace spdt {
 
   double windingNumber(double pointX, double pointY, NumericVector vectorX, NumericVector vectorY);
 
-  Rcpp::String single_wkt(Rcpp::List latLonList);
+  std::string single_wkt(Rcpp::List latLonList);
 
   Rcpp::List decode_polyline(std::string encoded);
 

@@ -91,7 +91,9 @@ decode_pl <- function(encoded){
 #'
 #' @export
 mywkt <- function(polyline){
-	rcpp_decode_wkt(polyline)
+
+	rcpp_polyline_wkt(polyline)
+
 }
 
 

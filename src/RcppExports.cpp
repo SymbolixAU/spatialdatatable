@@ -159,26 +159,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_wkt
-Rcpp::String rcpp_wkt(Rcpp::NumericVector lats, Rcpp::NumericVector lons);
-RcppExport SEXP _spatialdatatable_rcpp_wkt(SEXP latsSEXP, SEXP lonsSEXP) {
+// rcpp_polyline_wkt
+Rcpp::String rcpp_polyline_wkt(Rcpp::StringVector encodedStrings);
+RcppExport SEXP _spatialdatatable_rcpp_polyline_wkt(SEXP encodedStringsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type lats(latsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type lons(lonsSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_wkt(lats, lons));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpp_decode_wkt
-Rcpp::String rcpp_decode_wkt(std::string encoded);
-RcppExport SEXP _spatialdatatable_rcpp_decode_wkt(SEXP encodedSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type encoded(encodedSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_decode_wkt(encoded));
+    Rcpp::traits::input_parameter< Rcpp::StringVector >::type encodedStrings(encodedStringsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_polyline_wkt(encodedStrings));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -244,8 +232,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spatialdatatable_rcppDistanceEuclidean", (DL_FUNC) &_spatialdatatable_rcppDistanceEuclidean, 4},
     {"_spatialdatatable_rcppPointsInPolygon", (DL_FUNC) &_spatialdatatable_rcppPointsInPolygon, 5},
     {"_spatialdatatable_rcppWindingNumber", (DL_FUNC) &_spatialdatatable_rcppWindingNumber, 4},
-    {"_spatialdatatable_rcpp_wkt", (DL_FUNC) &_spatialdatatable_rcpp_wkt, 2},
-    {"_spatialdatatable_rcpp_decode_wkt", (DL_FUNC) &_spatialdatatable_rcpp_decode_wkt, 1},
+    {"_spatialdatatable_rcpp_polyline_wkt", (DL_FUNC) &_spatialdatatable_rcpp_polyline_wkt, 1},
     {"_spatialdatatable_rcpp_decode_pl", (DL_FUNC) &_spatialdatatable_rcpp_decode_pl, 1},
     {"_spatialdatatable_rcpp_encode_pl", (DL_FUNC) &_spatialdatatable_rcpp_encode_pl, 3},
     {"_spatialdatatable_rcppDouglasPeucker", (DL_FUNC) &_spatialdatatable_rcppDouglasPeucker, 2},
