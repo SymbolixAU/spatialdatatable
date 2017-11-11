@@ -4,7 +4,7 @@
 \alias{mywkt}
 \title{Well Known Text}
 \usage{
-mywkt(lats, lons)
+mywkt(polyline)
 }
 \description{
 well known text

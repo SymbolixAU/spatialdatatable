@@ -106,8 +106,6 @@ namespace spdt {
   double rcppDist2gc(double latFrom, double lonFrom, double latTo, double lonTo,
                      double pointLat, double pointLon, double tolerance, double earthRadius);
 
-  DataFrame decode_polyline(std::string encoded);
-
   Rcpp::String EncodeNumber(int num);
 
   Rcpp::String EncodeSignedNumber(int num);
@@ -118,5 +116,7 @@ namespace spdt {
 
   double windingNumber(double pointX, double pointY, NumericVector vectorX, NumericVector vectorY);
 
-  Rcpp::String single_wkt(Rcpp::NumericVector lats, Rcpp::NumericVector lons);
+  Rcpp::String single_wkt(Rcpp::List latLonList);
+
+  Rcpp::List decode_polyline(std::string encoded);
 

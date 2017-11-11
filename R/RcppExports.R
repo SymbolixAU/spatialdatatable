@@ -45,6 +45,10 @@ rcpp_wkt <- function(lats, lons) {
     .Call('_spatialdatatable_rcpp_wkt', PACKAGE = 'spatialdatatable', lats, lons)
 }
 
+rcpp_decode_wkt <- function(encoded) {
+    .Call('_spatialdatatable_rcpp_decode_wkt', PACKAGE = 'spatialdatatable', encoded)
+}
+
 rcpp_decode_pl <- function(encodedStrings) {
     .Call('_spatialdatatable_rcpp_decode_pl', PACKAGE = 'spatialdatatable', encodedStrings)
 }

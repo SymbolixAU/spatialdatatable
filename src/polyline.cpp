@@ -25,21 +25,26 @@ Rcpp::String rcpp_wkt(Rcpp::NumericVector lats, Rcpp::NumericVector lons){
 	// what enters this function when grouped by .id?
 	//Rcpp::Rcout << "string size: "  << lats.size() << std::endl;
 
-
 	// step 2:
 	// it's a multipolygon if there is more than one polygon ID
 	// AND not all of the other polygons are holes
-	Rcpp::Rcout << "lat 0: " << lats[0] << std::endl;
+//	Rcpp::Rcout << "lat 0: " << lats[0] << std::endl;
 
-	Rcpp::String out = single_wkt(lats, lons);
+  Rcpp::String out = "hi";
+	//Rcpp::String out = single_wkt(lats, lons);
 
 	return out;
-
 }
 
-//Rcpp::String rcpp_decode_wkt(Rcpp::StringVector encoded){
-//	Rcpp::List decoded = rcpp_decode_pl(encoded)
-//}
+// [[Rcpp::export]]
+Rcpp::String rcpp_decode_wkt(std::string encoded){
+
+	Rcpp::List decoded = decode_polyline(encoded);
+
+	Rcpp::String out = single_wkt(decoded);
+
+	return out;
+}
 
 
 // [[Rcpp::export]]
@@ -53,46 +58,57 @@ Rcpp::List rcpp_decode_pl(Rcpp::StringVector encodedStrings){
 
   	std::string encoded = Rcpp::as< std::string >(encodedStrings[i]);
 
-		int len = encoded.size();
-		int index = 0;
-		float lat = 0;
-		float lng = 0;
+  	Rcpp::List decoded = decode_polyline(encoded);
 
-		NumericVector pointsLat;
-		NumericVector pointsLon;
+  	resultLats[i] = decoded["lat"];
+  	resultLons[i] = decoded["lon"];
 
-		while (index < len){
-			char b;
-			int shift = 0;
-			int result = 0;
-			do {
-				b = encoded.at(index++) - 63;
-				result |= (b & 0x1f) << shift;
-				shift += 5;
-			} while (b >= 0x20);
-			float dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
-			lat += dlat;
-
-			shift = 0;
-			result = 0;
-			do {
-				b = encoded.at(index++) - 63;
-				result |= (b & 0x1f) << shift;
-				shift += 5;
-			} while (b >= 0x20);
-			float dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
-			lng += dlng;
-
-			pointsLat.push_back(lat * (float)1e-5);
-			pointsLon.push_back(lng * (float)1e-5);
-		}
-
-		resultLats[i] = pointsLat;
-		resultLons[i] = pointsLon;
+//		resultLats[i] = pointsLat;
+//		resultLons[i] = pointsLon;
   }
 
   return Rcpp::List::create(_["lat"] = resultLats, _["lon"] = resultLons);
 }
+
+
+Rcpp::List decode_polyline(std::string encoded){
+
+	int len = encoded.size();
+	int index = 0;
+	float lat = 0;
+	float lng = 0;
+
+	NumericVector pointsLat;
+	NumericVector pointsLon;
+
+	while (index < len){
+		char b;
+		int shift = 0;
+		int result = 0;
+		do {
+			b = encoded.at(index++) - 63;
+			result |= (b & 0x1f) << shift;
+			shift += 5;
+		} while (b >= 0x20);
+		float dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
+		lat += dlat;
+
+		shift = 0;
+		result = 0;
+		do {
+			b = encoded.at(index++) - 63;
+			result |= (b & 0x1f) << shift;
+			shift += 5;
+		} while (b >= 0x20);
+		float dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
+		lng += dlng;
+
+		pointsLat.push_back(lat * (float)1e-5);
+		pointsLon.push_back(lng * (float)1e-5);
+	}
+	return Rcpp::List::create(_["lat"] = pointsLat, _["lon"] = pointsLon);
+}
+
 
 Rcpp::String EncodeNumber(int num){
 

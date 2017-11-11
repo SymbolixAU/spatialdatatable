@@ -90,10 +90,10 @@ decode_pl <- function(encoded){
 #' well known text
 #'
 #' @export
-mywkt <- function(lats, lons){
-	# lats * 2
-	rcpp_wkt(lats, lons)
+mywkt <- function(polyline){
+	rcpp_decode_wkt(polyline)
 }
+
 
 
 #' Encode PL

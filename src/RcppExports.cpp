@@ -171,6 +171,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_decode_wkt
+Rcpp::String rcpp_decode_wkt(std::string encoded);
+RcppExport SEXP _spatialdatatable_rcpp_decode_wkt(SEXP encodedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type encoded(encodedSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_decode_wkt(encoded));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_decode_pl
 Rcpp::List rcpp_decode_pl(Rcpp::StringVector encodedStrings);
 RcppExport SEXP _spatialdatatable_rcpp_decode_pl(SEXP encodedStringsSEXP) {
@@ -234,6 +245,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spatialdatatable_rcppPointsInPolygon", (DL_FUNC) &_spatialdatatable_rcppPointsInPolygon, 5},
     {"_spatialdatatable_rcppWindingNumber", (DL_FUNC) &_spatialdatatable_rcppWindingNumber, 4},
     {"_spatialdatatable_rcpp_wkt", (DL_FUNC) &_spatialdatatable_rcpp_wkt, 2},
+    {"_spatialdatatable_rcpp_decode_wkt", (DL_FUNC) &_spatialdatatable_rcpp_decode_wkt, 1},
     {"_spatialdatatable_rcpp_decode_pl", (DL_FUNC) &_spatialdatatable_rcpp_decode_pl, 1},
     {"_spatialdatatable_rcpp_encode_pl", (DL_FUNC) &_spatialdatatable_rcpp_encode_pl, 3},
     {"_spatialdatatable_rcppDouglasPeucker", (DL_FUNC) &_spatialdatatable_rcppDouglasPeucker, 2},
