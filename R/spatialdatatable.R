@@ -110,61 +110,60 @@ sdt_polyline_col.default <- function(sdt){
 }
 
 
-#' @export
-print.spatial.data.table <- function(x, ...){
+# #' @export
+# print.spatial.data.table <- function(x, ...){
+#
+# 	# options("spatialdatatable.datatable.print.nrows" = getOption("datatable.print.nrows"))
+# 	# print(paste0("datatable print option: ", getOption("datatable.print.nrows")))
+# 	## The data.table print method will only print a subset of rows, or 100, unless
+# 	## you specify otherwise
+#
+# 	## what I want is to go through the 'print.data.table' method to get its formatting
+# 	## then to format the final column...
+#
+# 	poly_column <- polyline_column(x)
+# 	poly_column <- poly_column[ poly_column %in% names(x) ]
+#
+#
+# 	if( length(poly_column) > 0 ){
+#
+# 		## truncate just the 'polyline' columns.
+# 		## data.table has the option 'datatable.prettyprint.char' that may overwrite this
+#
+# 		x <- x[,  lapply(.SD, function(y) {
+# 			paste0(substr(y, 1, pmin(20, nchar(y))), "...")
+# 		} )
+# 		, by = setdiff(names(x), poly_column)
+# 		, .SDcols = poly_column]
+#
+# 		### using 'set' modifies the object
+# 		# for(col in poly_column)
+# 		#  	set(x, j = col, value = paste0(strtrim(x[[col]], 20), "..."))
+# 		#   x[, col := paste0(substr(dt[[col]], 1, pmin(20, nchar(dt[[col]]))), "...")]
+#
+#
+# 	}
+# 	NextMethod()
+# 	## reset data.table print options
+# 	options("datatable.print.nrows" = getOption("spatialdatatable.datatable.print.nrows"))
+# }
 
-	# options("spatialdatatable.datatable.print.nrows" = getOption("datatable.print.nrows"))
-	# print(paste0("datatable print option: ", getOption("datatable.print.nrows")))
-	## The data.table print method will only print a subset of rows, or 100, unless
-	## you specify otherwise
 
-	## what I want is to go through the 'print.data.table' method to get its formatting
-	## then to format the final column...
-
-	poly_column <- polyline_column(x)
-	poly_column <- poly_column[ poly_column %in% names(x) ]
-
-
-	if( length(poly_column) > 0 ){
-
-		## truncate just the 'polyline' columns.
-		## data.table has the option 'datatable.prettyprint.char' that may overwrite this
-
-		x <- x[,  lapply(.SD, function(y) {
-			paste0(substr(y, 1, pmin(20, nchar(y))), "...")
-		} )
-		, by = setdiff(names(x), poly_column)
-		, .SDcols = poly_column]
-
-		### using 'set' modifies the object
-		# for(col in poly_column)
-		#  	set(x, j = col, value = paste0(strtrim(x[[col]], 20), "..."))
-		#   x[, col := paste0(substr(dt[[col]], 1, pmin(20, nchar(dt[[col]]))), "...")]
-
-
-	}
-	NextMethod()
-	## reset data.table print options
-	options("datatable.print.nrows" = getOption("spatialdatatable.datatable.print.nrows"))
-}
-
-
-#' @export
-`[.spatial.data.table` <- function(x, ...){
-
-	## need to keep the polyline attribute if it exists
-
-	## detect for ':=' in 'j', and if it exists, we don't want to print
-
-	args <- as.list(substitute(list(...)))
-	args <- lapply(args, function(y) { grepl(":=", y) })
-	args <- sapply(args, sum)
-	if(sum(args) > 0){
-		options("datatable.print.nrows" = -1L)
-	}
-
-	NextMethod()
-}
+# #' @export
+# `[.spatial.data.table` <- function(x, ...){
+#
+# 	## need to keep the polyline attribute if it exists
+#
+# 	## detect for ':=' in 'j', and if it exists, we don't want to print
+#
+# 	args <- as.list(substitute(list(...)))
+# 	args <- lapply(args, function(y) { grepl(":=", y) })
+# 	args <- sapply(args, sum)
+# 	if(sum(args) > 0){
+# 		options("datatable.print.nrows" = -1L)
+# 	}
+# 	NextMethod()
+# }
 
 
 
