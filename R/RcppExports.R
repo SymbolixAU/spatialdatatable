@@ -2,58 +2,58 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 rcppAlongTrack <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, earthRadius) {
-    .Call('spatialdatatable_rcppAlongTrack', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, earthRadius)
+    .Call('_spatialdatatable_rcppAlongTrack', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, earthRadius)
 }
 
 rcppDist2gc <- function(latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, earthRadius) {
-    .Call('spatialdatatable_rcppDist2gc', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, earthRadius)
+    .Call('_spatialdatatable_rcppDist2gc', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, pointLat, pointLon, tolerance, earthRadius)
 }
 
 rcppDestination <- function(latFrom, lonFrom, distance, bearing, earthRadius) {
-    .Call('spatialdatatable_rcppDestination', PACKAGE = 'spatialdatatable', latFrom, lonFrom, distance, bearing, earthRadius)
+    .Call('_spatialdatatable_rcppDestination', PACKAGE = 'spatialdatatable', latFrom, lonFrom, distance, bearing, earthRadius)
 }
 
 rcppMidpoint <- function(latFrom, lonFrom, latTo, lonTo) {
-    .Call('spatialdatatable_rcppMidpoint', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo)
+    .Call('_spatialdatatable_rcppMidpoint', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo)
 }
 
 rcppBearing <- function(latFrom, lonFrom, latTo, lonTo, compassBearing) {
-    .Call('spatialdatatable_rcppBearing', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, compassBearing)
+    .Call('_spatialdatatable_rcppBearing', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, compassBearing)
 }
 
 rcppDistanceHaversine <- function(latFrom, lonFrom, latTo, lonTo, earthRadius, tolerance) {
-    .Call('spatialdatatable_rcppDistanceHaversine', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, earthRadius, tolerance)
+    .Call('_spatialdatatable_rcppDistanceHaversine', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, earthRadius, tolerance)
 }
 
 rcppDistanceCosine <- function(latFrom, lonFrom, latTo, lonTo, earthRadius) {
-    .Call('spatialdatatable_rcppDistanceCosine', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, earthRadius)
+    .Call('_spatialdatatable_rcppDistanceCosine', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo, earthRadius)
 }
 
 rcppDistanceEuclidean <- function(latFrom, lonFrom, latTo, lonTo) {
-    .Call('spatialdatatable_rcppDistanceEuclidean', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo)
+    .Call('_spatialdatatable_rcppDistanceEuclidean', PACKAGE = 'spatialdatatable', latFrom, lonFrom, latTo, lonTo)
 }
 
 rcppPointsInPolygon <- function(pointsId, pointsX, pointsY, vectorX, vectorY) {
-    .Call('spatialdatatable_rcppPointsInPolygon', PACKAGE = 'spatialdatatable', pointsId, pointsX, pointsY, vectorX, vectorY)
+    .Call('_spatialdatatable_rcppPointsInPolygon', PACKAGE = 'spatialdatatable', pointsId, pointsX, pointsY, vectorX, vectorY)
 }
 
 rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY) {
-    .Call('spatialdatatable_rcppWindingNumber', PACKAGE = 'spatialdatatable', pointX, pointY, vectorX, vectorY)
+    .Call('_spatialdatatable_rcppWindingNumber', PACKAGE = 'spatialdatatable', pointX, pointY, vectorX, vectorY)
 }
 
-rcpp_decode_pl <- function(encoded) {
-    .Call('spatialdatatable_rcpp_decode_pl', PACKAGE = 'spatialdatatable', encoded)
+rcpp_decode_pl <- function(encodedStrings) {
+    .Call('_spatialdatatable_rcpp_decode_pl', PACKAGE = 'spatialdatatable', encodedStrings)
 }
 
 rcpp_encode_pl <- function(latitude, longitude, num_coords) {
-    .Call('spatialdatatable_rcpp_encode_pl', PACKAGE = 'spatialdatatable', latitude, longitude, num_coords)
+    .Call('_spatialdatatable_rcpp_encode_pl', PACKAGE = 'spatialdatatable', latitude, longitude, num_coords)
 }
 
 rcppDouglasPeucker <- function(polyline, distanceTolerance) {
-    .Call('spatialdatatable_rcppDouglasPeucker', PACKAGE = 'spatialdatatable', polyline, distanceTolerance)
+    .Call('_spatialdatatable_rcppDouglasPeucker', PACKAGE = 'spatialdatatable', polyline, distanceTolerance)
 }
 
 rcppSimplifyPolyline <- function(polyline, distanceTolerance, tolerance, earthRadius) {
-    .Call('spatialdatatable_rcppSimplifyPolyline', PACKAGE = 'spatialdatatable', polyline, distanceTolerance, tolerance, earthRadius)
+    .Call('_spatialdatatable_rcppSimplifyPolyline', PACKAGE = 'spatialdatatable', polyline, distanceTolerance, tolerance, earthRadius)
 }
 

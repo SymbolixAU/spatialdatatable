@@ -75,6 +75,9 @@ decode_pl <- function(encoded){
 	# if(class(encoded) != "character" | length(encoded) != 1)
 	# 	stop("encoded must be a string of length 1")
 
+	print("encoded size: ")
+	print(length(encoded))
+
 	tryCatch({
 		rcpp_decode_pl(encoded)
 	},
