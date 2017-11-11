@@ -13,16 +13,39 @@ using namespace Rcpp;
 //
 // ------------------------------------------------------
 
+// [[Rcpp::export]]
+Rcpp::String rcpp_wkt(Rcpp::NumericVector lats, Rcpp::NumericVector lons){
 
-//Rcpp::List rcpp_decode_pl(std::string encoded){
+	// given an encoded polyline,
+	// return the WKT representation of it
+
+	// input will be two vectors of lats & lons
+
+	// step 1:
+	// what enters this function when grouped by .id?
+	//Rcpp::Rcout << "string size: "  << lats.size() << std::endl;
+
+
+	// step 2:
+	// it's a multipolygon if there is more than one polygon ID
+	// AND not all of the other polygons are holes
+	Rcpp::Rcout << "lat 0: " << lats[0] << std::endl;
+
+	Rcpp::String out = single_wkt(lats, lons);
+
+	return out;
+
+}
+
+//Rcpp::String rcpp_decode_wkt(Rcpp::StringVector encoded){
+//	Rcpp::List decoded = rcpp_decode_pl(encoded)
+//}
+
 
 // [[Rcpp::export]]
 Rcpp::List rcpp_decode_pl(Rcpp::StringVector encodedStrings){
-//DataFrame rcpp_decode_pl(std::string encoded){
 
   int encodedSize = encodedStrings.size();
-	//Rcpp::List result(encodedSize);
-	//DataFrame df_coords;
 	Rcpp::List resultLats(encodedSize);
 	Rcpp::List resultLons(encodedSize);
 
@@ -64,22 +87,11 @@ Rcpp::List rcpp_decode_pl(Rcpp::StringVector encodedStrings){
 			pointsLon.push_back(lng * (float)1e-5);
 		}
 
-		//df_coords = DataFrame::create(Named("lat") = pointsLat, Named("lon") = pointsLon);
-		//result[i] = df_coords;
-
-		//result[i] = Rcpp::List::create(
-		//	_["lat"] = pointsLat,
-		//	_["lon"] = pointsLon
-		//);
-
 		resultLats[i] = pointsLat;
 		resultLons[i] = pointsLon;
-
   }
 
   return Rcpp::List::create(_["lat"] = resultLats, _["lon"] = resultLons);
-  //return Rcpp::List::create(_["lat"] = pointsLat, _["lon"] = pointsLon);
-  //return result;
 }
 
 Rcpp::String EncodeNumber(int num){

@@ -75,9 +75,6 @@ decode_pl <- function(encoded){
 	# if(class(encoded) != "character" | length(encoded) != 1)
 	# 	stop("encoded must be a string of length 1")
 
-	print("encoded size: ")
-	print(length(encoded))
-
 	tryCatch({
 		rcpp_decode_pl(encoded)
 	},
@@ -85,6 +82,17 @@ decode_pl <- function(encoded){
 		message("The encoded string could not be decoded. \nYou can manually check the encoded line at https://developers.google.com/maps/documentation/utilities/polylineutility \nIf the line can successfully be manually decoded, please file an issue: https://github.com/SymbolixAU/googleway/issues ")
 	})
 
+}
+
+
+#' Well Known Text
+#'
+#' well known text
+#'
+#' @export
+mywkt <- function(lats, lons){
+	# lats * 2
+	rcpp_wkt(lats, lons)
 }
 
 

@@ -118,4 +118,5 @@ namespace spdt {
 
   double windingNumber(double pointX, double pointY, NumericVector vectorX, NumericVector vectorY);
 
+  Rcpp::String single_wkt(Rcpp::NumericVector lats, Rcpp::NumericVector lons);
 
