@@ -61,3 +61,7 @@ rcppSimplifyPolyline <- function(polyline, distanceTolerance, tolerance, earthRa
     .Call('_spatialdatatable_rcppSimplifyPolyline', PACKAGE = 'spatialdatatable', polyline, distanceTolerance, tolerance, earthRadius)
 }
 
+polyline_binops <- function(sfc0, sfc1, op, par = 0.0, pattern = "", sparse = TRUE, prepared = FALSE) {
+    .Call('_spatialdatatable_polyline_binops', PACKAGE = 'spatialdatatable', sfc0, sfc1, op, par, pattern, sparse, prepared)
+}
+

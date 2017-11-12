@@ -27,8 +27,75 @@
 # dt[, sf := sf::st_as_sfc(wkt)]
 # dt[, area := sf::st_area(sf) * 10000]
 #
+
+## -----------------------------------------------------------------------------
+
+# sf:::CPL_write_wkb(st_geometry(dt[1, sf ]))
+#
+# library(sf)
+# g <- st_geometry(nc[1:2, ])
+# str( g )
+#
+# wkt <- list( dt[1, wkt] )
+# setattr(wkt, 'class', c("XY", "POLYGON", "sfg"))
+# gwkt <- list(wkt)
+# setattr(gwkt, 'class', c('sfc_POLYGON', 'sfc'))
+# gwkt
+#
+# wkt
+# sf:::CPL_write_wkb( wkt  )
+#
+# wkt <-  list( unname(as.matrix(googleway::decode_pl(dt[1, polyline]))) )
+# setattr(wkt, 'class', c("XY", "POLYGON", "sfg"))
+# wkt
+#
+
+
+# library(data.table)
+# pl1 <-  list( list( unname(as.matrix(googleway::decode_pl(dt[1, polyline]))) ) )
+# pl2 <-  list( list( unname(as.matrix(googleway::decode_pl(dt[2, polyline]))) ) )
+#
+# setattr(pl1, 'class', c("XY", "MULTIPOLYGON", "sfg"))
+# setattr(pl2, 'class', c("XY", "MULTIPOLYGON", "sfg"))
+#
+# gwkt <- list(pl1, pl2)
+# #  wkt <-  list( list( pl1 ), list( pl2 ) )
+# # setattr(wkt, 'class', c("XY", "MULTIPOLYGON", "sfg"))
+# #wkt <- list( wkt )
+#
+# # gwkt <-  wkt
+# setattr(gwkt, 'class', c('sfc_MULTIPOLYGON', 'sfc'))
+#
+# ## add other sf attributes
+# setattr(gwkt, 'precision', 0)
+# bbox <- c('xmin' = 0, 'ymin' = 0, 'xmax' = 0, 'ymax' = 0)
+# setattr(bbox, 'class', 'bbox')
+# setattr(gwkt, 'bbox', bbox)
+#
+# ## with my_CPL_write_wkb - I've removed the precision
+# # crs <- list(epsg = 426, proj4string = "+proj=longlat + datum=NAD27 +no_defs")
+# # setattr(crs, 'class', 'crs')
+# # setattr(gwkt, 'crs', crs  )
+# # setattr(gwkt, 'n_empty', 0)
+#
+# gwkt
+#
+# sf:::CPL_write_wkb(g)
+# sf:::CPL_write_wkb(gwkt)
 #
 #
+# sf:::my_CPL_write_wkb(gwkt)
+
+
+## if I can set attributes on the polyline column, then I can use those
+## when decoding the polyline, turn them in to the required 'sfc' type when inside
+## CPL_write_wkb
+## which will then go into any of the geom_ops functions?
+
+
+
+## -----------------------------------------------------------------------------
+
 #
 # pl1 <- encode_pl(lat = c(0,1,1), lon = c(1,0,0))
 # pl2 <- encode_pl(lat = c(2,3,4), lon = c(5,4,3))
@@ -116,5 +183,4 @@
 # sdtnc[, wkt := mywkt(polyline), by = .id]
 #
 #
-# sf:::R_read_wkb("POLYGON( ( 0 0, 1 1, 2 2) )", )
 #

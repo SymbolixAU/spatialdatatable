@@ -15,12 +15,11 @@ Imports:
     data.table (>= 1.10.0),
     sf,
     Rcpp
-Depends:
-    data.table (>= 1.10.0)
 Suggests:
     testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
-LinkingTo: Rcpp
+LinkingTo: 
+		Rcpp

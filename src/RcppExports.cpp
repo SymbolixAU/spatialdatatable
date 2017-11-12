@@ -220,6 +220,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// polyline_binops
+Rcpp::List polyline_binops(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, std::string pattern, bool sparse, bool prepared);
+RcppExport SEXP _spatialdatatable_polyline_binops(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP patternSEXP, SEXP sparseSEXP, SEXP preparedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
+    Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
+    Rcpp::traits::input_parameter< double >::type par(parSEXP);
+    Rcpp::traits::input_parameter< std::string >::type pattern(patternSEXP);
+    Rcpp::traits::input_parameter< bool >::type sparse(sparseSEXP);
+    Rcpp::traits::input_parameter< bool >::type prepared(preparedSEXP);
+    rcpp_result_gen = Rcpp::wrap(polyline_binops(sfc0, sfc1, op, par, pattern, sparse, prepared));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_spatialdatatable_rcppAlongTrack", (DL_FUNC) &_spatialdatatable_rcppAlongTrack, 8},
@@ -237,6 +254,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spatialdatatable_rcpp_encode_pl", (DL_FUNC) &_spatialdatatable_rcpp_encode_pl, 3},
     {"_spatialdatatable_rcppDouglasPeucker", (DL_FUNC) &_spatialdatatable_rcppDouglasPeucker, 2},
     {"_spatialdatatable_rcppSimplifyPolyline", (DL_FUNC) &_spatialdatatable_rcppSimplifyPolyline, 4},
+    {"_spatialdatatable_polyline_binops", (DL_FUNC) &_spatialdatatable_polyline_binops, 7},
     {NULL, NULL, 0}
 };
 
