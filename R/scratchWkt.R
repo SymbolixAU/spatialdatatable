@@ -50,6 +50,15 @@
 # wkt
 #
 
+# spatialdatatable:::polyline_binops(st_geometry(nc[1:3, ]),
+# 																	 st_geometry(nc[3:5, ]),
+# 																	 op = "intersects")
+#
+# sf:::st_geos_binop("intersects", nc[1:3, ], nc[3:5,])
+#
+# sf:::CPL_geos_binop(st_geometry(nc[1:3, ]),
+# 										st_geometry(nc[3:5, ]),
+# 										op = "intersects")
 
 # library(data.table)
 # pl1 <-  list( list( unname(as.matrix(googleway::decode_pl(dt[1, polyline]))) ) )

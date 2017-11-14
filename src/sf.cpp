@@ -2,6 +2,10 @@
 #include "spdt.h"
 
 
+// [[Rcpp::depends(sf)]]
+
+#include <sf.h>
+
 // can I call a CPP function that's included in the 'sf' package:
 
 
@@ -32,10 +36,12 @@ Rcpp::List polyline_binops(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, dou
 	// https://stackoverflow.com/questions/38703682/calling-function-from-package-in-rcpp-code
 
 	// Obtain environment containing function
-	Rcpp::Environment package_env("package:sf");
-
-	// Make function callable from C++
-	Rcpp::Function rfunction = package_env["CPL_geos_binops"];
+	//Rcpp::Environment package_env("package:sf");
+	//Rcpp::Rcout << "env: " << package_env << std::endl;
+  //Rcpp::Rcout <<	package_env.get("CPL_geos_binop") << std::endl;
+	//Make function callable from C++
+	//Rcpp::Function rfunction = package_env.get("CPL_geos_binop");
+	//Rcpp::Rcout << "rfunction: " << std::endl;
 
 //	Rcpp::List sfc0;
 //	Rcpp::List sfc1;
@@ -45,7 +51,12 @@ Rcpp::List polyline_binops(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, dou
 //	bool sparse = true;
 //	bool prepared = false;
 
-	rfunction(sfc0, sfc1, op, par, pattern, sparse, prepared);
+//	rfunction(sfc0, sfc1, op, par, pattern, sparse, prepared);
+
+  //CPL_geos_binop(sfc0, sfc1, op, par, pattern, sparse, prepared);
+
+  //sf::CPL_read_wkb(Rcpp::List sfc0, false, false)
+
 
 	return Rcpp::List::create(_["lat"] = 0);
 }
