@@ -45,6 +45,10 @@ pointDistance <- function() {
     invisible(.Call('_spatialdatatable_pointDistance', PACKAGE = 'spatialdatatable'))
 }
 
+boostWkt <- function() {
+    invisible(.Call('_spatialdatatable_boostWkt', PACKAGE = 'spatialdatatable'))
+}
+
 rcpp_decode_pl <- function(encoded) {
     .Call('_spatialdatatable_rcpp_decode_pl', PACKAGE = 'spatialdatatable', encoded)
 }
