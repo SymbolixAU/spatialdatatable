@@ -52,12 +52,50 @@ void boostWkt(){
 // - WKT
 // - http://www.boost.org/doc/libs/1_60_0/boost/geometry/io/wkt/read.hpp
 
+// read WKT and encode coordinates into polylne
+// [[Rcpp::export]]
+void encodeWKT(Rcpp::List sfc){
+
+	namespace bg = boost::geometry;
+	namespace bgm = bg::model;
+
+	typedef double base_type;
+	typedef bgm::d2::point_xy<base_type> point_type;
+	typedef bgm::polygon<point_type> polygon_type;
+	typedef bgm::multi_polygon<polygon_type> multipolygon_type;
+
+	polygon_type pl;
+
+	Rcpp::CharacterVector cl_attr = sfc.attr("class");
+	Rcpp::Rcout << cl_attr << std::endl;
+	Rcpp::Rcout << "sfc size: " << sfc.size() << std::endl;
+
+	for (int i = 0; i < sfc.size(); i++) {
+		Rcpp::List lst = sfc[i];
+		Rcpp::Rcout << "sfc[i] size: " << lst.size() << std::endl;
+
+		int n = lst.size();
+		Rcpp::NumericVector x(n);
+
+		for (int j = 0; j < lst.size(); j++) {
+			 //x[j] = lst[j];
+			Rcpp::Rcout << j << std::endl;
+		}
+		
+
+	}
 
 
-//Rcpp::Date getIMMDate(int mon, int year) {
-//	// compute third Wednesday of given month / year
-//	date d = nth_day_of_the_week_in_month(nth_day_of_the_week_in_month::third,
-//                                      Wednesday, mon).get_date(year);
-//	date::ymd_type ymd = d.year_month_day();
-//	return Rcpp::wrap(Rcpp::Date(ymd.year, ymd.month, ymd.day));
-//}
+	//bg::read_wkt(sfc, pl);
+
+//	bg::read_wkt("POLYGON ((0 0, 0 15998.49, 12798.76 15998.49, 12798.76 0, 0 0), "
+//                "(3921.294 177.8112, 9064.3339 177.8112, 9064.333 2951.2112, 3921.294 2951.2112, 3921.294 177.8112), "
+//                "(9064.3340 177.8112, 12765.034 177.8112, 12765.034 5192.0872, 12743.139 5192.0872, 12743.139 6685.701, 11439.19 6685.701, 11439.19 5192.0872, 11438.834 5192.0872, 11438.834 2951.2112, 9064.334 2951.2112, 9064.334 177.8112), )", pl);
+
+
+	//std::string reason;
+	//std::cout << (bg::is_valid(pl, reason)?"valid ":"invalid ") << reason << std::endl;
+	//std::cout << bg::wkt(pl) << "\n";
+
+}
+
