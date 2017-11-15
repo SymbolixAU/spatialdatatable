@@ -81,10 +81,10 @@ Rcpp::String EncodeSignedNumber(int num){
 	return EncodeNumber(sgn_num);
 }
 
-// [[Rcpp::export]]
-Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
-                            Rcpp::NumericVector longitude,
-                            int num_coords){
+Rcpp::String encode_polyline(Rcpp::NumericVector latitude,
+                       Rcpp::NumericVector longitude,
+                       int num_coords){
+
 	int plat = 0;
 	int plon = 0;
 	String output_str;
@@ -99,6 +99,15 @@ Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
 		plat = late5;
 		plon = lone5;
 	}
+	return output_str;
+}
+
+// [[Rcpp::export]]
+Rcpp::String rcpp_encode_pl(Rcpp::NumericVector latitude,
+                            Rcpp::NumericVector longitude,
+                            int num_coords){
+
+	Rcpp::String output_str = encode_polyline(latitude, longitude, num_coords);
 	return output_str;
 }
 
