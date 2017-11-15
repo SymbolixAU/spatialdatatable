@@ -10,3 +10,4 @@
 
 # spatialdatatable:::encodeWKT(st_geometry(nc[1:4, ]))
 
+# spatialdatatable:::encodeSFWKB(sfc = st_geometry(nc[1, ]))

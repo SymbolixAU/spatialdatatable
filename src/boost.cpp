@@ -1,6 +1,11 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+//#include <iostream>
+//#include <iomanip>
+//#include <sstream>
+//#include <string>
+
 #include "sdt.h"
 // [[Rcpp::depends(BH)]]
 
@@ -108,18 +113,26 @@ void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = fals
 void write_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat, double prec) {
 
 	Rcpp::Rcout << "write_matrix: " << std::endl;
-	Rcpp::String encodedString;
+	Rcpp::StringVector encodedString;
 
-	add_int(os, mat.nrow());
-	for (int i = 0; i < mat.nrow(); i++){
+//	int nRow = mat.nrow();
+//	int nCols = mat.ncol();
+
+	//Rcpp::Rcout << "rows: " << nRow << std::endl;
+	//Rcpp::Rcout << "cols: " << nCols << std::endl;
+
+//	add_int(os, mat.nrow());
+  //for (int i = 0; i < mat.nrow(); i++){
 		//add_double(os, mat(i,j), prec);
-		Rcpp::NumericVector lats = mat(i, 1);
-		Rcpp::NumericVector lons = mat(i, 0);
+		Rcpp::NumericVector lats = mat(_, 1);
+		Rcpp::NumericVector lons = mat(_, 0);
 		Rcpp::Rcout << lats << std::endl;
 		int n = lats.size();
 		encodedString = encode_polyline(lats, lons, n);
-		//Rcpp::Rcout << encodedString << std::endl;
-	}
+		Rcpp::Rcout << encodedString << std::endl;
+		//os.write(encodedString);
+
+	//}
 }
 
 void write_matrix_list(std::ostringstream& os, Rcpp::List lst, double prec) {
@@ -175,6 +188,9 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 		cls = sfc.attr("classes");
 		tp = make_type(cls[0], "", false, NULL, 0);
 	}
+
+	Rcpp::Rcout << "tp: " << tp << std::endl;
+
 	switch (tp) {
 	case SF_Unknown: { // further check:
 		Rcpp::stop("impossible classs in get_dim_sfc()"); // #nocov
@@ -215,7 +231,7 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::String encodeSFWKB(Rcpp::List sfc){
+Rcpp::StringVector encodeSFWKB(Rcpp::List sfc){
 
 	double precision = sfc.attr("precision");
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
@@ -224,12 +240,19 @@ Rcpp::String encodeSFWKB(Rcpp::List sfc){
 	const char *cls = cls_attr[0], *dm = dim[0];
 
 	Rcpp::List output(sfc.size()); // with raw vectors
+	Rcpp::StringVector encoded;
+
+	double s = sfc.size();
+	Rcpp::Rcout << s << std::endl;
 
 	for (int i = 0; i < sfc.size(); i++){
+		//Rcpp::Rcout << i << std::endl;
+		Rcpp::checkUserInterrupt();
 		std::ostringstream os;
+
 		write_data(os, sfc, i, false, 0, cls, dm, precision, 0);
 	}
-
+	return "";
 }
 
 
