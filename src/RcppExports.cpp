@@ -173,7 +173,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // encodeSFWKB
-Rcpp::StringVector encodeSFWKB(Rcpp::List sfc);
+Rcpp::List encodeSFWKB(Rcpp::List sfc);
 RcppExport SEXP _spatialdatatable_encodeSFWKB(SEXP sfcSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

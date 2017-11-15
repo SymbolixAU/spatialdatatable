@@ -22,7 +22,7 @@ void pointDistance(){
 	std::cout << "Distance p1-p2 is: " << distance(p1, p2) << std::endl;
 }
 
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB,
+Rcpp::StringVector write_data(Rcpp::List sfc, int i, bool EWKB,
                 int endian, const char *cls, const char *dim, double prec, int srid);
 
 void add_int(std::ostringstream& os, unsigned int i) {
@@ -94,83 +94,102 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 	return type;
 }
 
-void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = false,
+void write_multipolygon(Rcpp::List lst, bool EWKB = false,
                         int endian = 0, double prec = 0.0) {
 	Rcpp::CharacterVector cl_attr = lst.attr("class");
 
-	Rcpp::Rcout << "write_multipolygon: " << cl_attr << std::endl;
+	Rcpp::Rcout << "write_multipolygon() " << cl_attr << std::endl;
 
 	const char *dim = cl_attr[0];
 
 	Rcpp::Rcout << "dim attr: " << dim << std::endl;
 
-	add_int(os, lst.length());
+	//add_int(os, lst.length());
 	for (int i = 0; i < lst.length(); i++)
-		write_data(os, lst, i, EWKB, endian, "POLYGON", dim, prec, 0);
+		write_data(lst, i, EWKB, endian, "POLYGON", dim, prec, 0);
 }
 
+Rcpp::String write_matrix( Rcpp::NumericMatrix mat) {
 
-void write_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat, double prec) {
+	Rcpp::Rcout << "write_matrix() " << std::endl;
+	Rcpp::String encodedString;
 
-	Rcpp::Rcout << "write_matrix: " << std::endl;
-	Rcpp::StringVector encodedString;
-
-//	int nRow = mat.nrow();
-//	int nCols = mat.ncol();
+	//	int nRow = mat.nrow();
+	//	int nCols = mat.ncol();
 
 	//Rcpp::Rcout << "rows: " << nRow << std::endl;
 	//Rcpp::Rcout << "cols: " << nCols << std::endl;
 
-//	add_int(os, mat.nrow());
-  //for (int i = 0; i < mat.nrow(); i++){
-		//add_double(os, mat(i,j), prec);
-		Rcpp::NumericVector lats = mat(_, 1);
-		Rcpp::NumericVector lons = mat(_, 0);
-		Rcpp::Rcout << lats << std::endl;
-		int n = lats.size();
-		encodedString = encode_polyline(lats, lons, n);
-		Rcpp::Rcout << encodedString << std::endl;
-		//os.write(encodedString);
+	//	add_int(os, mat.nrow());
+	//for (int i = 0; i < mat.nrow(); i++){
+	//add_double(os, mat(i,j), prec);
+	Rcpp::NumericVector lats = mat(_, 1);
+	Rcpp::NumericVector lons = mat(_, 0);
+	Rcpp::Rcout << lats << std::endl;
+	int n = lats.size();
+	encodedString = encode_polyline(lats, lons, n);
+
+	//Rcpp::Rcout << encodedString << std::endl;
+	//os.write(encodedString);
+
+	return encodedString;
 
 	//}
 }
 
-void write_matrix_list(std::ostringstream& os, Rcpp::List lst, double prec) {
+Rcpp::StringVector write_matrix_list(Rcpp::List lst) {
 
-	Rcpp::Rcout << "write_matrix_list: " << std::endl;
+	Rcpp::Rcout << "write_matrix_list() " << std::endl;
+	Rcpp::StringVector tempOutput;
 
 	size_t len = lst.length();
-	add_int(os, len);
+	Rcpp::StringVector encoded(len);
+
+	Rcpp::Rcout << "write_matrix_list size: " << len << std::endl;
+
 	for (size_t i = 0; i < len; i++)
-		write_matrix(os, lst[i], prec);
+		encoded[i] = write_matrix(lst[i]);
+
+	tempOutput = encoded[0];
+	Rcpp::Rcout << "write_matrix_list encoded: " << tempOutput << std::endl;
+	return encoded;
 }
 
 // write single simple feature object as (E)WKB to stream os
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = false,
+Rcpp::StringVector write_data(Rcpp::List sfc, int i = 0, bool EWKB = false,
                 int endian = 0, const char *cls = NULL, const char *dim = NULL, double prec = 0.0,
                 int srid = 0) {
 
-	add_byte(os, (char) endian);
+	Rcpp::Rcout << "write_data() " << std::endl;
+
+	Rcpp::StringVector encoded;
+
 	int tp;
 	unsigned int sf_type = make_type(cls, dim, EWKB, &tp, srid);
 
 	Rcpp::Rcout << "write_data type: " << sf_type << std::endl;
 
-	add_int(os, sf_type);
-	if (EWKB && srid != 0)
-		add_int(os, srid);
 	switch(tp) {
-		case SF_LineString: write_matrix(os, sfc[i], prec);
+		case SF_LineString:
+			encoded[i] = write_matrix(sfc[i]);
 			break;
-		case SF_Polygon: write_matrix_list(os, sfc[i], prec);
+		case SF_Polygon:
+			encoded[i] = write_matrix_list(sfc[i]);
 			break;
-		case SF_MultiPolygon: write_multipolygon(os, sfc[i], EWKB, endian, prec);
+		case SF_MultiPolygon:
+			write_multipolygon(sfc[i], EWKB, endian, prec);
 			break;
 		default: {
 			Rcpp::Rcout << "type is " << sf_type << "\n"; // #nocov
 			Rcpp::stop("writing this sf type is not supported, please file an issue"); // #nocov
 		}
 	}
+
+	Rcpp::Rcout << "return: write_data()" << std::endl;
+//	Rcpp::StringVector temp = encoded[0];
+//	Rcpp::Rcout << temp << std::endl;
+	return encoded;
+
 }
 
 Rcpp::List get_dim_sfc(Rcpp::List sfc) {
@@ -231,7 +250,7 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::StringVector encodeSFWKB(Rcpp::List sfc){
+Rcpp::List encodeSFWKB(Rcpp::List sfc){
 
 	double precision = sfc.attr("precision");
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
@@ -240,19 +259,15 @@ Rcpp::StringVector encodeSFWKB(Rcpp::List sfc){
 	const char *cls = cls_attr[0], *dm = dim[0];
 
 	Rcpp::List output(sfc.size()); // with raw vectors
-	Rcpp::StringVector encoded;
 
 	double s = sfc.size();
 	Rcpp::Rcout << s << std::endl;
 
 	for (int i = 0; i < sfc.size(); i++){
-		//Rcpp::Rcout << i << std::endl;
 		Rcpp::checkUserInterrupt();
-		std::ostringstream os;
-
-		write_data(os, sfc, i, false, 0, cls, dm, precision, 0);
+		output[i] = write_data(sfc, i, false, 0, cls, dm, precision, 0);
 	}
-	return "";
+	return output;
 }
 
 
@@ -291,20 +306,17 @@ void encodeWKT(Rcpp::List sfc){
 			Rcpp::CharacterVector lst_attr = lst2.attr("class");
 			Rcpp::Rcout << "lst2 attr: " << lst_attr << std::endl;
 
-
 		}
 	}
 }
 
-	//bg::read_wkt(sfc, pl);
+//bg::read_wkt(sfc, pl);
 
 //	bg::read_wkt("POLYGON ((0 0, 0 15998.49, 12798.76 15998.49, 12798.76 0, 0 0), "
 //                "(3921.294 177.8112, 9064.3339 177.8112, 9064.333 2951.2112, 3921.294 2951.2112, 3921.294 177.8112), "
 //                "(9064.3340 177.8112, 12765.034 177.8112, 12765.034 5192.0872, 12743.139 5192.0872, 12743.139 6685.701, 11439.19 6685.701, 11439.19 5192.0872, 11438.834 5192.0872, 11438.834 2951.2112, 9064.334 2951.2112, 9064.334 177.8112), )", pl);
 
 
-	//std::string reason;
-	//std::cout << (bg::is_valid(pl, reason)?"valid ":"invalid ") << reason << std::endl;
-	//std::cout << bg::wkt(pl) << "\n";
-
-
+//std::string reason;
+//std::cout << (bg::is_valid(pl, reason)?"valid ":"invalid ") << reason << std::endl;
+//std::cout << bg::wkt(pl) << "\n";
