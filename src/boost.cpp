@@ -14,6 +14,13 @@ using namespace Rcpp;
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 
+#include <boost/algorithm/string.hpp>
+
+#include <string>
+#include <sstream>
+#include <vector>
+#include <iterator>
+
 using namespace boost::geometry;
 
 // [[Rcpp::export]]
@@ -90,7 +97,7 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 		type = SF_Unknown; // a mix: GEOMETRY
 	if (tp != NULL)
 		*tp = type;
-	Rcpp::Rcout << "type: " << type << std::endl;
+//	Rcpp::Rcout << "type: " << type << std::endl;
 	return type;
 }
 
@@ -98,11 +105,11 @@ void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = fals
                         int endian = 0, double prec = 0.0) {
 	Rcpp::CharacterVector cl_attr = lst.attr("class");
 
-	Rcpp::Rcout << "write_multipolygon() " << cl_attr << std::endl;
+//	Rcpp::Rcout << "write_multipolygon() " << cl_attr << std::endl;
 
 	const char *dim = cl_attr[0];
 
-	Rcpp::Rcout << "dim attr: " << dim << std::endl;
+//	Rcpp::Rcout << "dim attr: " << dim << std::endl;
 
 	//add_int(os, lst.length());
 	for (int i = 0; i < lst.length(); i++)
@@ -112,13 +119,15 @@ void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = fals
 void addToStream(std::ostringstream& os, Rcpp::StringVector encodedString) {
 	//TODO:
 	// This needs to go to an Rcpp::List so it can be outputed back to R
-	os << encodedString;
+//	Rcpp::Rcout << "encodedstream: " << std::endl;
+//	Rcpp::Rcout << encodedString << std::endl;
+	os << encodedString << ' ';
 }
 
 
 void write_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat ) {
 
-	Rcpp::Rcout << "write_matrix() " << std::endl;
+//	Rcpp::Rcout << "write_matrix() " << std::endl;
 	Rcpp::StringVector encodedString;
 
 	//	int nRow = mat.nrow();
@@ -132,16 +141,16 @@ void write_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat ) {
 	//add_double(os, mat(i,j), prec);
 	Rcpp::NumericVector lats = mat(_, 1);
 	Rcpp::NumericVector lons = mat(_, 0);
-	Rcpp::Rcout << lats << std::endl;
+//	Rcpp::Rcout << lats << std::endl;
 	int n = lats.size();
 	encodedString = encode_polyline(lats, lons, n);
 
 	addToStream(os, encodedString);
 
-	Rcpp::Rcout << encodedString << std::endl;
+//	Rcpp::Rcout << encodedString << std::endl;
 	//os.write(encodedString);
 
-	Rcpp::Rcout << "return: write_matrix()" << std::endl;
+//	Rcpp::Rcout << "return: write_matrix()" << std::endl;
 //	return encodedString;
 
 	//}
@@ -149,16 +158,16 @@ void write_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat ) {
 
 void write_matrix_list(std::ostringstream& os, Rcpp::List lst) {
 
-	Rcpp::Rcout << "write_matrix_list() " << std::endl;
+//	Rcpp::Rcout << "write_matrix_list() " << std::endl;
 	Rcpp::StringVector tempOutput;
 
 	size_t len = lst.length();
 	Rcpp::StringVector encoded(len);
 
-	Rcpp::Rcout << "write_matrix_list size: " << len << std::endl;
+//	Rcpp::Rcout << "write_matrix_list size: " << len << std::endl;
 
 	for (size_t j = 0; j < len; j++){
-		Rcpp::Rcout << "write_matrix_list: j: " << j << std::endl;
+//		Rcpp::Rcout << "write_matrix_list: j: " << j << std::endl;
 		write_matrix(os, lst[j]);
 		//Rcpp::Rcout << encoded[j] << std::endl;
 	}
@@ -174,17 +183,17 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB = false
                 int endian = 0, const char *cls = NULL, const char *dim = NULL, double prec = 0.0,
                 int srid = 0) {
 
-	Rcpp::Rcout << "write_data() " << std::endl;
-	Rcpp::Rcout << "write_date i: " << i << std::endl;
+//	Rcpp::Rcout << "write_data() " << std::endl;
+//	Rcpp::Rcout << "write_date i: " << i << std::endl;
 	int sfcSize = sfc.size();
-	Rcpp::Rcout << "sfc size: " << sfcSize << std::endl;
+//	Rcpp::Rcout << "sfc size: " << sfcSize << std::endl;
 
 	Rcpp::List encoded(sfcSize);
 
 	int tp;
 	unsigned int sf_type = make_type(cls, dim, EWKB, &tp, srid);
 
-	Rcpp::Rcout << "write_data type: " << sf_type << std::endl;
+//	Rcpp::Rcout << "write_data type: " << sf_type << std::endl;
 
 	switch(tp) {
 		case SF_LineString:
@@ -194,7 +203,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB = false
 			write_matrix_list(os, sfc[i]);
 			break;
 		case SF_MultiPolygon:
-			Rcpp::Rcout << "we have a multi polygon" << std::endl;
+//			Rcpp::Rcout << "we have a multi polygon" << std::endl;
 			write_multipolygon(os, sfc, EWKB, endian, prec);
 			break;
 		default: {
@@ -277,21 +286,38 @@ Rcpp::List encodeSFWKB(Rcpp::List sfc){
 	const char *cls = cls_attr[0], *dm = dim[0];
 
 	double s = sfc.size();
-	Rcpp::Rcout << "sfc size: " <<  s << std::endl;
+//	Rcpp::Rcout << "sfc size: " <<  s << std::endl;
 
 	Rcpp::List output(sfc.size()); // with raw vectors
 
 	for (int i = 0; i < sfc.size(); i++){
 		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
-		Rcpp::Rcout << "encodeSFWKB() i: " << i << std::endl;
+//		Rcpp::Rcout << "encodeSFWKB() i: " << i << std::endl;
 		write_data(os, sfc[i], i, false, 0, cls, dm, precision, 0);
 
 		int streamSize = os.str().size();
 		Rcpp::StringVector strVec(streamSize);
-		Rcpp::Rcout << "strVec size: " << streamSize << std::endl;
-		Rcpp::Rcout << os.str();
-		output[i] = os.str();
+
+		std::string str = os.str();
+		//const char *cp = str.c_str();
+		//for (size_t j = 0; j < str.size(); j++) {
+			//Rcpp::Rcout << "c_str j: " << j << std::endl;
+		//}
+
+
+		std::vector<std::string> strs;
+		boost::split(strs, str, boost::is_any_of("\t "));
+
+		//for (int j = 0; j < strs.size(); j++) {
+		//	Rcpp::Rcout << strs[j] << std::endl;
+		//}
+		output[i] = str;
+
+
+		//Rcpp::Rcout << "strVec size: " << streamSize << std::endl;
+		//Rcpp::Rcout << os.str() << std::endl;
+		//output[i] = os.str();
 
 		//Rcpp::StringVector tempString = output[0];
 		//Rcpp::Rcout << "temp strings: " << tempString << std::endl;
@@ -318,19 +344,21 @@ void encodeWKT(Rcpp::List sfc){
 	polygon_type pl;
 
 	Rcpp::CharacterVector cl_attr = sfc.attr("class");
-	Rcpp::Rcout << cl_attr << std::endl;
-	Rcpp::Rcout << "sfc size: " << sfc.size() << std::endl;
+
+//	Rcpp::Rcout << cl_attr << std::endl;
+//	Rcpp::Rcout << "sfc size: " << sfc.size() << std::endl;
 
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::List lst = sfc[i];
-		Rcpp::Rcout << "sfc[i] size: " << lst.size() << std::endl;
+
+//		Rcpp::Rcout << "sfc[i] size: " << lst.size() << std::endl;
 
 		int n = lst.size();
 		Rcpp::NumericVector x(n);
 
 		for (int j = 0; j < lst.size(); j++) {
 			//x[j] = lst[j];
-			Rcpp::Rcout << j << std::endl;
+//			Rcpp::Rcout << j << std::endl;
 
 			Rcpp::List lst2 = lst[j];
 			Rcpp::Rcout << "lst2 size: " <<  lst2.size() << std::endl;
