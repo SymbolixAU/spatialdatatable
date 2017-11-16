@@ -309,6 +309,7 @@ Rcpp::List encodeSFWKB(Rcpp::List sfc){
 		std::vector<std::string> strs;
 		boost::split(strs, str, boost::is_any_of("\t "));
 
+
 		//for (int j = 0; j < strs.size(); j++) {
 		//	Rcpp::Rcout << strs[j] << std::endl;
 		//}
