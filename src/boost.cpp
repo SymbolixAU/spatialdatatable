@@ -110,7 +110,8 @@ void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = fals
 }
 
 void addToStream(std::ostringstream& os, Rcpp::StringVector encodedString) {
-
+	//TODO:
+	// This needs to go to an Rcpp::List so it can be outputed back to R
 	os << encodedString;
 }
 
@@ -267,7 +268,7 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-void encodeSFWKB(Rcpp::List sfc){
+Rcpp::List encodeSFWKB(Rcpp::List sfc){
 
 	double precision = sfc.attr("precision");
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
@@ -289,6 +290,8 @@ void encodeSFWKB(Rcpp::List sfc){
 		int streamSize = os.str().size();
 		Rcpp::StringVector strVec(streamSize);
 		Rcpp::Rcout << "strVec size: " << streamSize << std::endl;
+		Rcpp::Rcout << os.str();
+		output[i] = os.str();
 
 		//Rcpp::StringVector tempString = output[0];
 		//Rcpp::Rcout << "temp strings: " << tempString << std::endl;
@@ -296,7 +299,7 @@ void encodeSFWKB(Rcpp::List sfc){
 
 	//Rcpp::Rcout << "final output size: " << output.size() << std::endl;
 
-	//return output;
+	return output;
 }
 
 

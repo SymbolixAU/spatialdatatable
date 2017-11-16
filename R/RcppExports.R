@@ -50,7 +50,7 @@ boostWkt <- function() {
 }
 
 encodeSFWKB <- function(sfc) {
-    invisible(.Call('_spatialdatatable_encodeSFWKB', PACKAGE = 'spatialdatatable', sfc))
+    .Call('_spatialdatatable_encodeSFWKB', PACKAGE = 'spatialdatatable', sfc)
 }
 
 encodeWKT <- function(sfc) {

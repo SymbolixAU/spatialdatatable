@@ -173,13 +173,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // encodeSFWKB
-void encodeSFWKB(Rcpp::List sfc);
+Rcpp::List encodeSFWKB(Rcpp::List sfc);
 RcppExport SEXP _spatialdatatable_encodeSFWKB(SEXP sfcSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    encodeSFWKB(sfc);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(encodeSFWKB(sfc));
+    return rcpp_result_gen;
 END_RCPP
 }
 // encodeWKT
