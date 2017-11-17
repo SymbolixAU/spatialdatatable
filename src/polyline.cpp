@@ -87,7 +87,8 @@ Rcpp::String encode_polyline(Rcpp::NumericVector latitude,
 
 	int plat = 0;
 	int plon = 0;
-	String output_str;
+
+	Rcpp::String output_str;
 
 	for(int i = 0; i < num_coords; i++){
 		int late5 = latitude[i] * 1e5;
@@ -99,6 +100,11 @@ Rcpp::String encode_polyline(Rcpp::NumericVector latitude,
 		plat = late5;
 		plon = lone5;
 	}
+
+	Rcpp::StringVector sv(1);
+	sv[0] =  output_str;
+	Rcpp::Rcout << "Encoded: " << sv << std::endl;
+
 	return output_str;
 }
 

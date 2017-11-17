@@ -183,16 +183,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// encodeWKT
-void encodeWKT(Rcpp::List sfc);
-RcppExport SEXP _spatialdatatable_encodeWKT(SEXP sfcSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    encodeWKT(sfc);
-    return R_NilValue;
-END_RCPP
-}
 // rcpp_decode_pl
 DataFrame rcpp_decode_pl(std::string encoded);
 RcppExport SEXP _spatialdatatable_rcpp_decode_pl(SEXP encodedSEXP) {
@@ -289,7 +279,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spatialdatatable_pointDistance", (DL_FUNC) &_spatialdatatable_pointDistance, 0},
     {"_spatialdatatable_boostWkt", (DL_FUNC) &_spatialdatatable_boostWkt, 0},
     {"_spatialdatatable_encodeSFWKB", (DL_FUNC) &_spatialdatatable_encodeSFWKB, 1},
-    {"_spatialdatatable_encodeWKT", (DL_FUNC) &_spatialdatatable_encodeWKT, 1},
     {"_spatialdatatable_rcpp_decode_pl", (DL_FUNC) &_spatialdatatable_rcpp_decode_pl, 1},
     {"_spatialdatatable_rcpp_encode_pl", (DL_FUNC) &_spatialdatatable_rcpp_encode_pl, 3},
     {"_spatialdatatable_rcppPolylineDistance", (DL_FUNC) &_spatialdatatable_rcppPolylineDistance, 1},

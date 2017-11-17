@@ -53,10 +53,6 @@ encodeSFWKB <- function(sfc) {
     .Call('_spatialdatatable_encodeSFWKB', PACKAGE = 'spatialdatatable', sfc)
 }
 
-encodeWKT <- function(sfc) {
-    invisible(.Call('_spatialdatatable_encodeWKT', PACKAGE = 'spatialdatatable', sfc))
-}
-
 rcpp_decode_pl <- function(encoded) {
     .Call('_spatialdatatable_rcpp_decode_pl', PACKAGE = 'spatialdatatable', encoded)
 }
