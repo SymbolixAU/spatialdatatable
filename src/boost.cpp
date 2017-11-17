@@ -116,19 +116,18 @@ void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = fals
 		write_data(os, lst, i, EWKB, endian, "POLYGON", dim, prec, 0);
 }
 
-void addToStream(std::ostringstream& os, Rcpp::StringVector encodedString) {
-	//TODO:
-	// This needs to go to an Rcpp::List so it can be outputed back to R
-	Rcpp::Rcout << encodedString << std::endl;
-	os << encodedString;
-	Rcpp::Rcout << os.str() << std::endl;
+void addToStream(std::ostringstream& os, Rcpp::String encodedString) {
+
+	std::string strng = encodedString;
+	os << strng << ' ';
+	//Rcpp::Rcout << os.str() << std::endl;
 }
 
 
 void write_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat ) {
 
 //	Rcpp::Rcout << "write_matrix() " << std::endl;
-	Rcpp::StringVector encodedString;
+	Rcpp::String encodedString;
 
 	//	int nRow = mat.nrow();
 	//	int nCols = mat.ncol();
@@ -276,7 +275,6 @@ Rcpp::List encodeSFWKB(Rcpp::List sfc){
 	Rcpp::CharacterVector dim = sfc_dim["_cls"];
 	const char *cls = cls_attr[0], *dm = dim[0];
 
-	double s = sfc.size();
 //	Rcpp::Rcout << "sfc size: " <<  s << std::endl;
 
 	Rcpp::List output(sfc.size()); // with raw vectors
@@ -284,15 +282,18 @@ Rcpp::List encodeSFWKB(Rcpp::List sfc){
 	for (int i = 0; i < sfc.size(); i++){
 		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
-//		Rcpp::Rcout << "encodeSFWKB() i: " << i << std::endl;
+
 		write_data(os, sfc[i], i, false, 0, cls, dm, precision, 0);
 
 		std::string str = os.str();
 		std::vector<std::string> strs;
 		boost::split(strs, str, boost::is_any_of("\t "));
 
-		output[i] = strs;
+		int s = strs.size();
+		//Rcpp::Rcout << " size: " <<  s << std::endl;
 
+		strs.erase(strs.end() - 1);
+		output[i] = strs;
 	}
 
 	return output;
