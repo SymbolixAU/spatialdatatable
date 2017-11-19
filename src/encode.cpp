@@ -5,23 +5,17 @@ using namespace Rcpp;
 // [[Rcpp::depends(BH)]]
 
 // One include file from Boost
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
+//#include <boost/geometry.hpp>
+//#include <boost/geometry/geometries/point_xy.hpp>
+//#include <boost/geometry/geometries/polygon.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <string>
-#include <sstream>
-#include <vector>
-#include <iterator>
+//#include <string>
+//#include <sstream>
+//#include <vector>
+//#include <iterator>
 
-using namespace boost::geometry;
-
-// [[Rcpp::export]]
-void pointDistance(){
-	model::d2::point_xy<int> p1(1, 1), p2(2, 2);
-	std::cout << "Distance p1-p2 is: " << distance(p1, p2) << std::endl;
-}
+//using namespace boost::geometry;
 
 void write_data(std::ostringstream& os, Rcpp::List sfc, int i,
                 const char *cls, int srid);
@@ -35,23 +29,8 @@ void add_byte(std::ostringstream& os, char c) {
 	os.write((char*) &c, sizeof(char));
 }
 
-// [[Rcpp::export]]
-void boostWkt(){
-	// http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/io/wkt/wkt.html
-	namespace geom = boost::geometry;
-	typedef geom::model::d2::point_xy<double> point_type;
+// http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/io/wkt/wkt.html
 
-	point_type point = geom::make<point_type>(3, 6);
-	geom::model::polygon<point_type> polygon;
-	geom::append(geom::exterior_ring(polygon), geom::make<point_type>(0, 0));
-	geom::append(geom::exterior_ring(polygon), geom::make<point_type>(0, 4));
-	geom::append(geom::exterior_ring(polygon), geom::make<point_type>(4, 4));
-	geom::append(geom::exterior_ring(polygon), geom::make<point_type>(4, 0));
-	geom::append(geom::exterior_ring(polygon), geom::make<point_type>(0, 0));
-
-	std::cout << boost::geometry::wkt(point) << std::endl;
-	std::cout << boost::geometry::wkt(polygon) << std::endl;
-}
 
 // TODO:
 // encoded polyline to model::polygon

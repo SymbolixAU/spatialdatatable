@@ -154,24 +154,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// pointDistance
-void pointDistance();
-RcppExport SEXP _spatialdatatable_pointDistance() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    pointDistance();
-    return R_NilValue;
-END_RCPP
-}
-// boostWkt
-void boostWkt();
-RcppExport SEXP _spatialdatatable_boostWkt() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    boostWkt();
-    return R_NilValue;
-END_RCPP
-}
 // encodeGeometry
 Rcpp::List encodeGeometry(Rcpp::List sfc);
 RcppExport SEXP _spatialdatatable_encodeGeometry(SEXP sfcSEXP) {
@@ -276,8 +258,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spatialdatatable_rcppDistanceEuclidean", (DL_FUNC) &_spatialdatatable_rcppDistanceEuclidean, 4},
     {"_spatialdatatable_rcppPointsInPolygon", (DL_FUNC) &_spatialdatatable_rcppPointsInPolygon, 5},
     {"_spatialdatatable_rcppWindingNumber", (DL_FUNC) &_spatialdatatable_rcppWindingNumber, 4},
-    {"_spatialdatatable_pointDistance", (DL_FUNC) &_spatialdatatable_pointDistance, 0},
-    {"_spatialdatatable_boostWkt", (DL_FUNC) &_spatialdatatable_boostWkt, 0},
     {"_spatialdatatable_encodeGeometry", (DL_FUNC) &_spatialdatatable_encodeGeometry, 1},
     {"_spatialdatatable_rcpp_decode_pl", (DL_FUNC) &_spatialdatatable_rcpp_decode_pl, 1},
     {"_spatialdatatable_rcpp_encode_pl", (DL_FUNC) &_spatialdatatable_rcpp_encode_pl, 3},
