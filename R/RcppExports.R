@@ -49,8 +49,8 @@ boostWkt <- function() {
     invisible(.Call('_spatialdatatable_boostWkt', PACKAGE = 'spatialdatatable'))
 }
 
-encodeSFWKB <- function(sfc) {
-    .Call('_spatialdatatable_encodeSFWKB', PACKAGE = 'spatialdatatable', sfc)
+encodeGeometry <- function(sfc) {
+    .Call('_spatialdatatable_encodeGeometry', PACKAGE = 'spatialdatatable', sfc)
 }
 
 rcpp_decode_pl <- function(encoded) {

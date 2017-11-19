@@ -25,7 +25,7 @@ DataFrame rcpp_decode_pl(std::string encoded){
 	float lat = 0;
 	float lng = 0;
 
-	Rcpp::NumericVector  pointsLat;
+	Rcpp::NumericVector pointsLat;
 	Rcpp::NumericVector pointsLon;
 
 	while (index < len){
@@ -91,6 +91,7 @@ Rcpp::String encode_polyline(Rcpp::NumericVector latitude,
 	Rcpp::String output_str;
 
 	for(int i = 0; i < num_coords; i++){
+
 		int late5 = latitude[i] * 1e5;
 		int lone5 = longitude[i] * 1e5;
 
@@ -100,11 +101,6 @@ Rcpp::String encode_polyline(Rcpp::NumericVector latitude,
 		plat = late5;
 		plon = lone5;
 	}
-
-	Rcpp::StringVector sv(1);
-	sv[0] =  output_str;
-	Rcpp::Rcout << "Encoded: " << sv << std::endl;
-
 	return output_str;
 }
 

@@ -1,19 +1,13 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-
-//#include <iostream>
-//#include <iomanip>
-//#include <sstream>
-//#include <string>
-
 #include "sdt.h"
+
 // [[Rcpp::depends(BH)]]
 
 // One include file from Boost
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
-
 #include <boost/algorithm/string.hpp>
 
 #include <string>
@@ -29,8 +23,8 @@ void pointDistance(){
 	std::cout << "Distance p1-p2 is: " << distance(p1, p2) << std::endl;
 }
 
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB,
-                int endian, const char *cls, const char *dim, double prec, int srid);
+void write_data(std::ostringstream& os, Rcpp::List sfc, int i,
+                const char *cls, int srid);
 
 void add_int(std::ostringstream& os, unsigned int i) {
 	const char *cp = (char *)&i;
@@ -78,7 +72,7 @@ void boostWkt(){
 // - http://www.boost.org/doc/libs/1_60_0/boost/geometry/io/wkt/read.hpp
 
 
-unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int *tp = NULL,
+unsigned int make_type(const char *cls, int *tp = NULL,
                        int srid = 0) {
 	int type = 0;
 	if (strstr(cls, "sfc_") == cls)
@@ -93,6 +87,8 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 		type = SF_MultiLineString;
 	else if (strcmp(cls, "MULTIPOLYGON") == 0)
 		type = SF_MultiPolygon;
+	else if (strcmp(cls, "GEOMETRYCOLLECTION") == 0)
+		type = SF_GeometryCollection;
 	else
 		type = SF_Unknown; // a mix: GEOMETRY
 	if (tp != NULL)
@@ -101,107 +97,108 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 	return type;
 }
 
-void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = false,
-                        int endian = 0, double prec = 0.0) {
+void write_multipolygon(std::ostringstream& os, Rcpp::List lst) {
+
 	Rcpp::CharacterVector cl_attr = lst.attr("class");
 
-//	Rcpp::Rcout << "write_multipolygon() " << cl_attr << std::endl;
-
-	const char *dim = cl_attr[0];
-
-//	Rcpp::Rcout << "dim attr: " << dim << std::endl;
-
-	//add_int(os, lst.length());
 	for (int i = 0; i < lst.length(); i++)
-		write_data(os, lst, i, EWKB, endian, "POLYGON", dim, prec, 0);
+		write_data(os, lst, i, "POLYGON", 0);
+}
+
+void write_geometrycollection(std::ostringstream& os, Rcpp::List lst) {
+
+	Rcpp::Function Rclass("class");
+	for (int i = 0; i < lst.length(); i++) {
+		Rcpp::CharacterVector cl_attr = lst[i];
+		Rcpp::Rcout << cl_attr << std::endl;
+		//const char *cls = cl_attr[1], *dim = cl_attr[0];
+		//write_data(os, lst, i, EWKB, endian, cls, dim, prec, 0);
+	}
 }
 
 void addToStream(std::ostringstream& os, Rcpp::String encodedString) {
-
 	std::string strng = encodedString;
 	os << strng << ' ';
-	//Rcpp::Rcout << os.str() << std::endl;
 }
 
 
-void write_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat ) {
+void encode_vector( std::ostringstream& os, Rcpp::List vec ) {
 
-//	Rcpp::Rcout << "write_matrix() " << std::endl;
+	int n = vec.size() / 2;
 	Rcpp::String encodedString;
 
-	//	int nRow = mat.nrow();
-	//	int nCols = mat.ncol();
+	Rcpp::NumericVector lats(n);
+	Rcpp::NumericVector lons(n);
 
-	//Rcpp::Rcout << "rows: " << nRow << std::endl;
-	//Rcpp::Rcout << "cols: " << nCols << std::endl;
+	for (int i = 0; i < n; i++){
+		lons[i] = vec[i * 2];
+		lats[i] = vec[(i * 2) + 1];
+	}
+	encodedString = encode_polyline(lats, lons, n);
+	addToStream(os, encodedString);
+}
 
-	//	add_int(os, mat.nrow());
-	//for (int i = 0; i < mat.nrow(); i++){
-	//add_double(os, mat(i,j), prec);
+void encode_vectors( std::ostringstream& os, Rcpp::List sfc ){
+
+	int n = sfc.size();
+	for (int i = 0; i < n; i++) {
+		encode_vector(os, sfc[i]);
+	}
+}
+
+void encode_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat ) {
+
+	Rcpp::String encodedString;
+
 	Rcpp::NumericVector lats = mat(_, 1);
 	Rcpp::NumericVector lons = mat(_, 0);
-//	Rcpp::Rcout << lats << std::endl;
+
 	int n = lats.size();
 	encodedString = encode_polyline(lats, lons, n);
 
 	addToStream(os, encodedString);
-
-//	Rcpp::Rcout << encodedString << std::endl;
-	//os.write(encodedString);
-
-//	Rcpp::Rcout << "return: write_matrix()" << std::endl;
-//	return encodedString;
-
-	//}
 }
 
 void write_matrix_list(std::ostringstream& os, Rcpp::List lst) {
 
-//	Rcpp::Rcout << "write_matrix_list() " << std::endl;
 	Rcpp::StringVector tempOutput;
 
 	size_t len = lst.length();
 	Rcpp::StringVector encoded(len);
 
-//	Rcpp::Rcout << "write_matrix_list size: " << len << std::endl;
-
+	//TODO:
+	// is this ever greater than 1?
 	for (size_t j = 0; j < len; j++){
-//		Rcpp::Rcout << "write_matrix_list: j: " << j << std::endl;
-		write_matrix(os, lst[j]);
-		//Rcpp::Rcout << encoded[j] << std::endl;
+		encode_matrix(os, lst[j]);
 	}
-
-
-//	tempOutput = encoded[0];
-//	Rcpp::Rcout << "write_matrix_list encoded: " << encoded << std::endl;
-//  Rcpp::Rcout << "return: write_matrix_list()" << std::endl;
-//	return encoded;
 }
 
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB = false,
-                int endian = 0, const char *cls = NULL, const char *dim = NULL, double prec = 0.0,
-                int srid = 0) {
+void write_data(std::ostringstream& os, Rcpp::List sfc, int i,
+                const char *cls = NULL, int srid = 0) {
 
-//	Rcpp::Rcout << "write_data() " << std::endl;
-//	Rcpp::Rcout << "write_date i: " << i << std::endl;
 	int sfcSize = sfc.size();
-//	Rcpp::Rcout << "sfc size: " << sfcSize << std::endl;
 
 	Rcpp::List encoded(sfcSize);
 
 	int tp;
-	unsigned int sf_type = make_type(cls, dim, EWKB, &tp, srid);
+	unsigned int sf_type = make_type(cls, &tp, srid);
 
 	switch(tp) {
 		case SF_LineString:
-			write_matrix(os, sfc[i]);
+			encode_vector(os, sfc);
+			break;
+		case SF_MultiLineString:
+			encode_vectors(os, sfc);
 			break;
 		case SF_Polygon:
 			write_matrix_list(os, sfc[i]);
 			break;
 		case SF_MultiPolygon:
-			write_multipolygon(os, sfc, EWKB, endian, prec);
+			write_multipolygon(os, sfc);
 			break;
+//		case SF_GeometryCollection:
+//			write_geometrycollection(os, sfc[i]);
+//			break;
 		default: {
 			Rcpp::Rcout << "type is " << sf_type << "\n"; // #nocov
 			Rcpp::stop("writing this sf type is not supported, please file an issue"); // #nocov
@@ -219,13 +216,13 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 
 	// we have data:
 	Rcpp::CharacterVector cls = sfc.attr("class");
-	unsigned int tp = make_type(cls[0], "", false, NULL, 0);
+
+	unsigned int tp = make_type(cls[0], NULL, 0);
+
 	if (tp == SF_Unknown) {
 		cls = sfc.attr("classes");
-		tp = make_type(cls[0], "", false, NULL, 0);
+		tp = make_type(cls[0], NULL, 0);
 	}
-
-//	Rcpp::Rcout << "tp: " << tp << std::endl;
 
 	switch (tp) {
 	case SF_Unknown: { // further check:
@@ -267,30 +264,29 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List encodeSFWKB(Rcpp::List sfc){
+Rcpp::List encodeGeometry(Rcpp::List sfc){
 
-	double precision = sfc.attr("precision");
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
+	Rcpp::Rcout << "class: " << cls_attr << std::endl;
+
 	Rcpp::List sfc_dim = get_dim_sfc(sfc);
+
 	Rcpp::CharacterVector dim = sfc_dim["_cls"];
-	const char *cls = cls_attr[0], *dm = dim[0];
+	const char *cls = cls_attr[0];
 
-//	Rcpp::Rcout << "sfc size: " <<  s << std::endl;
+	Rcpp::Rcout << "cls: " <<  cls_attr << std::endl;
 
-	Rcpp::List output(sfc.size()); // with raw vectors
+	Rcpp::List output(sfc.size());
 
 	for (int i = 0; i < sfc.size(); i++){
 		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
 
-		write_data(os, sfc[i], i, false, 0, cls, dm, precision, 0);
+		write_data(os, sfc[i], i, cls, 0);
 
 		std::string str = os.str();
 		std::vector<std::string> strs;
 		boost::split(strs, str, boost::is_any_of("\t "));
-
-		int s = strs.size();
-		//Rcpp::Rcout << " size: " <<  s << std::endl;
 
 		strs.erase(strs.end() - 1);
 		output[i] = strs;

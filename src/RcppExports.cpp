@@ -172,14 +172,14 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// encodeSFWKB
-Rcpp::List encodeSFWKB(Rcpp::List sfc);
-RcppExport SEXP _spatialdatatable_encodeSFWKB(SEXP sfcSEXP) {
+// encodeGeometry
+Rcpp::List encodeGeometry(Rcpp::List sfc);
+RcppExport SEXP _spatialdatatable_encodeGeometry(SEXP sfcSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(encodeSFWKB(sfc));
+    rcpp_result_gen = Rcpp::wrap(encodeGeometry(sfc));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -278,7 +278,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spatialdatatable_rcppWindingNumber", (DL_FUNC) &_spatialdatatable_rcppWindingNumber, 4},
     {"_spatialdatatable_pointDistance", (DL_FUNC) &_spatialdatatable_pointDistance, 0},
     {"_spatialdatatable_boostWkt", (DL_FUNC) &_spatialdatatable_boostWkt, 0},
-    {"_spatialdatatable_encodeSFWKB", (DL_FUNC) &_spatialdatatable_encodeSFWKB, 1},
+    {"_spatialdatatable_encodeGeometry", (DL_FUNC) &_spatialdatatable_encodeGeometry, 1},
     {"_spatialdatatable_rcpp_decode_pl", (DL_FUNC) &_spatialdatatable_rcpp_decode_pl, 1},
     {"_spatialdatatable_rcpp_encode_pl", (DL_FUNC) &_spatialdatatable_rcpp_encode_pl, 3},
     {"_spatialdatatable_rcppPolylineDistance", (DL_FUNC) &_spatialdatatable_rcppPolylineDistance, 1},

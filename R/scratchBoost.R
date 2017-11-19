@@ -1,6 +1,28 @@
 
 
+### -------------------------------------------------------
+# library(sf)
 
+# outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+# hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+# hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+# pts = list(outer, hole1, hole2)
+# (ml1 = st_multilinestring(pts))
+# ml2 = st_multilinestring(list(hole2, hole1, outer))
+#
+# sf <- sf::st_sf(sf::st_sfc(list(ml1, ml2) ))
+#
+# spatialdatatable:::encodeGeometry(st_geometry(sf))
+
+#
+#
+# sf <- st_sf(mix)
+#
+# spatialdatatable:::encodeGeometry(st_geometry(sf[2, ]))
+#
+# str(st_geometry(sf[2, ]))
+
+### -------------------------------------------------------
 # library(sf)
 #
 # nc <- st_read(system.file("shape/nc.shp", package="sf"))
@@ -8,13 +30,13 @@
 # # st_geometry(nc)
 # #
 #
-# spatialdatatable:::encodeSFWKB(sfc = st_geometry(nc[4, ]))
+# spatialdatatable:::encodeGeometry(sfc = st_geometry(nc[4, ]))
 #
 #
 # library(microbenchmark)
 #
 # microbenchmark(
-# 	wkt = { spatialdatatable:::encodeSFWKB(st_geometry(nc))},
+# 	wkt = { spatialdatatable:::encodeGeometry(st_geometry(nc))},
 # 	dt = { EncodeSF(nc)},
 # 	times = 25
 # )
@@ -22,9 +44,10 @@
 # library(data.table)
 # dt <- copy(nc)
 # setDT(dt)
-# lst <- spatialdatatable:::encodeSFWKB(st_geometry(nc))
+# lst <- spatialdatatable:::encodeGeometry(st_geometry(nc))
 #
-# dt[, polyline := lst]
+# dt[, polyline := spatialdatatable:::encodeGeometry(geometry)]
+# dt[, geometry := NULL]
 #
 # library(googleway)
 #
