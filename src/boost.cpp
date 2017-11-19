@@ -110,7 +110,7 @@ void write_geometrycollection(std::ostringstream& os, Rcpp::List lst) {
 	Rcpp::Function Rclass("class");
 	for (int i = 0; i < lst.length(); i++) {
 		Rcpp::CharacterVector cl_attr = lst[i];
-		Rcpp::Rcout << cl_attr << std::endl;
+		//Rcpp::Rcout << cl_attr << std::endl;
 		//const char *cls = cl_attr[1], *dim = cl_attr[0];
 		//write_data(os, lst, i, EWKB, endian, cls, dim, prec, 0);
 	}
@@ -267,14 +267,14 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 Rcpp::List encodeGeometry(Rcpp::List sfc){
 
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
-	Rcpp::Rcout << "class: " << cls_attr << std::endl;
+	//Rcpp::Rcout << "class: " << cls_attr << std::endl;
 
 	Rcpp::List sfc_dim = get_dim_sfc(sfc);
 
 	Rcpp::CharacterVector dim = sfc_dim["_cls"];
 	const char *cls = cls_attr[0];
 
-	Rcpp::Rcout << "cls: " <<  cls_attr << std::endl;
+	//Rcpp::Rcout << "cls: " <<  cls_attr << std::endl;
 
 	Rcpp::List output(sfc.size());
 

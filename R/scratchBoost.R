@@ -26,12 +26,8 @@
 # library(sf)
 #
 # nc <- st_read(system.file("shape/nc.shp", package="sf"))
-# #
-# # st_geometry(nc)
-# #
 #
 # spatialdatatable:::encodeGeometry(sfc = st_geometry(nc[4, ]))
-#
 #
 # library(microbenchmark)
 #
@@ -40,6 +36,11 @@
 # 	dt = { EncodeSF(nc)},
 # 	times = 25
 # )
+#
+# # Unit: milliseconds
+# # expr       min        lq       mean    median        uq       max neval
+# # wkt   1.376192  1.484347   1.877932  1.534506  1.702152   8.54406    25
+# # dt   70.445816 77.721602 103.421258 82.933516 98.641371 209.08351    25
 
 # library(data.table)
 # dt <- copy(nc)
