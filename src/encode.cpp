@@ -66,8 +66,8 @@ unsigned int make_type(const char *cls, int *tp = NULL,
 		type = SF_MultiLineString;
 	else if (strcmp(cls, "MULTIPOLYGON") == 0)
 		type = SF_MultiPolygon;
-	else if (strcmp(cls, "GEOMETRYCOLLECTION") == 0)
-		type = SF_GeometryCollection;
+//	else if (strcmp(cls, "GEOMETRYCOLLECTION") == 0)
+//		type = SF_GeometryCollection;
 	else
 		type = SF_Unknown; // a mix: GEOMETRY
 	if (tp != NULL)

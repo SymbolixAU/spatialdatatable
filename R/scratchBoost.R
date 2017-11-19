@@ -22,12 +22,12 @@
 #
 # str(st_geometry(sf[2, ]))
 
-### -------------------------------------------------------
+# ## -------------------------------------------------------
 # library(sf)
 #
 # nc <- st_read(system.file("shape/nc.shp", package="sf"))
 #
-# spatialdatatable:::encodeGeometry(sfc = st_geometry(nc[4, ]))
+# spatialdatatable:::encodeGeometry(sfc = st_geometry(nc[, ]))
 #
 # library(microbenchmark)
 #
