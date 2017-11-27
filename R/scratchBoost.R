@@ -1,3 +1,79 @@
+### -------------------------------------------------------
+# library(sf)
+# library(data.table)
+# library(symbolix.utils)
+# library(googleway)
+# library(mongolite)
+# library(geojsonio)
+#
+# nc <- st_read(system.file("shape/nc.shp", package="sf"))
+# dt <- as.data.table(nc)
+#
+# dt[, polyline := spatialdatatable:::encodeGeometry(st_geometry(nc)) ]
+#
+# str(dt[4, ])
+#
+# google_map(key = mapKey()) %>%
+# 	add_polygons(data = dt[4, ], polyline = "polyline")
+#
+# ## plottilng a multipolygon with multi polygons
+#
+# qry <- '{ "properties.STE_NAME16" : "South Australia" }'
+# con <- ConnectToMongo(collection = "SA1_2016", db = "ABS", usr = "db_user")
+# res <- con$find(query = qry, ndjson = T)
+# rm(con); gc()
+# sf_lst <- lapply(res, sf:::read_sf)
+# sf <- do.call(sf:::rbind.sf, sf_lst)
+#
+# # plot(sf[, c("SA2_NAME16", "geometry")])
+#
+# dt <- as.data.table(sf)
+# dt[, polyline := spatialdatatable:::encodeGeometry(st_geometry(sf))]
+#
+# google_map(key = mapKey()) %>%
+# 	add_polygons(data = dt,  polyline = "polyline",
+# 							 info_window = "SA2_NAME16",
+# 							 mouse_over_group = "SA1_MAIN16")
+#
+#
+# dt[SA2_NAME16 == "Kadina"]
+# sf[sf$SA2_NAME16 == "Kadina", c("SA2_NAME16", "geometry")]
+#
+# sf[sf$SA2_NAME16 == "Eyre Peninsula", "geometry"]
+#
+#
+#
+#
+#
+# df <- data.frame(myId = c(1,1,1,1,1,1,1,1,2,2,2,2),
+# 								 lineId = c(1,1,1,1,2,2,2,2,1,1,1,2),
+# 								 lat = c(26.774, 18.466, 32.321, 26.774, 28.745, 29.570, 27.339, 28.745, 22, 23, 22, 22),
+# 								 lon = c(-80.190, -66.118, -64.757, -80.190,  -70.579, -67.514, -66.668, -70.579, -50, -49, -51, -50),
+# 								 stringsAsFactors = FALSE)
+#
+# p1 <- list(as.matrix(df[1:4, c("lon", "lat")]))
+# p2 <- list(as.matrix(df[5:8, c("lon", "lat")]))
+# p3 <- list(as.matrix(df[9:12, c("lon", "lat")]))
+#
+# mp <- sf::st_multipolygon(x = list(p1, p2, p3))
+#
+# sf <- sf::st_sf(sf::st_sfc(mp))
+#
+# plot(sf)
+#
+# sf$polyline <- spatialdatatable:::encodeGeometry(st_geometry(sf))
+#
+# google_map(key = mapKey() )%>%
+#  	add_polygons(data = sf, polyline = "polyline")
+#
+# f <- paste0("polyline", " ~ " , paste0(setdiff(names(sf), "polyline"), collapse = "+") )
+# stats::aggregate(stats::formula(f), data = sf, list)
+#
+# dt <- as.data.table(sf)
+#
+# google_map(key = mapKey() )%>%
+# 	add_polygons(data = dt, polyline = "polyline")
+
 
 
 ### -------------------------------------------------------
