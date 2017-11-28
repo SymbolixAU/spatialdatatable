@@ -48,9 +48,40 @@
 # df <- data.frame(myId = c(1,1,1,1,1,1,1,1,2,2,2,2),
 # 								 lineId = c(1,1,1,1,2,2,2,2,1,1,1,2),
 # 								 lat = c(26.774, 18.466, 32.321, 26.774, 28.745, 29.570, 27.339, 28.745, 22, 23, 22, 22),
-# 								 lon = c(-80.190, -66.118, -64.757, -80.190,  -70.579, -67.514, -66.668, -70.579, -50, -49, -51, -50),
+# 								 lon = c(-80.190, -66.118, -64.757, -80.190,  -70.579, -67.514, -66.668, -70.579, -70, -49, -51, -70),
 # 								 stringsAsFactors = FALSE)
 #
+# ### MULTIPOLYGON(((EXT), (HOLE)), (EXT))
+# p1 <- as.matrix(df[1:4, c("lon", "lat")])
+# p2 <- as.matrix(df[5:8, c("lon", "lat")])
+# poly <- sf::st_polygon(x = list(p1, p2))
+#
+# plot(poly)
+#
+# p3 <- list(as.matrix(df[9:12, c("lon", "lat")]))
+#
+# mp <- sf::st_multipolygon(x = list(poly, p3))
+#
+# sf <- sf::st_sf(sf::st_sfc(mp))
+#
+# plot(sf)
+#
+# sf$polyline <- spatialdatatable:::encodeGeometry(st_geometry(sf))
+#
+# # google_map(key = mapKey() )%>%
+# #  	add_polygons(data = sf, polyline = "polyline")
+# #
+# # f <- paste0("polyline", " ~ " , paste0(setdiff(names(sf), "polyline"), collapse = "+") )
+# # stats::aggregate(stats::formula(f), data = sf, list)
+#
+# dt <- as.data.table(sf)
+# dt[, id := .I]
+#
+# google_map(key = mapKey() )%>%
+# 	add_polygons(data = dt, mouse_over_group = "id",
+# 							 polyline = "polyline")
+#
+# ### MULTIPOLYGON(((EXT)), ((EXT)), ((EXT)) )
 # p1 <- list(as.matrix(df[1:4, c("lon", "lat")]))
 # p2 <- list(as.matrix(df[5:8, c("lon", "lat")]))
 # p3 <- list(as.matrix(df[9:12, c("lon", "lat")]))
@@ -59,21 +90,78 @@
 #
 # sf <- sf::st_sf(sf::st_sfc(mp))
 #
-# plot(sf)
+# sf$polyline <- spatialdatatable:::encodeGeometry(st_geometry(sf))
+#
+# dt <- as.data.table(sf)
+# dt[, id := .I]
+#
+# google_map(key = mapKey() )%>%
+# 	add_polygons(data = dt, mouse_over_group = "id",
+# 							 polyline = "polyline")
+#
+#
+# ### POLYGON((EXT), (HOLE), (HOLE))
+# p1 <- as.matrix(df[1:4, c("lon", "lat")])
+# p2 <- as.matrix(df[5:8, c("lon", "lat")])
+# p3 <- as.matrix(df[9:12, c("lon", "lat")])
+#
+# mp <- sf::st_polygon(x = list(p1, p2, p3))
+#
+# sf <- sf::st_sf(sf::st_sfc(mp))
 #
 # sf$polyline <- spatialdatatable:::encodeGeometry(st_geometry(sf))
 #
-# google_map(key = mapKey() )%>%
-#  	add_polygons(data = sf, polyline = "polyline")
+# dt <- as.data.table(sf)
+# dt[, id := .I]
 #
-# f <- paste0("polyline", " ~ " , paste0(setdiff(names(sf), "polyline"), collapse = "+") )
-# stats::aggregate(stats::formula(f), data = sf, list)
+# google_map(key = mapKey() )%>%
+# 	add_polygons(data = dt, mouse_over_group = "id",
+# 							 polyline = "polyline")
+#
+# #### POLYGON((EXT))
+# #### POLYGON((EXT))
+# #### POLYGON((EXT))
+#
+# sf1 <- sf::st_sf(geo = sf::st_sfc(sf::st_polygon(list(p1))))
+# sf2 <- sf::st_sf(geo = sf::st_sfc(sf::st_polygon(list(p2))))
+# sf3 <- sf::st_sf(geo = sf::st_sfc(sf::st_polygon(list(p3))))
+#
+# sf <- rbind(sf1, sf2, sf3)
+#
+# sf$polyline <- spatialdatatable:::encodeGeometry(st_geometry(sf))
 #
 # dt <- as.data.table(sf)
+# dt[, id := .I]
 #
 # google_map(key = mapKey() )%>%
-# 	add_polygons(data = dt, polyline = "polyline")
-
+# 	add_polygons(data = dt, mouse_over_group = "id",
+# 							 polyline = "polyline")
+#
+#
+# ### LINESTRING(line)
+# sf <- sf::st_sf(geo = sf::st_sfc(sf::st_linestring(p1)))
+# spatialdatatable:::encodeGeometry(st_geometry(sf))
+#
+# ### MULTILINESTRING((line1), (line2))
+# sf <- sf::st_sf(geo = sf::st_sfc(sf::st_multilinestring(list(p1, p2))))
+# spatialdatatable:::encodeGeometry(st_geometry(sf))
+#
+# ### LINESTRING(line)
+# ### POLYGON((EXT), (HOLE))
+# p1 <- as.matrix(df[1:4, c("lon", "lat")])
+# p2 <- as.matrix(df[5:8, c("lon", "lat")])
+# p3 <- as.matrix(df[9:12, c("lon", "lat")])
+# mp <- sf::st_polygon(x = list(p1, p2))
+# sf1 <- sf::st_sf(geo = sf::st_sfc(mp))
+# sf2 <- sf::st_sf(geo = sf::st_sfc(sf::st_linestring(p3)))
+#
+# sf <- rbind(sf1, sf2)
+#
+# spatialdatatable:::encodeGeometry(st_geometry(sf))
+#
+# class(st_geometry(sf[1,]))
+# class(st_geometry(sf[2,]))
+# class(st_geometry(sf))
 
 
 ### -------------------------------------------------------

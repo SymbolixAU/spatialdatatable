@@ -22,6 +22,7 @@ using namespace Rcpp;
 #define SF_PolyhedralSurface  15
 #define SF_TIN                16
 #define SF_Triangle           17
+#define SF_Geometry           18
 
 namespace sdt {
 

@@ -4,20 +4,9 @@ using namespace Rcpp;
 
 // [[Rcpp::depends(BH)]]
 
-// One include file from Boost
-//#include <boost/geometry.hpp>
-//#include <boost/geometry/geometries/point_xy.hpp>
-//#include <boost/geometry/geometries/polygon.hpp>
 #include <boost/algorithm/string.hpp>
 
-//#include <string>
-//#include <sstream>
-//#include <vector>
-//#include <iterator>
-
-//using namespace boost::geometry;
-
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i,
+void write_data(std::ostringstream& os, Rcpp::List sfc,
                 const char *cls, int srid);
 
 void add_int(std::ostringstream& os, unsigned int i) {
@@ -28,6 +17,8 @@ void add_int(std::ostringstream& os, unsigned int i) {
 void add_byte(std::ostringstream& os, char c) {
 	os.write((char*) &c, sizeof(char));
 }
+
+void write_matrix_list(std::ostringstream& os, Rcpp::List lst);
 
 // http://www.boost.org/doc/libs/1_65_0/libs/geometry/doc/html/geometry/reference/io/wkt/wkt.html
 
@@ -66,6 +57,8 @@ unsigned int make_type(const char *cls, int *tp = NULL,
 		type = SF_MultiLineString;
 	else if (strcmp(cls, "MULTIPOLYGON") == 0)
 		type = SF_MultiPolygon;
+	else if (strcmp(cls, "GEOMETRY") == 0)
+		type = SF_Geometry;
 //	else if (strcmp(cls, "GEOMETRYCOLLECTION") == 0)
 //		type = SF_GeometryCollection;
 	else
@@ -78,10 +71,13 @@ unsigned int make_type(const char *cls, int *tp = NULL,
 
 void write_multipolygon(std::ostringstream& os, Rcpp::List lst) {
 
-	Rcpp::CharacterVector cl_attr = lst.attr("class");
+	//Rcpp::CharacterVector cl_attr = lst.attr("class");
 
-	for (int i = 0; i < lst.length(); i++)
-		write_data(os, lst, i, "POLYGON", 0);
+	for (int i = 0; i < lst.length(); i++){
+		//write_data(os, lst, i, "POLYGON", 0);
+		write_matrix_list(os, lst[i]);
+
+	}
 }
 
 void write_geometrycollection(std::ostringstream& os, Rcpp::List lst) {
@@ -140,27 +136,59 @@ void encode_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat ) {
 
 void write_matrix_list(std::ostringstream& os, Rcpp::List lst) {
 
-	Rcpp::StringVector tempOutput;
-
 	size_t len = lst.length();
-	Rcpp::StringVector encoded(len);
 
 	//TODO:
 	// is this ever greater than 1?
 	for (size_t j = 0; j < len; j++){
+		Rcpp::NumericVector lats = lst[j];
 		encode_matrix(os, lst[j]);
 	}
 }
 
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i,
+void write_geometry(std::ostringstream& os, Rcpp::List lst) {
+	//size_t len = lst.length();
+
+	Rcpp::Rcout << "write_geometry() " << std::endl;
+	//for (size_t j = 0; j < len; j++) {
+
+		Rcpp::List sfcList = lst;
+
+		if ( Rf_isNull(sfcList) ) {
+			Rcpp::Rcout << "sfcList IS NULL" << std::endl;
+		} else {
+			Rcpp::Rcout << "sfcList NOT NULL" << std::endl;
+			//Rcpp::CharacterVector cls_attr = sfcList.attr("class");
+
+			if (!Rf_isNull(sfcList.attr("class")) ){
+				Rcpp::Rcout << "cls_attr NOT NULL" << std::endl;
+				Rcpp::CharacterVector cls_attr = sfcList.attr("class");
+				Rcpp::Rcout << cls_attr << std::endl;
+				const char *cls = cls_attr[1];
+				write_data(os, lst, cls, 0);
+			} else {
+				Rcpp::Rcout << "cls_attr IS NULL" << std::endl;
+
+				// TODO: why is cls NULL?
+				write_data(os, lst, "LINESTRING", 0);
+			}
+		}
+
+
+//		Rcpp::Rcout << cls << std::endl;
+//		write_data(os, lst, cls, 0);
+	//}
+}
+
+
+void write_data(std::ostringstream& os, Rcpp::List sfc,
                 const char *cls = NULL, int srid = 0) {
-
-	int sfcSize = sfc.size();
-
-	Rcpp::List encoded(sfcSize);
 
 	int tp;
 	unsigned int sf_type = make_type(cls, &tp, srid);
+
+	Rcpp::Rcout << "write_data()" << std::endl;
+	Rcpp::Rcout << "tp: " << tp << std::endl;
 
 	switch(tp) {
 		case SF_LineString:
@@ -170,10 +198,13 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i,
 			encode_vectors(os, sfc);
 			break;
 		case SF_Polygon:
-			write_matrix_list(os, sfc[i]);
+			write_matrix_list(os, sfc);
 			break;
 		case SF_MultiPolygon:
 			write_multipolygon(os, sfc);
+			break;
+		case SF_Geometry:
+			write_geometry(os, sfc);
 			break;
 //		case SF_GeometryCollection:
 //			write_geometrycollection(os, sfc[i]);
@@ -221,6 +252,7 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 	case SF_Polygon: // list:
 	case SF_MultiLineString:
 	case SF_MultiPolygon:
+	case SF_Geometry:
 	case SF_GeometryCollection:
 	case SF_CompoundCurve:
 	case SF_CurvePolygon:
@@ -253,15 +285,28 @@ Rcpp::List encodeGeometry(Rcpp::List sfc){
 	Rcpp::CharacterVector dim = sfc_dim["_cls"];
 	const char *cls = cls_attr[0];
 
-	//Rcpp::Rcout << "cls: " <<  cls_attr << std::endl;
+	Rcpp::Rcout << "cls: " <<  cls_attr << std::endl;
+	Rcpp::Rcout << "dim: " << dim << std::endl;
 
 	Rcpp::List output(sfc.size());
 
 	for (int i = 0; i < sfc.size(); i++){
+
+		Rcpp::Rcout << "i: " << i << std::endl;
+
 		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
 
-		write_data(os, sfc[i], i, cls, 0);
+		Rcpp::List l = sfc[i];
+		Rcpp::CharacterVector cv = l.attr("class");
+		Rcpp::Rcout << "loop i: cls: " << cv << std::endl;
+
+		Rcpp::List l_dim = get_dim_sfc(l);
+		Rcpp::CharacterVector ld = l_dim["_cls"];
+		Rcpp::Rcout << "loop i: dim: " << ld << std::endl;
+
+
+		write_data(os, sfc[i], cls, 0);
 
 		std::string str = os.str();
 		std::vector<std::string> strs;
