@@ -301,11 +301,6 @@ Rcpp::List encodeGeometry(Rcpp::List sfc){
 		Rcpp::CharacterVector cv = l.attr("class");
 		Rcpp::Rcout << "loop i: cls: " << cv << std::endl;
 
-		Rcpp::List l_dim = get_dim_sfc(l);
-		Rcpp::CharacterVector ld = l_dim["_cls"];
-		Rcpp::Rcout << "loop i: dim: " << ld << std::endl;
-
-
 		write_data(os, sfc[i], cls, 0);
 
 		std::string str = os.str();
