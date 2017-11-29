@@ -13,7 +13,7 @@
 # p3 <- as.matrix(df[9:12, c("lon", "lat")])
 #
 # point <- sf::st_sfc(sf::st_point(x = c(df[1,"lon"], df[1,"lat"])))
-# multipoint <- sf::st_sfc(sf::st_multipoint(x = as.matrix(df[1:2, c("lon", "lat")])))
+# # multipoint <- sf::st_sfc(sf::st_multipoint(x = as.matrix(df[1:2, c("lon", "lat")])))
 # polygon <- sf::st_sfc(sf::st_polygon(x = list(p1, p2)))
 # linestring <- sf::st_sfc(sf::st_linestring(p3))
 # multilinestring <- sf::st_sfc(sf::st_multilinestring(list(p3, p3)))
@@ -86,6 +86,47 @@
 #
 #
 # sfClass(sf[3,])
+#
+#
+# ## C++ function retrieves the correct attributes
+# sfClass(sf[1,])
+# sfClass(sf[2,])
+# sfClass(sf[3,])
+# sfClass(sf[4,])
+#
+# ## retrieves the correct attributes
+# attr(st_geometry(sf[1,]), 'class')
+# attr(st_geometry(sf[2,]), 'class')
+# attr(st_geometry(sf[3,]), 'class')
+# attr(st_geometry(sf[4,]), 'class')
+#
+# ## C++ function fails on LINESTRING and POINT
+# sfClass(st_geometry(sf[1, ]))
+# sfClass(st_geometry(sf[2, ]))
+# sfClass(st_geometry(sf[3, ]))
+# sfClass(st_geometry(sf[4, ]))
+#
+# sfClass(st_geometry(sf))
+# # sf size: 4
+# # class: "XY" "POLYGON" "sfg"
+# # class: "XY" "MULTILINESTRING" "sfg"
+# # Error in sfClass(st_geometry(sf)) :
+# # 	Not compatible with STRSXP: [type=NULL].
+#
+#
+# obj <- sf[1, ]
+# class(obj[[attr(obj, "sf_column")]])
+#
+# obj <- sf[2, ]
+# class(obj[[attr(obj, "sf_column")]])
+#
+# obj <- sf[3, ]
+# class(obj[[attr(obj, "sf_column")]])
+#
+# obj <- sf[4, ]
+# class(obj[[attr(obj, "sf_column")]])
+#
+#
 #
 #
 # ls <- sf:::Mtrx(p3, dim = "XYZ", type = "LINESTRING")
