@@ -5,6 +5,7 @@
 # library(googleway)
 # library(mongolite)
 # library(geojsonio)
+# library(spatialdatatable)
 #
 # nc <- st_read(system.file("shape/nc.shp", package="sf"))
 # dt <- as.data.table(nc)
@@ -155,7 +156,7 @@
 # sf1 <- sf::st_sf(geo = sf::st_sfc(mp))
 # sf2 <- sf::st_sf(geo = sf::st_sfc(sf::st_linestring(p3)))
 #
-# sf <- rbind(sf1, sf2)
+# sf <- rbind(sf1, sf1, sf2)
 #
 # spatialdatatable:::encodeGeometry(st_geometry(sf))
 #
