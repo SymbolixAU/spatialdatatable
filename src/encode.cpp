@@ -11,9 +11,6 @@ Rcpp::CharacterVector sfClass(Vector<RTYPE> v) {
 	return v.attr("class");
 }
 
-Rcpp::CharacterVector getSfClass(SEXP sf);
-
-// [[Rcpp::export]]
 Rcpp::CharacterVector getSfClass(SEXP sf) {
 
 	switch( TYPEOF(sf) ) {
@@ -111,21 +108,6 @@ void addToStream(std::ostringstream& os, Rcpp::String encodedString ) {
 	os << strng << ' ';
 }
 
-void encode_point( std::ostringstream& os, Rcpp::NumericVector vec ) {
-
-	Rcpp::Rcout << "encoding point: " << std::endl;
-
-	Rcpp::String encodedString;
-	Rcpp::NumericVector lats(1);
-	Rcpp::NumericVector lons(1);
-
-	lons[0] = vec[0];
-	lats[0] = vec[1];
-
-	encodedString = encode_polyline(lats, lons, 1);
-	addToStream(os, encodedString);
-}
-
 void encode_vector( std::ostringstream& os, Rcpp::List vec ) {
 
 	Rcpp::Rcout << "encoding vector" << std::endl;
@@ -199,7 +181,8 @@ void write_data(std::ostringstream& os, SEXP sfc,
 
 	switch(tp) {
 	 	case SF_Point:
-		 encode_point(os, sfc);
+		 //encode_point(os, sfc);
+		 encode_vector(os, sfc);
 	 		break;
 		case SF_LineString:
 			encode_vector(os, sfc);

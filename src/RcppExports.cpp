@@ -154,17 +154,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// getSfClass
-Rcpp::CharacterVector getSfClass(SEXP sf);
-RcppExport SEXP _spatialdatatable_getSfClass(SEXP sfSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type sf(sfSEXP);
-    rcpp_result_gen = Rcpp::wrap(getSfClass(sf));
-    return rcpp_result_gen;
-END_RCPP
-}
 // encodeGeometry
 Rcpp::List encodeGeometry(Rcpp::List sfc);
 RcppExport SEXP _spatialdatatable_encodeGeometry(SEXP sfcSEXP) {
@@ -269,7 +258,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spatialdatatable_rcppDistanceEuclidean", (DL_FUNC) &_spatialdatatable_rcppDistanceEuclidean, 4},
     {"_spatialdatatable_rcppPointsInPolygon", (DL_FUNC) &_spatialdatatable_rcppPointsInPolygon, 5},
     {"_spatialdatatable_rcppWindingNumber", (DL_FUNC) &_spatialdatatable_rcppWindingNumber, 4},
-    {"_spatialdatatable_getSfClass", (DL_FUNC) &_spatialdatatable_getSfClass, 1},
     {"_spatialdatatable_encodeGeometry", (DL_FUNC) &_spatialdatatable_encodeGeometry, 1},
     {"_spatialdatatable_rcpp_decode_pl", (DL_FUNC) &_spatialdatatable_rcpp_decode_pl, 1},
     {"_spatialdatatable_rcpp_encode_pl", (DL_FUNC) &_spatialdatatable_rcpp_encode_pl, 3},
