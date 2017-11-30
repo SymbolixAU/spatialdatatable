@@ -16,8 +16,6 @@ Rcpp::CharacterVector getSfClass(SEXP sf);
 // [[Rcpp::export]]
 Rcpp::CharacterVector getSfClass(SEXP sf) {
 
-	Rcpp::Rcout << "type: " << TYPEOF(sf) << std::endl;
-
 	switch( TYPEOF(sf) ) {
 	case REALSXP: return sfClass<REALSXP>(sf);
 	case VECSXP: return sfClass<VECSXP>(sf);
@@ -91,12 +89,8 @@ unsigned int make_type(const char *cls, int *tp = NULL,
 
 void write_multipolygon(std::ostringstream& os, Rcpp::List lst) {
 
-	//Rcpp::CharacterVector cl_attr = lst.attr("class");
-
 	for (int i = 0; i < lst.length(); i++){
-		//write_data(os, lst, i, "POLYGON", 0);
 		write_matrix_list(os, lst[i]);
-
 	}
 }
 
@@ -111,13 +105,30 @@ void write_geometrycollection(std::ostringstream& os, Rcpp::List lst) {
 	}
 }
 
-void addToStream(std::ostringstream& os, Rcpp::String encodedString) {
+void addToStream(std::ostringstream& os, Rcpp::String encodedString ) {
+	Rcpp::Rcout << "add stream:" << std::endl;
 	std::string strng = encodedString;
 	os << strng << ' ';
 }
 
+void encode_point( std::ostringstream& os, Rcpp::NumericVector vec ) {
+
+	Rcpp::Rcout << "encoding point: " << std::endl;
+
+	Rcpp::String encodedString;
+	Rcpp::NumericVector lats(1);
+	Rcpp::NumericVector lons(1);
+
+	lons[0] = vec[0];
+	lats[0] = vec[1];
+
+	encodedString = encode_polyline(lats, lons, 1);
+	addToStream(os, encodedString);
+}
 
 void encode_vector( std::ostringstream& os, Rcpp::List vec ) {
+
+	Rcpp::Rcout << "encoding vector" << std::endl;
 
 	int n = vec.size() / 2;
 	Rcpp::String encodedString;
@@ -143,6 +154,7 @@ void encode_vectors( std::ostringstream& os, Rcpp::List sfc ){
 
 void encode_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat ) {
 
+	Rcpp::Rcout << "encoding matrix" << std::endl;
 	Rcpp::String encodedString;
 
 	Rcpp::NumericVector lats = mat(_, 1);
@@ -167,44 +179,12 @@ void write_matrix_list(std::ostringstream& os, Rcpp::List lst) {
 }
 
 void write_geometry(std::ostringstream& os, SEXP s) {
-	//size_t len = lst.length();
 
-	Rcpp::Rcout << "write_geometry() " << std::endl;
-	//for (size_t j = 0; j < len; j++) {
-
-		//Rcpp::List sfcList = lst;
 	Rcpp::CharacterVector cls_attr = getSfClass(s);
 	Rcpp::Rcout << "geometry cls_attr: " << cls_attr << std::endl;
 
-
 	write_data(os, s, cls_attr[1], 0);
 
-
-//		if ( Rf_isNull(sfcList) ) {
-//			Rcpp::Rcout << "sfcList IS NULL" << std::endl;
-//		} else {
-//			Rcpp::Rcout << "sfcList NOT NULL" << std::endl;
-//			//Rcpp::CharacterVector cls_attr = sfcList.attr("class");
-//
-//			if (!Rf_isNull(sfcList.attr("class")) ){
-//				Rcpp::Rcout << "cls_attr NOT NULL" << std::endl;
-//				Rcpp::CharacterVector cls_attr = sfcList.attr("class");
-//				Rcpp::Rcout << cls_attr << std::endl;
-//				const char *cls = cls_attr[1];
-//				write_data(os, lst, cls, 0);
-//			} else {
-//				Rcpp::Rcout << "cls_attr IS NULL" << std::endl;
-//
-//				// TODO: why is cls NULL?
-//				// ANSWER:: because it's not a LIST
-//				write_data(os, lst, "LINESTRING", 0);
-//			}
-//		}
-
-
-//		Rcpp::Rcout << cls << std::endl;
-//		write_data(os, lst, cls, 0);
-	//}
 }
 
 
@@ -214,10 +194,13 @@ void write_data(std::ostringstream& os, SEXP sfc,
 	int tp;
 	unsigned int sf_type = make_type(cls, &tp, srid);
 
-	Rcpp::Rcout << "write_data()" << std::endl;
-	Rcpp::Rcout << "tp: " << tp << std::endl;
+//	Rcpp::Rcout << "write_data()" << std::endl;
+//	Rcpp::Rcout << "tp: " << tp << std::endl;
 
 	switch(tp) {
+	 	case SF_Point:
+		 encode_point(os, sfc);
+	 		break;
 		case SF_LineString:
 			encode_vector(os, sfc);
 			break;
@@ -243,63 +226,7 @@ void write_data(std::ostringstream& os, SEXP sfc,
 	}
 }
 
-Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 
-	if (sfc.length() == 0)
-		return Rcpp::List::create(
-			Rcpp::Named("_cls") = Rcpp::CharacterVector::create("XY"),
-			Rcpp::Named("_dim") = Rcpp::IntegerVector::create(2)
-		);
-
-	// we have data:
-	Rcpp::CharacterVector cls = sfc.attr("class");
-
-	unsigned int tp = make_type(cls[0], NULL, 0);
-
-	if (tp == SF_Unknown) {
-		cls = sfc.attr("classes");
-		tp = make_type(cls[0], NULL, 0);
-	}
-
-	switch (tp) {
-	case SF_Unknown: { // further check:
-		Rcpp::stop("impossible classs in get_dim_sfc()"); // #nocov
-	} break;
-	case SF_Point: { // numeric:
-		Rcpp::NumericVector v = sfc[0];
-		cls = v.attr("class");
-	} break;
-	case SF_LineString:  // matrix:
-	case SF_MultiPoint:
-	case SF_CircularString:
-	case SF_Curve: {
-		Rcpp::NumericMatrix m = sfc[0];
-		cls = m.attr("class");
-	} break;
-	case SF_Polygon: // list:
-	case SF_MultiLineString:
-	case SF_MultiPolygon:
-	case SF_Geometry:
-	case SF_GeometryCollection:
-	case SF_CompoundCurve:
-	case SF_CurvePolygon:
-	case SF_MultiCurve:
-	case SF_MultiSurface:
-	case SF_Surface:
-	case SF_PolyhedralSurface:
-	case SF_TIN:
-	case SF_Triangle: {
-		Rcpp::List l = sfc[0];
-		cls = l.attr("class");
-	} break;
-	}
-
-	return Rcpp::List::create(
-		Rcpp::Named("_cls") = cls,
-		Rcpp::Named("_dim") = strstr(cls[0], "Z") != NULL ?
-	Rcpp::IntegerVector::create(3) :
-		Rcpp::IntegerVector::create(2));
-}
 
 // [[Rcpp::export]]
 Rcpp::List encodeGeometry(Rcpp::List sfc){
@@ -307,10 +234,10 @@ Rcpp::List encodeGeometry(Rcpp::List sfc){
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
 	//Rcpp::Rcout << "class: " << cls_attr << std::endl;
 
-	Rcpp::List sfc_dim = get_dim_sfc(sfc);
+//	Rcpp::List sfc_dim = get_dim_sfc(sfc);
 
-	Rcpp::CharacterVector dim = sfc_dim["_cls"];
-	const char *cls = cls_attr[0];
+//	Rcpp::CharacterVector dim = sfc_dim["_cls"];
+	//const char *cls = cls_attr[0];
 
 //	Rcpp::Rcout << "cls: " <<  cls_attr << std::endl;
 //	Rcpp::Rcout << "dim: " << dim << std::endl;
@@ -319,17 +246,17 @@ Rcpp::List encodeGeometry(Rcpp::List sfc){
 
 	for (int i = 0; i < sfc.size(); i++){
 
-		Rcpp::Rcout << "i: " << i << std::endl;
+		//Rcpp::Rcout << "i: " << i << std::endl;
 
 		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
 
 		//Rcpp::List l = sfc[i];
 		//Rcpp::CharacterVector cv = l.attr("class");
-		Rcpp::CharacterVector cv = getSfClass(sfc[i]);
-		Rcpp::Rcout << "loop i: cls: " << cv << std::endl;
+		//Rcpp::CharacterVector cv = getSfClass(sfc[i]);
+		//Rcpp::Rcout << "loop i: cls: " << cv << std::endl;
 
-		write_data(os, sfc[i], cls, 0);
+		write_data(os, sfc[i], cls_attr[0], 0);
 
 		std::string str = os.str();
 		std::vector<std::string> strs;
