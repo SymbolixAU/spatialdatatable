@@ -41,6 +41,10 @@ rcppWindingNumber <- function(pointX, pointY, vectorX, vectorY) {
     .Call('_spatialdatatable_rcppWindingNumber', PACKAGE = 'spatialdatatable', pointX, pointY, vectorX, vectorY)
 }
 
+getSfClass <- function(sf) {
+    .Call('_spatialdatatable_getSfClass', PACKAGE = 'spatialdatatable', sf)
+}
+
 encodeGeometry <- function(sfc) {
     .Call('_spatialdatatable_encodeGeometry', PACKAGE = 'spatialdatatable', sfc)
 }

@@ -28,16 +28,62 @@
 # ## Use C++ to print the class of each geometry to the console
 # cppFunction('void sfClass(Rcpp::List sfGeometry){
 #
+#   //Rcpp::Rcout << "type: " << TYPEOF(sfGeometry) << std::endl;
+#
+#   int isList;
+#   isList = Rf_isNewList(sfGeometry) ? 0 : -1;
+#   Rcpp::Rcout << "is list: " << isList << std::endl;
+#
+#   isList = Rf_isMatrix(sfGeometry) ? 0 : -1;
+#   Rcpp::Rcout << "is matrix: " << isList << std::endl;
+#
 #   int n = sfGeometry.size();
 #   Rcpp::Rcout << "sf size: " << n << std::endl;
 #
+#   int type;
+#
 # 	for (int i = 0; i < n; i++) {
-#     Rcpp::List singleSf = sfGeometry[i];
-#     Rcpp::CharacterVector cls = singleSf.attr("class");
-#     Rcpp::Rcout << "class: " << cls << std::endl;
+#
+#     SEXP singleSf = sfGeometry[i];
+#     type = TYPEOF(singleSf);
+#
+# 		Rcpp::Rcout << "type: " << type << std::endl;
+#     Rcpp::Rcout << singleSf.attr("class") << std::endl;
+#     //Rcpp::CharacterVector cls = singleSf.attr("class");
+#     //Rcpp::Rcout << "class: " << cls << std::endl;
 # 	}
 #
 # }')
+#
+#
+# library(Rcpp)
+#
+# cppFunction('bool is_list(SEXP data) {
+#   return Rf_isList(data) ? true : false;
+# }')
+#
+# cppFunction('bool is_data_frame(SEXP x) {
+# 	return Rf_inherits(x, "data.frame") ? true : false;
+# }')
+#
+# cppFunction('bool is_integer(SEXP data) {
+#   return Rf_isInteger(data) ? true : false;
+# }')
+#
+# is_data_frame(list(a = 1))
+# # [1] FALSE
+# is_data_frame(data.frame())
+# # [1] TRUE
+# is_integer(1)
+# # [1] FALSE
+# is_integer(1L)
+# # [1] TRUE
+#
+# is_list(list(a = 1))
+# # [1] FALSE
+#
+# is_list(pairlist(a = 1))
+#
 #
 # class(polygon)
 # # [1] "sfc_POLYGON" "sfc"
@@ -58,11 +104,11 @@
 # str(point)
 # attributes(point)
 # sfClass(point)
-#
-# str(multipoint)
-# class(multipoint)
-# class(multipoint[[1]])
-# sfClass(multipoint)
+# #
+# # str(multipoint)
+# # class(multipoint)
+# # class(multipoint[[1]])
+# # sfClass(multipoint)
 #
 #
 #

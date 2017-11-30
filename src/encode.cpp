@@ -6,7 +6,27 @@ using namespace Rcpp;
 
 #include <boost/algorithm/string.hpp>
 
-void write_data(std::ostringstream& os, Rcpp::List sfc,
+template <int RTYPE>
+Rcpp::CharacterVector sfClass(Vector<RTYPE> v) {
+	return v.attr("class");
+}
+
+Rcpp::CharacterVector getSfClass(SEXP sf);
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector getSfClass(SEXP sf) {
+
+	Rcpp::Rcout << "type: " << TYPEOF(sf) << std::endl;
+
+	switch( TYPEOF(sf) ) {
+	case REALSXP: return sfClass<REALSXP>(sf);
+	case VECSXP: return sfClass<VECSXP>(sf);
+	default: Rcpp::stop("unknown sf type");
+	}
+	return "";
+}
+
+void write_data(std::ostringstream& os, SEXP sfc,
                 const char *cls, int srid);
 
 void add_int(std::ostringstream& os, unsigned int i) {
@@ -146,33 +166,40 @@ void write_matrix_list(std::ostringstream& os, Rcpp::List lst) {
 	}
 }
 
-void write_geometry(std::ostringstream& os, Rcpp::List lst) {
+void write_geometry(std::ostringstream& os, SEXP s) {
 	//size_t len = lst.length();
 
 	Rcpp::Rcout << "write_geometry() " << std::endl;
 	//for (size_t j = 0; j < len; j++) {
 
-		Rcpp::List sfcList = lst;
+		//Rcpp::List sfcList = lst;
+	Rcpp::CharacterVector cls_attr = getSfClass(s);
+	Rcpp::Rcout << "geometry cls_attr: " << cls_attr << std::endl;
 
-		if ( Rf_isNull(sfcList) ) {
-			Rcpp::Rcout << "sfcList IS NULL" << std::endl;
-		} else {
-			Rcpp::Rcout << "sfcList NOT NULL" << std::endl;
-			//Rcpp::CharacterVector cls_attr = sfcList.attr("class");
 
-			if (!Rf_isNull(sfcList.attr("class")) ){
-				Rcpp::Rcout << "cls_attr NOT NULL" << std::endl;
-				Rcpp::CharacterVector cls_attr = sfcList.attr("class");
-				Rcpp::Rcout << cls_attr << std::endl;
-				const char *cls = cls_attr[1];
-				write_data(os, lst, cls, 0);
-			} else {
-				Rcpp::Rcout << "cls_attr IS NULL" << std::endl;
+	write_data(os, s, cls_attr[1], 0);
 
-				// TODO: why is cls NULL?
-				write_data(os, lst, "LINESTRING", 0);
-			}
-		}
+
+//		if ( Rf_isNull(sfcList) ) {
+//			Rcpp::Rcout << "sfcList IS NULL" << std::endl;
+//		} else {
+//			Rcpp::Rcout << "sfcList NOT NULL" << std::endl;
+//			//Rcpp::CharacterVector cls_attr = sfcList.attr("class");
+//
+//			if (!Rf_isNull(sfcList.attr("class")) ){
+//				Rcpp::Rcout << "cls_attr NOT NULL" << std::endl;
+//				Rcpp::CharacterVector cls_attr = sfcList.attr("class");
+//				Rcpp::Rcout << cls_attr << std::endl;
+//				const char *cls = cls_attr[1];
+//				write_data(os, lst, cls, 0);
+//			} else {
+//				Rcpp::Rcout << "cls_attr IS NULL" << std::endl;
+//
+//				// TODO: why is cls NULL?
+//				// ANSWER:: because it's not a LIST
+//				write_data(os, lst, "LINESTRING", 0);
+//			}
+//		}
 
 
 //		Rcpp::Rcout << cls << std::endl;
@@ -181,7 +208,7 @@ void write_geometry(std::ostringstream& os, Rcpp::List lst) {
 }
 
 
-void write_data(std::ostringstream& os, Rcpp::List sfc,
+void write_data(std::ostringstream& os, SEXP sfc,
                 const char *cls = NULL, int srid = 0) {
 
 	int tp;
@@ -285,8 +312,8 @@ Rcpp::List encodeGeometry(Rcpp::List sfc){
 	Rcpp::CharacterVector dim = sfc_dim["_cls"];
 	const char *cls = cls_attr[0];
 
-	Rcpp::Rcout << "cls: " <<  cls_attr << std::endl;
-	Rcpp::Rcout << "dim: " << dim << std::endl;
+//	Rcpp::Rcout << "cls: " <<  cls_attr << std::endl;
+//	Rcpp::Rcout << "dim: " << dim << std::endl;
 
 	Rcpp::List output(sfc.size());
 
@@ -297,8 +324,9 @@ Rcpp::List encodeGeometry(Rcpp::List sfc){
 		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
 
-		Rcpp::List l = sfc[i];
-		Rcpp::CharacterVector cv = l.attr("class");
+		//Rcpp::List l = sfc[i];
+		//Rcpp::CharacterVector cv = l.attr("class");
+		Rcpp::CharacterVector cv = getSfClass(sfc[i]);
 		Rcpp::Rcout << "loop i: cls: " << cv << std::endl;
 
 		write_data(os, sfc[i], cls, 0);
