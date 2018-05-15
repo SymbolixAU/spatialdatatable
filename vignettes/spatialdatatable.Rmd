@@ -179,10 +179,12 @@ library(data.table)
 dt_stops <- as.data.table(tram_stops)
 dt_route <- as.data.table(tram_route)
 
-dt_nearest <- dtNearestPoints(dt1 = copy(dt_route),
-															dt2 = copy(dt_stops),
-															dt1Coords = c("shape_pt_lat", "shape_pt_lon"),
-															dt2Coords = c("stop_lat","stop_lon"))
+dt_nearest <- dtNearestPoints(
+	dt1 = copy(dt_route)
+	, dt2 = copy(dt_stops)
+	, dt1Coords = c("shape_pt_lat", "shape_pt_lon")
+	, dt2Coords = c("stop_lat","stop_lon")
+	)
 
 
 ## create a polyline between the joined pairs of coordinates
@@ -200,8 +202,8 @@ pl <- sapply(1:nrow(dt_nearest), function(x){
 
 dt_nearest[, polyline := pl ]
 
-
-# mapKey <- symbolix.utils::mapKey()
+# To plot a google map through `googleway` you need your own Google Maps API key and replace this line with your own key.
+# mapKey <- "GOOGLE_MAP_KEY" 
 
 # google_map(key = mapKey) %>%
 # 	#add_circles(data = dt_route, lat = "shape_pt_lat", lon = "shape_pt_lon", fill_colour = "#FF00FF", stroke_weight = 0) %>%
